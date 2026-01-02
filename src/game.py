@@ -1,7 +1,8 @@
+import os
 import pygame
 
 
-from .config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, GAME_TITLE, BG_COLOR
+from .config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, GAME_TITLE, BG_COLOR, MAIN_SCREEN
 from .scenes.menu import MenuScene
 
 
@@ -9,6 +10,12 @@ class Game:
     '''Main class that manages the game'''
     def __init__(self):
         pygame.init()
+
+        monitors = pygame.display.get_display_rects() if hasattr(pygame.display, 'get_display_rects') else []
+        
+        if monitors and MAIN_SCREEN < len(monitors):
+            monitor = monitors[MAIN_SCREEN]
+            os.environ['SDL_WINDOWPOS'] = f'{monitor.x},{monitor.y}'
 
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
