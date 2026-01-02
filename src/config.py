@@ -16,5 +16,5 @@ FPS = 60
 # Window title
 GAME_TITLE = 'Pico ASCII Jam'
 
-# Main screen display (0-indexed, 2 = third monitor)
-MAIN_SCREEN = 2
+# Main screen display.
+MAIN_SCREEN = 1

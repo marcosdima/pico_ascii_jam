@@ -11,20 +11,26 @@ class Game:
     def __init__(self):
         pygame.init()
 
-        monitors = pygame.display.get_display_rects() if hasattr(pygame.display, 'get_display_rects') else []
-        
-        if monitors and MAIN_SCREEN < len(monitors):
-            monitor = monitors[MAIN_SCREEN]
-            os.environ['SDL_WINDOWPOS'] = f'{monitor.x},{monitor.y}'
-
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption(GAME_TITLE)
+
+        self.__set_display()
 
         self.clock = pygame.time.Clock()
         self.running = True
 
         # Current scene
         self.current_scene = MenuScene(self)
+
+    
+    def __set_display(self):
+        '''Set the display to the specified monitor.'''
+        display = pygame.display
+        self.screen = display.set_mode(
+            (WINDOW_WIDTH, WINDOW_HEIGHT),
+            display=MAIN_SCREEN
+        )
+        display.set_caption(GAME_TITLE)
 
 
     def handle_events(self):
