@@ -3,9 +3,10 @@ import pygame
 
 from ..config import WINDOW_WIDTH, WINDOW_HEIGHT, TEXT_COLOR, FONT_PATH
 from ..types import Text
+from .__scene import Scene
 
 
-class MenuScene:
+class MenuScene(Scene):
     '''Main menu scene that displays "Hello World"'''
     def __init__(self, game):
         self.game = game
@@ -22,18 +23,21 @@ class MenuScene:
         self.text_surface = self.font.render(self.text, False, TEXT_COLOR)
 
 
+    ''' Scene abstract methods. '''
     def handle_event(self, event):
-        '''Handle input events.'''
-        pass
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.game.running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            print('click en', x, y)
 
 
     def update(self, dt):
-        '''Update scene logic.'''
         pass
 
 
     def draw(self, screen):
-        '''Render the scene to the screen.'''
         # Calculate centered position
         text_rect = self.text_surface.get_rect(
             center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
