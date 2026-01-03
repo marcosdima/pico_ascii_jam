@@ -71,3 +71,7 @@ class Vector2:
     def __iter__(self):
         yield self.x
         yield self.y
+
+
+    def __str__(self):
+        return f'Vector2({self.x}, {self.y})'

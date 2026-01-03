@@ -20,12 +20,10 @@ class Anchor:
     def __init__(
             self,
             point: tuple[float, float] = (0, 0),
-            position: AnchorPosition = AnchorPosition.TOP_LEFT,
         ):
         self.point = Vector2.from_tuple(point)
-        self.position = position
 
 
     def copy(self) -> 'Anchor':
         '''Return a copy of the anchor.'''
-        return Anchor(self.point.to_tuple(), self.position)
+        return Anchor(self.point.to_tuple())

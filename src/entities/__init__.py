@@ -1,6 +1,6 @@
 from .entity import Entity
 from .ascii.ascii import Ascii
-from .ascii.combinations.avatar import Avatar
+from .ascii.composed.avatar import Avatar
 
 
 __all__ = [

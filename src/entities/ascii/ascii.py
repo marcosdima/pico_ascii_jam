@@ -1,6 +1,8 @@
 import pygame
+
+
 from ...types import Font
-from ..entity import Entity
+from ..entity import Entity, abstractmethod
 
 
 class Ascii(Entity):
@@ -13,6 +15,10 @@ class Ascii(Entity):
         return self
     
 
+    def get_default_unicode(self) -> int:
+        return 65 # Default character 'A'
+    
+
     def __set_transform_from_unicode(self):
         surf = self.font.render(self.unicode, False, self.color.to_pygame_color())
         bbox = surf.get_bounding_rect()
@@ -23,7 +29,6 @@ class Ascii(Entity):
         self.image = tight
         self.transform.set_size(bbox.width, bbox.height)
 
-    
 
     ''' Entity overrides. '''
     def set_transform(self, position = None, size = None, scale = None):
@@ -37,7 +42,7 @@ class Ascii(Entity):
         self.font_size = 16
         self.font = Font('assets/pico-8.otf', self.font_size)
         if not hasattr(self, 'unicode'):
-            self.set_unicode(65)  # Default character 'A'
+            self.set_unicode(self.get_default_unicode())
 
         super().setup()
 

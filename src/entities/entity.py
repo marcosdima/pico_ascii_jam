@@ -1,11 +1,12 @@
 import pygame
+from abc import ABC, abstractmethod
 
 
 from ..types import Transform
 from ..core.interfaces import Coloreable, ImmuneSystem
 
 
-class Entity(Coloreable, ImmuneSystem):
+class Entity(Coloreable, ImmuneSystem, ABC):
     __count = 0
 
 
@@ -39,14 +40,10 @@ class Entity(Coloreable, ImmuneSystem):
 
     def update(self, dt):
         self.handle_update(dt)
-        for child in self.children:
-            child.update(dt)
 
 
     def draw(self):
         self.handle_draw()
-        for child in self.children:
-            child.draw()
 
 
     ''' Python special methods. '''

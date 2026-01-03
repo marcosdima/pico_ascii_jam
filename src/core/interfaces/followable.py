@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-from ...types import Anchor
+from ...types import Anchor, AnchorPosition
 from ..parasites import Follow
 
 
@@ -11,18 +11,23 @@ class Followable(ABC):
         ''' Get a follow position by index. '''
         index = follow.follow_index
         follow_anchors = self.get_follow_anchors()
-        valid_index = index if 0 <= index < len(follow_anchors) else 0
-        return follow_anchors[valid_index]
+        return follow_anchors[index]
     
+
+    ''' Python special methods. '''
+    def __init__(self):
+        super().__init__()
+        self.followers = []
+
     
     ''' Abstract methods. '''
     @abstractmethod
-    def get_follow_anchors(self) -> None:
+    def get_follow_anchors(self) -> dict[AnchorPosition, Anchor]:
         ''' Set the initial follow positions for the entity. '''
         pass
 
 
     @abstractmethod
-    def add_follower(self, follower):
+    def add_follower(self, follower, position: AnchorPosition = AnchorPosition.CENTER):
         ''' Add a follower. '''
         pass

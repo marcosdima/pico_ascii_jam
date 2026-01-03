@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 
-from ...entities.entity import Entity
+from ...entities import Entity
+from ..interfaces import Followable
 
 
 if TYPE_CHECKING:
@@ -20,12 +21,18 @@ class Scene( ABC):
         '''Update the scene and its entities.'''
         for entity in self.entities:
             entity.update(delta_time)
+            if isinstance(entity, Followable):
+                for follower in entity.followers:
+                    follower.update(delta_time)
+            
 
-    
     def on_draw(self):
         '''Draw the scene and its entities.'''
         for entity in self.entities:
             entity.draw()
+            if isinstance(entity, Followable):
+                for follower in entity.followers:
+                    follower.draw()
 
 
     ''' Abstract methods. '''

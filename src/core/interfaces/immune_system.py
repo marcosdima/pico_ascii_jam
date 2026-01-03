@@ -27,7 +27,6 @@ class ImmuneSystem:
     
     def handle_draw(self):
         '''Draw all parasites in the immune system'''
-        #print(f'On draw from immune system: {self.parasites}')
         for parasite in self.parasites:
             parasite.on_draw()
 
