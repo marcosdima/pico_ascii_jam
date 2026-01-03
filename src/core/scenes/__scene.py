@@ -2,19 +2,30 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 
-from ..entity import Entity
+from ...entities.entity import Entity
 
 
 if TYPE_CHECKING:
     from src.game import Game
     
 
-class Scene(Entity, ABC):
+class Scene( ABC):
     '''Base class for all game scenes.'''
     def __init__(self, game: 'Game'):
-        super().__init__(surface=game.screen)
         self.game = game
-        self.load_resources()
+        self.entities = self.load_resources()
+
+
+    def on_update(self, delta_time: float):
+        '''Update the scene and its entities.'''
+        for entity in self.entities:
+            entity.update(delta_time)
+
+    
+    def on_draw(self):
+        '''Draw the scene and its entities.'''
+        for entity in self.entities:
+            entity.draw()
 
 
     ''' Abstract methods. '''
@@ -31,6 +42,6 @@ class Scene(Entity, ABC):
 
 
     @abstractmethod
-    def load_resources(self):
+    def load_resources(self) -> list[Entity]:
         '''Load necessary resources for the scene.'''
-        pass
+        return []
