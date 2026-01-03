@@ -13,7 +13,22 @@ class Transform:
         self.size = size
         self.scale = scale
 
-    
+
+    def set_size(self, width: int, height: int):
+        '''Set the size.'''
+        self.size = Size(width, height)
+
+
+    def set_scale(self, scale_x: float, scale_y: float):
+        '''Set the scale.'''
+        self.scale = Vector2(scale_x, scale_y)
+
+
+    def set_position(self, x: float, y: float):
+        '''Set the position.'''
+        self.position = Position(x, y)
+
+
     def get_scaled_size(self) -> Size:
         '''Get the size after applying the scale.'''
         return Size(
@@ -21,7 +36,3 @@ class Transform:
             self.size.height * self.scale.y
         )
     
-
-    def move(self, delta: Vector2):
-        '''Move the position.'''
-        self.position += delta
