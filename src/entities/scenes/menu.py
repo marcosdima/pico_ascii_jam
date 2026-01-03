@@ -2,7 +2,8 @@ import pygame
 
 
 from ...config import WINDOW_WIDTH, WINDOW_HEIGHT, TEXT_COLOR, FONT_PATH
-from .__scene import Scene, Entity
+from .__scene import Scene
+from ..ascii.ascii import Ascii
 from ...core.parasites import Border
 
 class MenuScene(Scene):
@@ -21,7 +22,7 @@ class MenuScene(Scene):
 
 
     def load_resources(self):
-        entity = Entity(surface=self.surface)
-        entity.transform.set_scale(100, 100)
+        entity = Ascii(surface=self.surface)
+        entity.set_transform(scale=(10, 10))
         entity.add_parasite(Border())
         self.add_child(entity)

@@ -9,19 +9,6 @@ class Entity(Coloreable, ImmuneSystem):
     __count = 0
 
 
-    def __init__(self, surface: pygame.Surface):
-        super().__init__()
-
-        self.parent: 'Entity' = None
-        self.surface = surface
-        self.children = []
-        self.transform = Transform()
-
-        # Set an unique name.
-        self.name = f'Entity_{Entity.__count}'
-        Entity.__count += 1
-
-
     def get_global_position(self):
         '''Get the global position considering parent transforms.'''
         if self.parent is None:
@@ -29,6 +16,22 @@ class Entity(Coloreable, ImmuneSystem):
         
         parent_pos = self.parent.get_global_position()
         return parent_pos + self.transform.position
+
+
+    def set_transform(
+            self,
+            position: tuple[float, float] = None,
+            size: tuple[float, float] = None,
+            scale: tuple[float, float] = None,
+        ):
+        '''Set the entity's transform.'''
+        if position is not None:
+            self.transform.set_position(*position)
+        if size is not None:
+            self.transform.set_size(*size)
+        if scale is not None:
+            self.transform.set_scale(*scale)
+        return self
 
 
     ''' Children management. '''
@@ -46,6 +49,17 @@ class Entity(Coloreable, ImmuneSystem):
 
 
     ''' Life cycle. '''
+    def setup(self):
+        # Set default attributes.
+        self.parent: 'Entity' = None
+        self.children = []
+        self.transform = Transform()
+
+        # Set an unique name.
+        self.name = f'Entity_{Entity.__count}'
+        Entity.__count += 1
+
+
     def update(self, dt):
         self.handle_update(dt)
         for child in self.children:
@@ -57,10 +71,14 @@ class Entity(Coloreable, ImmuneSystem):
         for child in self.children:
             child.draw()
 
+
     ''' Python special methods. '''
+    def __init__(self, surface: pygame.Surface):
+        super().__init__()
+        self.surface = surface
+        self.setup()
+
+
     def __str__(self):
         return f'<Entity name={self.name} position={self.get_position()} size={self.get_size()} color={self.get_color()}>'
     
-
-    
-
