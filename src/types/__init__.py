@@ -4,6 +4,7 @@ from.font import Font
 from .world.position import Position
 from .world.size import Size
 from .world.color import Color
+from .world.transform import Transform
 
 __all__ = [
     "Text",
@@ -12,4 +13,5 @@ __all__ = [
     "Vector2",
     "Position",
     "Size",
+    "Transform",
 ]
