@@ -1,9 +1,8 @@
-import os
 import pygame
 
 
 from .config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, GAME_TITLE, BG_COLOR, MAIN_SCREEN
-from .scenes.menu import MenuScene
+from .entities.scenes.menu import MenuScene
 
 
 class Game:
@@ -42,24 +41,22 @@ class Game:
                 self.current_scene.handle_event(event)
 
 
-    def update(self, dt):
-        '''Update game logic.'''
-        self.current_scene.update(dt)
-
-
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.current_scene.draw(self.screen)
+        self.current_scene.draw()
         pygame.display.flip()
 
 
     def run(self):
         '''Execute main game loop.'''
         while self.running:
+            # Set delta time.
             dt = self.clock.tick(FPS) / 1000.0
+
+            # Handle events, update and draw.
             self.handle_events()
-            self.update(dt)
+            self.current_scene.update(dt)
             self.draw()
 
         pygame.quit()
