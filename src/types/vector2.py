@@ -40,15 +40,23 @@ class Vector2:
             return NotImplemented
         return Vector2(self.x + other.x, self.y + other.y)
     
+    
+    def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return Vector2(self.x * other, self.y * other)
+        if isinstance(other, Vector2):
+            return Vector2(self.x * other.x, self.y * other.y)
+        return NotImplemented
+    
+    
+    def __rmul__(self, other):
+        return self.__mul__(other)
+    
 
     def __sub__(self, other):
         if not isinstance(other, Vector2):
             return NotImplemented
         return Vector2(self.x - other.x, self.y - other.y)
-    
-
-    def __mul__(self, scalar: float):
-        return Vector2(self.x * scalar, self.y * scalar)
     
 
     def __truediv__(self, scalar: float):
