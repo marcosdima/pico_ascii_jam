@@ -8,7 +8,21 @@ class Ascii(Entity):
     def set_unicode(self, unicode_value: int):
         '''Set character from unicode code point.'''
         self.unicode = chr(unicode_value)
+        if hasattr(self, 'transform'):
+            self.__set_transform_from_unicode()
         return self
+    
+
+    def __set_transform_from_unicode(self):
+        surf = self.font.render(self.unicode, False, self.color.to_pygame_color())
+        bbox = surf.get_bounding_rect()
+
+        tight = pygame.Surface((bbox.width, bbox.height), pygame.SRCALPHA)
+        tight.blit(surf, (0, 0), bbox)
+
+        self.image = tight
+        self.transform.set_size(bbox.width, bbox.height)
+
     
 
     ''' Entity overrides. '''
@@ -22,20 +36,21 @@ class Ascii(Entity):
     def setup(self):
         self.font_size = 16
         self.font = Font('assets/pico-8.otf', self.font_size)
-        self.set_unicode(65)  # Default character 'A'
+        if not hasattr(self, 'unicode'):
+            self.set_unicode(65)  # Default character 'A'
 
         super().setup()
 
-        self.transform.set_size(*self.font.font.size(self.unicode))
+        self.__set_transform_from_unicode()
 
         
     def draw(self):
         super().draw()
 
-        # Render the ASCII character to surface at the entity's position
-        x, y = self.get_global_position().to_tuple()
-        color = self.get_color().to_pygame_color()
+        x, y = self.transform.position.to_tuple()
+        w, h = self.transform.get_scaled_size().to_tuple()
         
-        text_surface = self.font.render(self.unicode, False, color)
-        self.surface.blit(text_surface, (int(x), int(y)))
+        # Scale image to match transform scale
+        scaled_image = pygame.transform.scale(self.image, (int(w), int(h)))
+        self.surface.blit(scaled_image, (int(x), int(y)))
 

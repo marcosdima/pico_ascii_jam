@@ -21,6 +21,7 @@ class Color:
         self.a = int(a)
 
 
+    ''' Type conversion methods. '''
     def to_tuple(self) -> tuple[int, int, int, int]:
         '''Return color as RGBA tuple.'''
         return (self.r, self.g, self.b, self.a)
@@ -36,6 +37,12 @@ class Color:
         return pygame.Color(self.r, self.g, self.b, self.a)
 
 
+    def copy(self) -> 'Color':
+        '''Return a copy of the color.'''
+        return Color(self.r, self.g, self.b, self.a)
+
+
+    '''  Python special methods. '''
     def __repr__(self) -> str:
         return f'Color(r={self.r}, g={self.g}, b={self.b}, a={self.a})'
     

@@ -8,6 +8,11 @@ class Vector2:
     def to_tuple(self) -> tuple[float, float]:
         '''Return vector as tuple.'''
         return (self.x, self.y)
+    
+
+    def copy(self) -> 'Vector2':
+        '''Return a copy of the vector.'''
+        return Vector2(self.x, self.y)
 
 
     @classmethod

@@ -5,6 +5,7 @@ from .world.position import Position
 from .world.size import Size
 from .world.color import Color
 from .world.transform import Transform
+from .world.anchor import Anchor, AnchorPosition
 
 __all__ = [
     "Text",
@@ -14,4 +15,6 @@ __all__ = [
     "Position",
     "Size",
     "Transform",
+    "Anchor",
+    "AnchorPosition",
 ]

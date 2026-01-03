@@ -2,7 +2,7 @@ import pygame
 
 
 from .config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, GAME_TITLE, BG_COLOR, MAIN_SCREEN
-from .entities.scenes.menu import MenuScene
+from .core.scenes.menu import MenuScene
 
 
 class Game:
@@ -44,7 +44,7 @@ class Game:
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.current_scene.draw()
+        self.current_scene.on_draw()
         pygame.display.flip()
 
 
@@ -56,7 +56,7 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.current_scene.update(dt)
+            self.current_scene.on_update(dt)
             self.draw()
 
         pygame.quit()
