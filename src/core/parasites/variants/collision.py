@@ -9,6 +9,22 @@ class Collision(Parasite):
     __register: dict[int, 'Collision'] = {}
 
 
+    def __init__(
+            self,
+            on_collision_callback=callable,
+            on_keep_collision_callback=callable,
+            on_end_collision_callback=callable
+        ):
+        super().__init__()
+        Collision.__register[self.id] = self
+        self.in_collision: list['Collision'] = []
+
+        # Callbacks.
+        self.on_collision_callback = on_collision_callback
+        self.on_keep_collision_callback = on_keep_collision_callback
+        self.on_end_collision_callback = on_end_collision_callback
+
+
     def check_collision(self, other: 'Collision') -> bool:
         rect1 = self.target.transform.get_rect()
         rect2 = other.target.transform.get_rect()
@@ -36,20 +52,3 @@ class Collision(Parasite):
                     self.in_collision.remove(other)
                     self.on_end_collision_callback(other.target)
                 
-
-
-    ''' Python special methods. '''
-    def __init__(
-            self,
-            on_collision_callback=callable,
-            on_keep_collision_callback=callable,
-            on_end_collision_callback=callable
-        ):
-        super().__init__()
-        Collision.__register[self.id] = self
-        self.in_collision: list['Collision'] = []
-
-        # Callbacks.
-        self.on_collision_callback = on_collision_callback
-        self.on_keep_collision_callback = on_keep_collision_callback
-        self.on_end_collision_callback = on_end_collision_callback

@@ -28,3 +28,4 @@ class Font:
         '''Set font size.'''
         self.size = font_size
         self.__set_font()
+

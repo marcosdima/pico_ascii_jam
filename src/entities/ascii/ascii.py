@@ -20,6 +20,7 @@ class Ascii(Entity):
     
 
     def __set_transform_from_unicode(self):
+        # Render glyph with current color and cache a tight surface
         surf = self.font.render(self.unicode, False, self.color.to_pygame_color())
         bbox = surf.get_bounding_rect()
 
@@ -35,12 +36,21 @@ class Ascii(Entity):
         super().set_transform(position, size, scale)
         self.font.set_font_size(int(self.font_size * self.transform.scale.y))
         return self
+
+
+    def set_color(self, color):
+        '''Override to re-render glyph with new color.'''
+        super().set_color(color)
+        if hasattr(self, 'font'):
+            self.__set_transform_from_unicode()
+        return self
     
 
     ''' Entity life cycle overrides. '''
     def setup(self):
         self.font_size = 16
         self.font = Font('assets/pico-8.otf', self.font_size)
+
         if not hasattr(self, 'unicode'):
             self.set_unicode(self.get_default_unicode())
 
@@ -58,4 +68,8 @@ class Ascii(Entity):
         # Scale image to match transform scale
         scaled_image = pygame.transform.scale(self.image, (int(w), int(h)))
         self.surface.blit(scaled_image, (int(x), int(y)))
+
+
+    def update(self, dt):
+        super().update(dt)
 

@@ -11,6 +11,17 @@ if TYPE_CHECKING:
 
 class Follow(Parasite):
     ''' A parasite that makes the target entity follow another entity. '''
+    def __init__(
+            self,
+            followable: 'Followable',
+            follow_index: AnchorPosition = AnchorPosition.CENTER
+        ):
+        super().__init__()
+        self.followable = followable
+        self.follow_index: AnchorPosition = follow_index
+    
+
+    ''' Override methods. '''
     def on_update(self, dt):
         if self.target:
             anchor = self.followable.get_follow_anchor(self).copy()
@@ -31,14 +42,4 @@ class Follow(Parasite):
     
     def on_draw(self):
         pass
-
-
-    ''' Python special methods. '''
-    def __init__(
-            self,
-            followable: 'Followable',
-            follow_index: AnchorPosition = AnchorPosition.CENTER
-        ):
-        super().__init__()
-        self.followable = followable
-        self.follow_index: AnchorPosition = follow_index
+    

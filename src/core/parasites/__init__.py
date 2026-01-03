@@ -3,6 +3,7 @@ from .variants.border import Border
 from .variants.follow import Follow 
 from .variants.wasd import WASD
 from .variants.collision import Collision
+from .variants.trigger import Trigger
 
 
 __all__ = [
@@ -11,4 +12,5 @@ __all__ = [
     'Follow',
     'WASD',
     'Collision',
+    'Trigger',
 ]

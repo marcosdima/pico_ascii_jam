@@ -4,6 +4,9 @@ from ..parasite import Parasite
 
 class Border(Parasite):
     ''' A parasite that draws a border around the target entity. '''
+
+
+    ''' Override methods. '''
     def on_draw(self):
         target = self.target
         x, y = target.transform.position.to_tuple()
