@@ -6,6 +6,15 @@ if TYPE_CHECKING:
 
 
 class Parasite:
+    __count = 0
+
+
+    def __init__(self):
+        self.id = Parasite.__count
+        Parasite.__count += 1
+        self.target: 'Entity' = None
+
+
     ''' Base class for all parasites. '''
     def set_target(self, target: 'Entity'):
         self.target = target

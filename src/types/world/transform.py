@@ -1,6 +1,10 @@
+import pygame
+
+
 from .size import Size
 from .position import Position
 from ..vector2 import Vector2
+
 
 class Transform:
     def __init__(
@@ -35,4 +39,15 @@ class Transform:
             self.size.width * self.scale.x,
             self.size.height * self.scale.y
         )
+    
+
+    def get_rect(self) -> pygame.Rect:
+        '''Get the pygame.Rect representing the transform.'''
+        real_size = self.get_scaled_size()
+        return pygame.Rect(
+            int(self.position.x),
+            int(self.position.y),
+            int(real_size.width),
+            int(real_size.height)
+        )   
     

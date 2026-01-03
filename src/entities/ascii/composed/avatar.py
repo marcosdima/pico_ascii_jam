@@ -1,5 +1,5 @@
 from ..ascii import Ascii, Entity
-from ....core.parasites import Follow
+from ..special.pickaxe import Pickaxe
 from ....types import Anchor, AnchorPosition
 from .__composed import Composed
 
@@ -16,8 +16,7 @@ class Avatar(Composed):
         hat.set_transform(scale=(7, 7))
 
         # Set right
-        pickaxe = Ascii(surface=self.surface)
-        pickaxe.set_unicode(0x30E4)  # Unicode character 'ヤ'
+        pickaxe = Pickaxe(surface=self.surface)
         pickaxe.set_transform(scale=(5, 5))
 
         return [

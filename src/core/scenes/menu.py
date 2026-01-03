@@ -3,8 +3,9 @@ import pygame
 
 from ...config import WINDOW_WIDTH, WINDOW_HEIGHT, TEXT_COLOR, FONT_PATH
 from .__scene import Scene
-from ...entities import Ascii, Avatar
+from ...entities import Ascii, Avatar, Pickaxe
 from ...core.parasites import WASD, Border
+
 
 class MenuScene(Scene):
     '''Main menu scene that displays "Hello World"'''
@@ -26,9 +27,14 @@ class MenuScene(Scene):
         avatar = Avatar(surface=self.game.screen)
         avatar.set_transform(scale=(8, 8), position=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
         avatar.add_parasite(WASD(400))
-        #avatar.add_parasite(Border())
+        avatar.add_parasite(Border())
+
+        # Random pickaxe.
+        pickaxe = Pickaxe(surface=self.game.screen)
+        pickaxe.set_transform(scale=(8, 8), position=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
 
         return [
             avatar,
+            pickaxe,
         ]
         
