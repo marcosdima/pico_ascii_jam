@@ -15,6 +15,7 @@ class Entity(Coloreable, ImmuneSystem, ABC):
             position: tuple[float, float] = None,
             size: tuple[float, float] = None,
             scale: tuple[float, float] = None,
+            z_index: int = None,
         ):
         '''Set the entity's transform.'''
         if position is not None:
@@ -23,6 +24,8 @@ class Entity(Coloreable, ImmuneSystem, ABC):
             self.transform.set_size(*size)
         if scale is not None:
             self.transform.set_scale(*scale)
+        if z_index is not None:
+            self.transform.z_index = z_index
         return self
 
 

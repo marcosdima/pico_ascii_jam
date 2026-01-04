@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from src.game import Game
     
 
+by_z_index = lambda e: e.transform.z_index
+
+
 class Scene( ABC):
     '''Base class for all game scenes.'''
     def __init__(self, game: 'Game'):
@@ -19,7 +22,8 @@ class Scene( ABC):
 
     def on_update(self, delta_time: float):
         '''Update the scene and its entities.'''
-        for entity in self.entities:
+        entity_by_z_index = sorted(self.entities, key=by_z_index)
+        for entity in entity_by_z_index:
             entity.update(delta_time)
             if isinstance(entity, Followable):
                 for follower in entity.followers:
@@ -28,10 +32,12 @@ class Scene( ABC):
 
     def on_draw(self):
         '''Draw the scene and its entities.'''
-        for entity in self.entities:
+        entity_by_z_index = sorted(self.entities, key=by_z_index)
+        for entity in entity_by_z_index:
             entity.draw()
             if isinstance(entity, Followable):
-                for follower in entity.followers:
+                followers_by_z_index = sorted(entity.followers, key=by_z_index)
+                for follower in followers_by_z_index:
                     follower.draw()
 
 

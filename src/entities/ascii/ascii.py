@@ -32,8 +32,8 @@ class Ascii(Entity):
 
 
     ''' Entity overrides. '''
-    def set_transform(self, position = None, size = None, scale = None):
-        super().set_transform(position, size, scale)
+    def set_transform(self, position = None, size = None, scale = None, z_index = None):
+        super().set_transform(position, size, scale, z_index)
         self.font.set_font_size(int(self.font_size * self.transform.scale.y))
         return self
 

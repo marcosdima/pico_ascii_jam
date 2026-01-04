@@ -12,10 +12,12 @@ class Transform:
             position: Position = Position(0, 0),
             size: Size = Size(1, 1),
             scale: Vector2 = Vector2(1, 1),
+            z_index: int = 0,
         ):
         self.position = position
         self.size = size
         self.scale = scale
+        self.z_index = z_index
 
 
     def set_size(self, width: int, height: int):

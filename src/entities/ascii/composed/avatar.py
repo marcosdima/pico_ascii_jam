@@ -1,6 +1,6 @@
 from ..ascii import Ascii, Entity
 from ..special.pickaxe import Pickaxe
-from ....types import Anchor, AnchorPosition
+from ....types import Anchor, AnchorPosition, Color
 from .__composed import Composed
 
 
@@ -12,6 +12,7 @@ class Avatar(Composed):
     def get_followers(self) -> list[('Entity', AnchorPosition)]:
         # Set hat.
         hat = Ascii(surface=self.surface)
+        hat.set_color(Color.RED)
         hat.set_unicode(0x30E6)  # Unicode character 'ユ'
         hat.set_transform(scale=(7, 7))
 
@@ -23,6 +24,14 @@ class Avatar(Composed):
             (hat, AnchorPosition.TOP_CENTER),
             (pickaxe, AnchorPosition.CENTER_RIGHT),
         ]   
+
+
+    ''' Entity life cycle overrides. '''
+    def setup(self):
+        super().setup()
+        self.set_color(Color.YELLOW)
+        self.set_transform(scale=(10, 10))
+        self.transform.z_index = 10
 
 
     ''' Ascii overrides. '''
