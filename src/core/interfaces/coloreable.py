@@ -2,11 +2,6 @@ from ...types import Color
 
 class Coloreable:
     '''Interface for objects that can have their color changed.'''
-    def __init__(self):
-        super().__init__()
-        self.color: Color = Color(255, 255, 255)  # Default white color
-        
-
     def set_color(self, color: Color) -> None:
         '''Set the color of the object.
         
