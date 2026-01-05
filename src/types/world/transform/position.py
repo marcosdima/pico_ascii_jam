@@ -1,8 +1,4 @@
-from typing import TYPE_CHECKING
-
-
-from ..vector2 import Vector2
-
+from ...vector2 import Vector2
 
 
 class Position(Vector2):

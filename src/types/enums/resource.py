@@ -1,7 +1,6 @@
-import enum
+from .__enum import CustomEnum
 
-
-class Resource(enum.Enum):
+class Resource(CustomEnum):
     ROCK = 0
     IRON = 1
     GOLD = 2

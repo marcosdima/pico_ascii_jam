@@ -3,7 +3,7 @@ import pygame
 
 from .size import Size
 from .position import Position
-from ..vector2 import Vector2
+from ...vector2 import Vector2
 
 
 class Transform:

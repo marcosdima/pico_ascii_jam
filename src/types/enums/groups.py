@@ -1,7 +1,7 @@
-from enum import Enum
+from .__enum import CustomEnum
 
 
-class ColliderGroup(Enum):
+class ColliderGroup(CustomEnum):
     ''' Enumeration for collider groups. '''
     DEFAULT = 0
     PLAYER = 1
