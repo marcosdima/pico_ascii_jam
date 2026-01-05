@@ -1,7 +1,7 @@
 # Transform.
-from .world.transform.transform import Transform
-from .world.transform.position import Position
-from .world.transform.size import Size
+from .transform.transform import Transform
+from .transform.position import Position
+from .transform.size import Size
 
 
 # Enums.
@@ -13,6 +13,7 @@ from .enums.groups import ColliderGroup
 # Others.
 from .vector2 import Vector2
 from .font import Font
+from .color import Color
 
 
 __all__ = [
