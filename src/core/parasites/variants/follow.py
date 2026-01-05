@@ -34,6 +34,9 @@ class Follow(Parasite):
             elif self.follow_index == AnchorPosition.CENTER_RIGHT:
                 offset_x = 0
                 offset_y = -scaled_size.y / 2
+            elif self.follow_index == AnchorPosition.CENTER:
+                offset_x = -scaled_size.x / 2
+                offset_y = -scaled_size.y / 2
             
             x = anchor.point.x + offset_x
             y = anchor.point.y + offset_y
