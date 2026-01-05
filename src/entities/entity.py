@@ -1,9 +1,14 @@
-import pygame
-from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING 
+from abc import ABC
 
 
-from ..types import Transform
+from ..types import Transform, Color
 from ..core.interfaces import Coloreable, ImmuneSystem
+from ..core.parasites import Parasite
+
+
+if TYPE_CHECKING:
+    from ..core.scenes import Scene
 
 
 class Entity(Coloreable, ImmuneSystem, ABC):
@@ -29,30 +34,70 @@ class Entity(Coloreable, ImmuneSystem, ABC):
         return self
 
 
+    def __set_default_parasites(self):
+        '''Set the default parasites for the entity.'''
+        for parasite in self.get_default_parasites():
+            self.add_parasite(parasite)
+
+
+    ''' Visibility methods. '''
+    def show(self):
+        '''Make the entity visible.'''
+        self.__show = True
+        return self
+    
+
+    def hide(self):
+        '''Make the entity invisible.'''
+        self.__show = False
+        return self
+
+
+    def is_visible(self) -> bool:
+        '''Check if the entity is visible.'''
+        return self.__show
+    
+
+    ''' Overrides. '''
+    def get_default_color(self):
+        return Color.WHITE
+
+
+    def get_default_parasites(self) -> list[Parasite]:
+        return []
+
+
     ''' Life cycle. '''
     def setup(self):
-        # Set default attributes.
-        self.parent: 'Entity' = None
-        self.children = []
-        self.transform = Transform()
-
-        # Set an unique name.
-        self.name = f'Entity_{Entity.__count}'
-        Entity.__count += 1
-
+        self.__set_default_parasites()
+        
 
     def update(self, dt):
         self.handle_update(dt)
 
 
-    def draw(self):
-        self.handle_draw()
+    def draw(self) -> bool:
+        if self.__show:
+            self.handle_draw()
+        return self.__show
 
 
     ''' Python special methods. '''
-    def __init__(self, surface: pygame.Surface):
+    def __init__(self, scene: 'Scene'):
         super().__init__()
-        self.surface = surface
+        self.scene = scene
+        self.surface = scene.game.screen
+        
+        # Set default values.
+        self.transform = Transform()
+        self.__show = True
+        self.color = self.get_default_color()
+
+        # Set an unique name.
+        self.name = f'Entity_{Entity.__count}'
+        Entity.__count += 1
+
+        # Call setup method.
         self.setup()
 
 

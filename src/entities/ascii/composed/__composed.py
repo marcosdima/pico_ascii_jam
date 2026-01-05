@@ -10,9 +10,9 @@ class Composed(Ascii, Followable):
 
     ''' Entity life cycle overrides. '''
     def setup(self):
-        self.set_unicode(self.get_default_unicode())
-
         super().setup()
+        
+        self.set_unicode(self.get_default_unicode())
 
         # Set followers.
         for follower, position in self.get_followers():

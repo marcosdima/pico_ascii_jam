@@ -12,6 +12,7 @@ class Color:
     CYAN: 'Color' = None
     MAGENTA: 'Color' = None
     YELLOW: 'Color' = None
+    GRAY: 'Color' = None
 
     
     def __init__(self, r: int, g: int, b: int, a: int = 255):
@@ -80,3 +81,4 @@ Color.BLUE = Color(0, 0, 255)
 Color.CYAN = Color(0, 255, 255)
 Color.MAGENTA = Color(255, 0, 255)
 Color.YELLOW = Color(255, 255, 0)
+Color.GRAY = Color(128, 128, 128)

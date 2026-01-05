@@ -1,35 +1,37 @@
-from ..ascii import Ascii, Entity
+from ..ascii import Entity
 from ..special.pickaxe import Pickaxe
-from ....types import Anchor, AnchorPosition, Color
+from ....types import Anchor, AnchorPosition, Color, ColliderGroup
+from ....core.interfaces import Collider
 from .__composed import Composed
 
 
-class Avatar(Composed):
+class Avatar(Composed, Collider):
     ''' An ASCII entity that represents an avatar character. '''
 
 
     ''' Composed abstract methods. '''
     def get_followers(self) -> list[('Entity', AnchorPosition)]:
-        # Set hat.
-        hat = Ascii(surface=self.surface)
-        hat.set_color(Color.RED)
-        hat.set_unicode(0x30E6)  # Unicode character 'ユ'
-        hat.set_transform(scale=(7, 7))
-
         # Set right
-        pickaxe = Pickaxe(surface=self.surface)
+        pickaxe = Pickaxe(scene=self.scene)
         pickaxe.set_transform(scale=(5, 5))
 
         return [
-            (hat, AnchorPosition.TOP_CENTER),
             (pickaxe, AnchorPosition.CENTER_RIGHT),
         ]   
+
+
+    ''' Entity Overrides. '''
+    def get_default_color(self):
+        return Color.YELLOW
+
+
+    def get_default_parasites(self):
+        return super().get_default_parasites() + [self.collision]
 
 
     ''' Entity life cycle overrides. '''
     def setup(self):
         super().setup()
-        self.set_color(Color.YELLOW)
         self.set_transform(scale=(10, 10))
         self.transform.z_index = 10
 
@@ -68,3 +70,9 @@ class Avatar(Composed):
             AnchorPosition.CENTER_RIGHT: anchor_right_hand,
             AnchorPosition.CENTER: anchor_center
         }   
+
+
+    ''' Collider interface override. '''
+    def get_default_collider_group(self) -> 'ColliderGroup':
+        return ColliderGroup.PLAYER
+

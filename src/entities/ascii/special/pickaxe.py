@@ -7,14 +7,16 @@ from ....types import Color
 class Pickaxe(Ascii, Collider):
     ''' An ASCII entity that represents a pickaxe character. '''
 
+    ''' Entity overrides. '''
+    def get_default_color(self):
+        return Color.GREEN
+
+
+    def get_default_parasites(self):
+        return super().get_default_parasites() + [self.collision]
+
+
     ''' Entity life cycle overrides. '''
-    def setup(self):
-        super().setup()
-        self.set_color(Color.GREEN)
-        self.add_parasite(Border())
-        self.add_parasite(self.collision)   
-
-
     def update(self, dt):
         super().update(dt)
 

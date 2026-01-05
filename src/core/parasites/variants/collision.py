@@ -27,6 +27,8 @@ class Collision(Parasite):
 
     def check_collision(self, other: 'Collision') -> bool:
         rect1 = self.target.transform.get_rect()
+        if other.target is None:
+            return False
         rect2 = other.target.transform.get_rect()
         return rect1.colliderect(rect2)
 
@@ -44,6 +46,7 @@ class Collision(Parasite):
             if self.check_collision(other):
                 if other not in self.in_collision:
                     self.in_collision.append(other)
+                    print(f'Collision detected between {self.target.name} and {other.target.name}')
                     self.on_collision_callback(other.target)
                 else:
                     self.on_keep_collision_callback(other.target)

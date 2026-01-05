@@ -1,8 +1,9 @@
 import pygame
+from abc import abstractmethod
 
 
 from ...types import Font
-from ..entity import Entity, abstractmethod
+from ..entity import Entity
 
 
 class Ascii(Entity):
@@ -32,12 +33,6 @@ class Ascii(Entity):
 
 
     ''' Entity overrides. '''
-    def set_transform(self, position = None, size = None, scale = None, z_index = None):
-        super().set_transform(position, size, scale, z_index)
-        self.font.set_font_size(int(self.font_size * self.transform.scale.y))
-        return self
-
-
     def set_color(self, color):
         '''Override to re-render glyph with new color.'''
         super().set_color(color)
@@ -60,8 +55,9 @@ class Ascii(Entity):
 
         
     def draw(self):
-        super().draw()
-
+        if not super().draw():
+            return False
+        
         x, y = self.transform.position.to_tuple()
         w, h = self.transform.get_scaled_size().to_tuple()
         

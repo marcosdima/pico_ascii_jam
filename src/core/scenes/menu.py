@@ -3,8 +3,8 @@ import pygame
 
 from ...config import WINDOW_WIDTH, WINDOW_HEIGHT, TEXT_COLOR, FONT_PATH
 from .__scene import Scene
-from ...entities import Avatar, Rock
-from ...core.parasites import WASD, Border
+from ...entities import Avatar, Rock, Gold
+from ...core.parasites import WASD
 
 
 class MenuScene(Scene):
@@ -24,17 +24,26 @@ class MenuScene(Scene):
 
     def load_resources(self):
         # Avatar.
-        avatar = Avatar(surface=self.game.screen)
+        avatar = Avatar(scene=self)
         avatar.set_transform(scale=(8, 8), position=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
         avatar.add_parasite(WASD(400))
-        avatar.add_parasite(Border())
 
         # Random rock.
-        rock = Rock(surface=self.game.screen)
-        rock.set_transform(scale=(8, 8), position=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+        rock = Rock(scene=self)
+        rock.set_transform(position=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+
+        # Rock gold.
+        gold = Gold(scene=self)
+        gold.set_transform(
+            position=(
+                WINDOW_WIDTH // 2 + gold.transform.get_scaled_size().x,
+                WINDOW_HEIGHT // 2,
+            )
+        )
 
         return [
             avatar,
             rock,
+            gold,
         ]
         
