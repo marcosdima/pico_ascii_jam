@@ -35,6 +35,11 @@ class Transform:
         self.position = Position(x, y)
 
 
+    def set_z_index(self, z_index: int):
+        '''Set the z-index.'''
+        self.z_index = z_index
+
+
     def get_scaled_size(self) -> Size:
         '''Get the size after applying the scale.'''
         return Size(
@@ -53,3 +58,16 @@ class Transform:
             int(real_size.height)
         )   
     
+    
+    def copy(self) -> 'Transform':
+        '''Create a copy of the transform.'''
+        return Transform(
+            position=Position(self.position.x, self.position.y),
+            size=Size(self.size.width, self.size.height),
+            scale=Vector2(self.scale.x, self.scale.y),
+            z_index=self.z_index
+        )
+    
+
+    def __str__(self):
+        return f'Transform(position={self.position}, size={self.size}, scale={self.scale}, z_index={self.z_index})'

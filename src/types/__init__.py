@@ -8,6 +8,7 @@ from .transform.size import Size
 from .enums.anchor import Anchor
 from .enums.resource import Resource
 from .enums.groups import ColliderGroup
+from .enums.event import Event
 
 
 # Others.
@@ -26,6 +27,7 @@ __all__ = [
     "Anchor",
     "Resource",
     "ColliderGroup",
+    "Event",
 
     # Others.
     "Color",

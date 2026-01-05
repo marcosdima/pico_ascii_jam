@@ -1,8 +1,15 @@
 import pygame
 
 
-from .config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, GAME_TITLE, BG_COLOR, MAIN_SCREEN
-from .core.scenes.menu import MenuScene
+from .config import (
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    FPS,
+    GAME_TITLE,
+    BG_COLOR,
+    MAIN_SCREEN,
+)
+from .entities.entity import Entity
 
 
 class Game:
@@ -18,10 +25,15 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        # Current scene
-        self.current_scene = MenuScene(self)
 
-    
+        self.entity = Entity(surface=self.screen)
+        self.entity.set_transform(
+            position=(100, 100),
+            size=(200, 150),
+            z_index=1
+        )
+        
+
     def __set_display(self):
         '''Set the display to the specified monitor.'''
         display = pygame.display
@@ -37,14 +49,12 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            else:
-                self.current_scene.handle_event(event)
 
 
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.current_scene.on_draw()
+        self.entity.draw()
         pygame.display.flip()
 
 
@@ -56,7 +66,7 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.current_scene.on_update(dt)
+            self.entity.update(dt)
             self.draw()
 
         pygame.quit()

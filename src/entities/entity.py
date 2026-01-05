@@ -1,105 +1,105 @@
-from typing import TYPE_CHECKING 
-from abc import ABC
+from pygame import Surface
 
 
-from ..types import Transform, Color
-from ..core.interfaces import Coloreable, ImmuneSystem
-from ..core.parasites import Parasite
+from .modules import Modules
+from ..types import Transform, Position, Color
+from ..interfaces import Anfitrion, Coloreable, Visible
 
 
-if TYPE_CHECKING:
-    from ..core.scenes import Scene
-
-
-class Entity(Coloreable, ImmuneSystem, ABC):
+class Entity(Anfitrion, Coloreable, Visible):
     __count = 0
+
+
+    ''' Base class for all entities. '''
+    def get_position(self) -> Position:
+        offset = Position()
+
+        # Check if has a parent entity through the family module...
+        parent = self.modules.family.parent
+        if parent is not None:
+            # If has it, then get offset from parent..
+            offset = parent.get_position()
+
+        return self.transform.position + offset
+    
+
+    def get_size(self) -> Position:
+        real_size = self.transform.size
+        scale = self.transform.scale
+
+        # Get parent scale.
+        parent = self.modules.family.parent
+        if parent is not None:
+            parent_scale = parent.transform.scale
+            scale = scale * parent_scale
+
+        return real_size * scale
 
 
     def set_transform(
             self,
+            transform: Transform = None,
             position: tuple[float, float] = None,
             size: tuple[float, float] = None,
             scale: tuple[float, float] = None,
-            z_index: int = None,
+            z_index: int = None
         ):
-        '''Set the entity's transform.'''
-        if position is not None:
-            self.transform.set_position(*position)
-        if size is not None:
-            self.transform.set_size(*size)
-        if scale is not None:
-            self.transform.set_scale(*scale)
-        if z_index is not None:
-            self.transform.z_index = z_index
-        return self
+        new_transform = self.transform.copy()
+
+        # Check values provided.
+        if transform is not None:
+            new_transform = transform
+        else:
+            if position is not None:
+                new_transform.set_position(*position)
+            if size is not None:
+                new_transform.set_size(*size)
+            if scale is not None:
+                new_transform.set_scale(*scale)
+            if z_index is not None:
+                new_transform.set_z_index(z_index)
+
+        self.on_transform_changed(prev=self.transform, new=new_transform)
+        self.transform = new_transform
+        
+
+    ''' Lifecycle methods. '''
+    def setup(self):
+        pass
 
 
-    def __set_default_parasites(self):
-        '''Set the default parasites for the entity.'''
-        for parasite in self.get_default_parasites():
-            self.add_parasite(parasite)
+    def update(self, delta_time: float):
+        self.on_update(delta_time=delta_time)
 
 
-    ''' Visibility methods. '''
-    def show(self):
-        '''Make the entity visible.'''
-        self.__show = True
-        return self
-    
-
-    def hide(self):
-        '''Make the entity invisible.'''
-        self.__show = False
-        return self
+    def draw(self):
+        if self.is_visible():
+            self.on_draw()
 
 
-    def is_visible(self) -> bool:
-        '''Check if the entity is visible.'''
-        return self.__show
-    
-
-    ''' Overrides. '''
+    ''' Interface methods. '''
     def get_default_color(self):
         return Color.WHITE
 
 
-    def get_default_parasites(self) -> list[Parasite]:
-        return []
-
-
-    ''' Life cycle. '''
-    def setup(self):
-        self.__set_default_parasites()
-        
-
-    def update(self, dt):
-        self.handle_update(dt)
-
-
-    def draw(self) -> bool:
-        if self.__show:
-            self.handle_draw()
-        return self.__show
-
-
     ''' Python special methods. '''
-    def __init__(self, scene: 'Scene'):
+    def __init__(self, surface: Surface):
         super().__init__()
-        self.scene = scene
-        self.surface = scene.game.screen
-        
-        # Set default values.
-        self.transform = Transform()
-        self.__show = True
-        self.color = self.get_default_color()
 
-        # Set an unique name.
-        self.name = f'Entity_{Entity.__count}'
+        # Set id.
+        self.id = Entity.__count
         Entity.__count += 1
 
-        # Call setup method.
+        # Set surface.
+        self.surface = surface
+
+        # Initialize components.
+        self.modules = Modules(self)
+        self.transform = Transform()
+
+        # Call setup.
         self.setup()
 
 
     def __str__(self):
-        return f'<Entity name={self.name} transform={self.transform} color={self.get_color()}>'
+        return f'<Entity id={id(self)}>'
