@@ -7,3 +7,4 @@ class Event(CustomEnum):
     DRAW = 0
     UPDATE = 1
     TRANSFORM_CHANGED = 2
+    PYGAME_EVENT = 3

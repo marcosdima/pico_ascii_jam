@@ -9,6 +9,7 @@ from .enums.anchor import Anchor
 from .enums.resource import Resource
 from .enums.groups import ColliderGroup
 from .enums.event import Event
+from .enums.key import Key
 
 
 # Others.
@@ -28,6 +29,7 @@ __all__ = [
     "Resource",
     "ColliderGroup",
     "Event",
+    "Key",
 
     # Others.
     "Color",

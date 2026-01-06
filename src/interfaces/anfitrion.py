@@ -1,5 +1,9 @@
+import pygame
 from .__interface import Interface
+
+
 from ..types import Event, Transform
+
 
 class Anfitrion(Interface):
     ''' Anfitrion interface. '''
@@ -13,23 +17,30 @@ class Anfitrion(Interface):
         self.events[event] = []
 
 
-    ''' Anfitrion event methods. '''
+    def get_event_callbacks(self, event: Event) -> list[callable]:
+        ''' Get all callbacks for an event. '''
+        return self.events.get(event, [])
+
+
+    ''' Interface event methods. '''
     def on_draw(self):
-        ''' Anfitrion: Call all draw event callbacks. '''
-        for callback in self.events[Event.DRAW]:
+        for callback in self.get_event_callbacks(Event.DRAW):
             callback()
 
     
     def on_update(self, delta_time: float):
-        ''' Anfitrion: Call all update event callbacks. '''
-        for callback in self.events[Event.UPDATE]:
+        for callback in self.get_event_callbacks(Event.UPDATE):
             callback(delta_time)
 
 
     def on_transform_changed(self, prev: Transform, new: Transform):
-        ''' Anfitrion: Call all transform changed event callbacks. '''
-        for callback in self.events[Event.TRANSFORM_CHANGED]:
+        for callback in self.get_event_callbacks(Event.TRANSFORM_CHANGED):
             callback(prev, new)
+
+        
+    def on_event(self, event: pygame.event.Event):
+        for callback in self.get_event_callbacks(Event.PYGAME_EVENT):
+            callback(event)
 
 
     ''' Interface abstract methods. '''
@@ -38,5 +49,6 @@ class Anfitrion(Interface):
             Event.DRAW: [],
             Event.UPDATE: [],
             Event.TRANSFORM_CHANGED: [],
+            Event.PYGAME_EVENT: [],
         }
         super().set_properties()

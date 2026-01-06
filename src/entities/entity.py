@@ -1,8 +1,9 @@
 from pygame import Surface
+import pygame
 
 
 from .modules import Modules
-from ..types import Transform, Position, Color
+from ..types import Transform, Position, Color, Vector2
 from ..interfaces import Anfitrion, Coloreable, Visible
 
 
@@ -15,25 +16,34 @@ class Entity(Anfitrion, Coloreable, Visible):
         offset = Position()
 
         # Check if has a parent entity through the family module...
-        parent = self.modules.family.parent
-        if parent is not None:
+        if self.modules.family.has_parent():
             # If has it, then get offset from parent..
+            parent = self.modules.family.get_parent()
             offset = parent.get_position()
 
-        return self.transform.position + offset
+        return (self.transform.position * self.get_scale()) + offset
     
 
     def get_size(self) -> Position:
         real_size = self.transform.size
+        return real_size * self.get_scale()
+    
+
+    def get_rect(self) -> tuple[float, float, float, float]:
+        position = self.get_position()
+        size = self.get_size()
+        return (position.x, position.y, size.x, size.y)
+    
+
+    def get_scale(self) -> Vector2:
         scale = self.transform.scale
 
         # Get parent scale.
-        parent = self.modules.family.parent
-        if parent is not None:
-            parent_scale = parent.transform.scale
+        if self.modules.family.has_parent():
+            parent_scale = self.modules.family.get_parent().transform.scale
             scale = scale * parent_scale
 
-        return real_size * scale
+        return scale
 
 
     def set_transform(
@@ -69,13 +79,16 @@ class Entity(Anfitrion, Coloreable, Visible):
 
 
     def update(self, delta_time: float):
-        print(self.events)
         self.on_update(delta_time=delta_time)
 
 
     def draw(self):
         if self.is_visible():
             self.on_draw()
+
+
+    def handle_event(self, event: pygame.event.Event):
+        self.on_event(event=event)
 
 
     ''' Interface methods. '''
@@ -96,6 +109,7 @@ class Entity(Anfitrion, Coloreable, Visible):
 
         # Initialize components.
         self.modules = Modules(self)
+        self.modules.set_background()
         self.transform = Transform()
 
         # Call setup.

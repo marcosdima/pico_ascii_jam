@@ -10,6 +10,7 @@ from .config import (
     MAIN_SCREEN,
 )
 from .entities.entity import Entity
+from .types import Color, Key
 
 
 class Game:
@@ -33,6 +34,26 @@ class Game:
             z_index=1
         )
         self.entity.modules.set_wasd(speed=200.0)
+        self.entity.set_color(color=Color.GREEN)
+
+        second_entity = Entity(surface=self.screen)
+        second_entity.set_transform(
+            position=(400, 300),
+            size=(100, 100),
+            z_index=2
+        )
+        
+        self.entity.modules.family.add_child(second_entity.modules.family)
+        self.entity.modules.input.add_callback(
+            to='released',
+            target=Key.E,
+            callback=lambda: second_entity.set_color(Color.WHITE)
+        )
+        self.entity.modules.input.add_callback(
+            to='pressed',
+            target=Key.E,
+            callback=lambda: second_entity.set_color(Color.RED)
+        )
 
 
     def __set_display(self):
@@ -48,8 +69,12 @@ class Game:
     def handle_events(self):
         '''Handle game events.'''
         for event in pygame.event.get():
+            self.entity.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
+            # If it was a click...
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.entity.set_transform(scale=self.entity.transform.scale * 1.1)
 
 
     def draw(self):

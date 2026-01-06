@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
 
+from ..types import Transform
+
+
 class Interface(ABC):
     def __init__(self):
         self.set_properties()

@@ -1,6 +1,6 @@
 # Window dimensions
-WINDOW_WIDTH = 1080
-WINDOW_HEIGHT = 900
+WINDOW_WIDTH = 600
+WINDOW_HEIGHT = 600
 
 # Colors (RGB)
 BG_COLOR = (20, 20, 40)  # Dark blue

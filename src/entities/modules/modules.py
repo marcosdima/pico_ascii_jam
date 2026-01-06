@@ -3,6 +3,8 @@ from .variants.family import Family
 from .variants.debug import Debug
 from .variants.movement import Movement
 from .variants.wasd import WASD
+from .variants.background import Background
+from .variants.input import Input
 
 
 class Modules(Module):
@@ -13,10 +15,20 @@ class Modules(Module):
         self.wasd.speed = speed
 
 
+    def set_debug(self):
+        ''' Set Debug module. '''
+        self.debug = Debug(self.owner)
+
+
+    def set_background(self):
+        ''' Set Background module. '''
+        self.background = Background(self.owner)
+
+
     ''' Module abstract methods. '''
     def setup(self):
         # Set basic modules.
-        self.family = Family(self.owner)
-        self.debug = Debug(self.owner)
         self.movement = Movement(self.owner)
+        self.family = Family(self.owner)
+        self.input = Input(self.owner)
         
