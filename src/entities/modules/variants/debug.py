@@ -24,6 +24,7 @@ class Debug(Module):
     ''' Module lifecycle methods. '''
     def on_owner_update(self, delta_time: float):
         ''' Called when the owner entity is updated. '''
+        super().on_owner_update(delta_time)
         if self.timeout < 0.0:
             self.timeout = self.update_delay
             self.__debug(f'Updating entity id={self.owner.id}')

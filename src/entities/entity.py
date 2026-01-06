@@ -69,6 +69,7 @@ class Entity(Anfitrion, Coloreable, Visible):
 
 
     def update(self, delta_time: float):
+        print(self.events)
         self.on_update(delta_time=delta_time)
 
 

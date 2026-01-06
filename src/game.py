@@ -32,7 +32,8 @@ class Game:
             size=(200, 150),
             z_index=1
         )
-        
+        self.entity.modules.set_wasd(speed=200.0)
+
 
     def __set_display(self):
         '''Set the display to the specified monitor.'''

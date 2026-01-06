@@ -1,5 +1,13 @@
 class Vector2:
     '''2D vector with basic helpers.'''
+
+    ZERO: 'Vector2' = None
+    ONE: 'Vector2' = None
+    RIGHT: 'Vector2' = None
+    LEFT: 'Vector2' = None
+    UP: 'Vector2' = None
+    DOWN: 'Vector2' = None
+
     def __init__(self, x: float = 0.0, y: float = 0.0):
         self.x = float(x)
         self.y = float(y)
@@ -13,6 +21,29 @@ class Vector2:
     def copy(self) -> 'Vector2':
         '''Return a copy of the vector.'''
         return Vector2(self.x, self.y)
+    
+
+    def normalized(self) -> 'Vector2':
+        '''Return a normalized version of the vector.'''
+        length = (self.x ** 2 + self.y ** 2) ** 0.5
+        if length == 0:
+            return Vector2(0, 0)
+        return Vector2(self.x / length, self.y / length)
+    
+
+    def is_zero(self) -> bool:
+        '''Check if the vector is zero.'''
+        return self.x == 0.0 and self.y == 0.0
+    
+
+    def absolute(self) -> 'Vector2':
+        '''Return a vector with absolute values.'''
+        return Vector2(abs(self.x), abs(self.y))
+    
+
+    def is_positive(self) -> bool:
+        '''Check if both components are positive.'''
+        return self.x >= 0.0 and self.y >= 0.0
 
 
     @classmethod
@@ -75,3 +106,11 @@ class Vector2:
 
     def __str__(self):
         return f'Vector2({self.x}, {self.y})'
+
+
+# Initialize constant.
+Vector2.ONE = Vector2(1.0, 1.0)
+Vector2.RIGHT = Vector2(1.0, 0.0)
+Vector2.LEFT = Vector2(-1.0, 0.0)
+Vector2.UP = Vector2(0.0, -1.0)
+Vector2.DOWN = Vector2(0.0, 1.0)
