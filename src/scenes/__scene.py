@@ -7,7 +7,7 @@ from ..interfaces import Followable
 
 
 if TYPE_CHECKING:
-    from src.game import Game
+    from game import Game
     
 
 by_z_index = lambda e: e.transform.z_index

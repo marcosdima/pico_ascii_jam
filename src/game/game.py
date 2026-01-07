@@ -1,7 +1,7 @@
 import pygame
 
 
-from .config import (
+from ..config import (
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     FPS,
@@ -9,7 +9,7 @@ from .config import (
     BG_COLOR,
     MAIN_SCREEN,
 )
-from .entities import Avatar
+from ..entities import Avatar
 
 
 class Game:
