@@ -42,6 +42,12 @@ class Family(Module):
         super().on_owner_update(delta_time)
         for child in self.__children:
             child.owner.update(delta_time)
+
+
+    def on_owner_event(self, event):
+        super().on_owner_event(event)
+        for child in self.__children:
+            child.owner.handle_event(event)
         
 
     ''' Module abstract methods. '''
