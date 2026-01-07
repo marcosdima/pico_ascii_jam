@@ -1,8 +1,8 @@
 from pygame import Surface
 
 
-from ..entities import Avatar
-from ..types import Color, Resource
+from ..entities import Avatar, Slingshot
+from ..types import Color
 from .logic import Resources
 
 
@@ -16,8 +16,9 @@ class Player:
 
         # Set resources.
         self.resources = Resources()
-        
-        # Add some initial resources for testing
-        self.resources.recolect(Resource.ROCK, 10)
-        self.resources.recolect(Resource.IRON, 5)
-        self.resources.recolect(Resource.GOLD, 2)
+
+        # Set slingshot.
+        entity_size = self.entity.get_size()
+        self.slingshot = Slingshot(surface=surface)
+        self.slingshot.set_transform(position=(entity_size.x, 0))  # Set slingshot size and position.
+        self.entity.modules.family.add_child(self.slingshot.modules.family) # Add slingshot as child of avatar.

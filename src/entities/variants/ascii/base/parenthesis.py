@@ -7,7 +7,7 @@ class Parenthesis(Ascii):
 
 
     ''' Ascii overrides. '''
-    def get_unicode() -> int:
+    def get_unicode(self) -> int:
         ''' Get the Unicode code point for this parenthesis. '''
         return 0x0028  # Unicode for '('
     

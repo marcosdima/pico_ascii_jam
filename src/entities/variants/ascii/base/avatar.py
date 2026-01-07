@@ -1,4 +1,4 @@
-from ..ascii import Ascii
+from ..ascii import Ascii, Anchor
 from .....types import Color, Transform
 
 
@@ -7,7 +7,7 @@ class Avatar(Ascii):
 
 
     ''' Ascii overrides. '''
-    def get_unicode() -> int:
+    def get_unicode(self) -> int:
         ''' Get the Unicode code point for this avatar. '''
         return 0xC6C3
     
@@ -21,24 +21,14 @@ class Avatar(Ascii):
     def setup(self):
         super().setup()
 
-        from_row = lambda r, f, t: (((r, c), self.color) for c in range(f, t + 1))
+        coord = lambda r, c: ((r, c), self.color)
+        from_row = lambda r, f, t: (coord(r, c) for c in range(f, t + 1))
 
         self.create_squares([
             *from_row(0, 1, 3),
             *from_row(1, 1, 3),
             *from_row(2, 0, 4),
             *from_row(3, 1, 3),
-            ((4, 1), self.color),
-            ((4, 3), self.color),
+            coord(4, 1),
+            coord(4, 3),
         ])
-
-    
-    def set_color(self, color: Color):
-        super().set_color(color)
-        for square in self.squares:
-            square.set_color(color=self.color)
-
-
-    def on_transform_changed(self, prev: Transform, new: Transform):
-        super().on_transform_changed(prev, new)
-        self.grid.set_transform(size=new.size.to_tuple())

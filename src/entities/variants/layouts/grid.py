@@ -28,7 +28,7 @@ class Grid(Entity):
         self.columns = 2
         self.rows = 2
         self.positions: dict[int, tuple[int, int]] = {}
-        self.modules.set_debug()
+        #self.modules.set_debug()
 
     
     def update(self, delta_time):
