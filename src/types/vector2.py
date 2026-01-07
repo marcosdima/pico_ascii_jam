@@ -106,6 +106,12 @@ class Vector2:
 
     def __str__(self):
         return f'Vector2({self.x}, {self.y})'
+    
+
+    def __eq__(self, value):
+        if not isinstance(value, Vector2):
+            return NotImplemented
+        return self.x == value.x and self.y == value.y
 
 
 # Initialize constant.
