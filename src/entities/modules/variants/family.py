@@ -34,14 +34,14 @@ class Family(Module):
         ''' Interface: Call all draw event callbacks. '''
         super().on_owner_draw()
         for child in self.__children:
-            child.owner.on_draw()
+            child.owner.draw()
 
 
     def on_owner_update(self, delta_time: float):
         ''' Interface: Call all update event callbacks. '''
         super().on_owner_update(delta_time)
         for child in self.__children:
-            child.owner.on_update(delta_time)
+            child.owner.update(delta_time)
         
 
     ''' Module abstract methods. '''
