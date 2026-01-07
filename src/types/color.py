@@ -13,6 +13,15 @@ class Color:
     MAGENTA: 'Color' = None
     YELLOW: 'Color' = None
     GRAY: 'Color' = None
+    BEIGE: 'Color' = None
+    WHEAT: 'Color' = None
+    BROWN: 'Color' = None
+    ORANGE: 'Color' = None
+    PURPLE: 'Color' = None
+    PINK: 'Color' = None
+    LIME: 'Color' = None
+    NAVY: 'Color' = None
+    TEAL: 'Color' = None
     TRANSPARENT: 'Color' = None
 
     
@@ -99,4 +108,13 @@ Color.CYAN = Color(0, 255, 255)
 Color.MAGENTA = Color(255, 0, 255)
 Color.YELLOW = Color(255, 255, 0)
 Color.GRAY = Color(128, 128, 128)
+Color.BEIGE = Color(245, 245, 220)
+Color.WHEAT = Color(245, 222, 179)
+Color.BROWN = Color(165, 42, 42)
+Color.ORANGE = Color(255, 165, 0)
+Color.PURPLE = Color(128, 0, 128)
+Color.PINK = Color(255, 192, 203)
+Color.LIME = Color(0, 255, 0)
+Color.NAVY = Color(0, 0, 128)
+Color.TEAL = Color(0, 128, 128)
 Color.TRANSPARENT = Color(0, 0, 0, 0)
