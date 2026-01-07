@@ -18,7 +18,9 @@ class Ascii(Entity):
     def create_squares(self, positions: list[tuple[tuple[int, int], Color]]):
         '''Create square figures from a list of ((row, col), Color) items.'''
         if self.squares:
-            return  # Squares already created.
+            # Clear previous squares.
+            for square in self.squares:
+                self.grid.modules.family.remove_child(square.modules.family)
 
         self.squares = []
 
@@ -31,11 +33,11 @@ class Ascii(Entity):
             square.modules.set_debug()
             square.modules.input.add_mouse_callback(
                 to='on',
-                callback=lambda sq=square, col=color: sq.set_color(color=col.darker())
+                callback=lambda sq=square, ow=self: sq.set_color(color=self.color.darker())
             )
             square.modules.input.add_mouse_callback(
                 to='exit',
-                callback=lambda sq=square, col=color: sq.set_color(color=col)
+                callback=lambda sq=square, ow=self: sq.set_color(color=self.color)
             )
 
             # Add to grid.
@@ -54,6 +56,11 @@ class Ascii(Entity):
 
 
     ''' Lifecycle methods. '''
+    def set_properties(self):
+        self.squares: list[Square] = []
+        super().set_properties()
+
+
     def setup(self):
         super().setup()
 
@@ -62,9 +69,6 @@ class Ascii(Entity):
         rows, columns = self.get_default_dimensions()
         self.grid.set_grid_dimensions(rows=rows, columns=columns)
         self.modules.family.add_child(self.grid.modules.family)
-
-        # Container for created square figures.
-        self.squares: list[Square] = []
 
 
     def on_transform_changed(self, prev, new):

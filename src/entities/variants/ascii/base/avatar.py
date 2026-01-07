@@ -32,6 +32,12 @@ class Avatar(Ascii):
             ((4, 3), self.color),
         ])
 
+    
+    def set_color(self, color: Color):
+        super().set_color(color)
+        for square in self.squares:
+            square.set_color(color=self.color)
+
 
     def on_transform_changed(self, prev: Transform, new: Transform):
         super().on_transform_changed(prev, new)

@@ -1,9 +1,22 @@
 from .__enum import CustomEnum
+from ..color import Color
 
 class Resource(CustomEnum):
     ROCK = 0
     IRON = 1
     GOLD = 2
+
+
+    def get_color(self) -> Color:
+        '''Get the RGB color associated with the resource.'''
+        if self == Resource.ROCK:
+            return Color.GRAY
+        elif self == Resource.IRON:
+            return Color(230, 230, 230).brighter()  # Light gray.
+        elif self == Resource.GOLD:
+            return Color(255, 215, 0)    # Gold.
+        else:
+            return Color.WHITE
 
 
     @staticmethod

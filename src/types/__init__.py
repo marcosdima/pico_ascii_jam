@@ -17,6 +17,7 @@ from .enums.mouse import MouseButton
 from .vector2 import Vector2
 from .font import Font
 from .color import Color
+from .text import Text
 
 
 __all__ = [
@@ -36,5 +37,6 @@ __all__ = [
     # Others.
     "Color",
     "Font",
+    "Text",
     "Vector2",
 ]

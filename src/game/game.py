@@ -9,7 +9,8 @@ from ..config import (
     BG_COLOR,
     MAIN_SCREEN,
 )
-from ..entities import Avatar
+from .player import Player
+from .ui import Status, UI
 
 
 class Game:
@@ -25,13 +26,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.entity = Avatar(surface=self.screen)
-        self.entity.modules.set_wasd(speed=200.0)
-        self.entity.set_transform(
-            position=(100, 100),
-            size=(200, 200),
-            z_index=1
-        )
+        self.player = Player(surface=self.screen)
+        
+        # Initialize UI
+        self.ui_elements: list[UI] = []
+        self.status_ui = Status(surface=self.screen)
+        self.status_ui.set_resources(self.player.resources)
+        self.ui_elements.append(self.status_ui)
 
 
     def __set_display(self):
@@ -47,7 +48,7 @@ class Game:
     def handle_events(self):
         '''Handle game events.'''
         for event in pygame.event.get():
-            self.entity.handle_event(event)
+            self.player.entity.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
 
@@ -55,7 +56,14 @@ class Game:
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.entity.draw()
+        
+        # Draw entities first
+        self.player.entity.draw()
+        
+        # Draw UI on top (always visible)
+        for ui_element in self.ui_elements:
+            ui_element.draw()
+        
         pygame.display.flip()
 
 
@@ -67,7 +75,12 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.entity.update(dt)
+            self.player.entity.update(dt)
+            
+            # Update UI elements
+            for ui_element in self.ui_elements:
+                ui_element.update(dt)
+            
             self.draw()
 
         pygame.quit()

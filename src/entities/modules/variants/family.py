@@ -8,6 +8,13 @@ class Family(Module):
         child.set_parent(self)
         self.__children.append(child)
 
+
+    def remove_child(self, child: 'Family'):
+        ''' Remove a child. '''
+        if child in self.__children:
+            self.__children.remove(child)
+            child.set_parent(None)
+
     
     def set_parent(self, parent: 'Family'):
         ''' Set familiar parent. '''
