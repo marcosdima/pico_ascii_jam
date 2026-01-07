@@ -10,6 +10,7 @@ from .enums.resource import Resource
 from .enums.groups import ColliderGroup
 from .enums.event import Event
 from .enums.key import Key
+from .enums.mouse import MouseButton
 
 
 # Others.
@@ -30,6 +31,7 @@ __all__ = [
     "ColliderGroup",
     "Event",
     "Key",
+    "MouseButton",
 
     # Others.
     "Color",

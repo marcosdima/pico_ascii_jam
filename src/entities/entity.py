@@ -91,7 +91,7 @@ class Entity(Anfitrion, Coloreable, Visible):
         self.on_event(event=event)
 
 
-    ''' Interface methods. '''
+    ''' Coloreable interface methods. '''
     def get_default_color(self):
         return Color.WHITE
 
@@ -109,7 +109,6 @@ class Entity(Anfitrion, Coloreable, Visible):
 
         # Initialize components.
         self.modules = Modules(self)
-        self.modules.set_background()
         self.transform = Transform()
 
         # Call setup.
