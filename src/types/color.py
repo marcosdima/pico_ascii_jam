@@ -23,6 +23,27 @@ class Color:
         self.a = int(a)
 
 
+    def copy(self) -> 'Color':
+        '''Return a copy of the color.'''
+        return Color(self.r, self.g, self.b, self.a)
+    
+
+    def brighter(self, factor: float = 0.2) -> 'Color':
+        '''Return a brighter version of the color.'''
+        r = min(int(self.r + (255 - self.r) * factor), 255)
+        g = min(int(self.g + (255 - self.g) * factor), 255)
+        b = min(int(self.b + (255 - self.b) * factor), 255)
+        return Color(r, g, b, self.a)
+    
+
+    def darker(self, factor: float = 0.2) -> 'Color':
+        '''Return a darker version of the color.'''
+        r = max(int(self.r * (1 - factor)), 0)
+        g = max(int(self.g * (1 - factor)), 0)
+        b = max(int(self.b * (1 - factor)), 0)
+        return Color(r, g, b, self.a)
+
+
     ''' Type conversion methods. '''
     def to_tuple(self) -> tuple[int, int, int, int]:
         '''Return color as RGBA tuple.'''
@@ -37,11 +58,6 @@ class Color:
     def to_pygame_color(self) -> 'pygame.Color':
         '''Return color as pygame.Color.'''
         return pygame.Color(self.r, self.g, self.b, self.a)
-
-
-    def copy(self) -> 'Color':
-        '''Return a copy of the color.'''
-        return Color(self.r, self.g, self.b, self.a)
 
 
     '''  Python special methods. '''
