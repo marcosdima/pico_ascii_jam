@@ -71,3 +71,14 @@ class Transform:
 
     def __str__(self):
         return f'Transform(position={self.position}, size={self.size}, scale={self.scale}, z_index={self.z_index})'
+
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Transform):
+            return NotImplemented
+        return (
+            self.position == other.position and
+            self.size == other.size and
+            self.scale == other.scale and
+            self.z_index == other.z_index
+        )   
