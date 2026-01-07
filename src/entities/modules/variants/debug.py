@@ -15,8 +15,11 @@ class Debug(Module):
 
         self.update_delay = 10.0 # Seconds.
         self.timeout = 0.0
-        self.print = False # Change to False to disable debug printing.
-        self.filters: set[Literal['events', 'keys', 'mouse']] = set() # List of debug filters
+        self.filters: set[Literal['events', 'keys', 'mouse']] = set((
+            'events',
+            'keys',
+            'mouse',
+        )) # List of debug filters
 
         # Input debug.
         self.owner.modules.input.add_mouse_callback(
@@ -25,7 +28,7 @@ class Debug(Module):
                 lambda:
                     self.__debug(
                         print_message=f'Entity id={self.owner.id} mouse on',
-                        force='mouse' not in self.filters
+                        block='mouse' in self.filters
                     )
             )
         )
@@ -35,7 +38,7 @@ class Debug(Module):
                 lambda:
                     self.__debug(
                         print_message=f'Entity id={self.owner.id} mouse exit',
-                        force='mouse' not in self.filters
+                        block='mouse' in self.filters
                     )
             )
         )
@@ -46,7 +49,7 @@ class Debug(Module):
                 lambda:
                     self.__debug(
                         print_message=f'Entity id={self.owner.id} mouse button LEFT pressed',
-                        force='mouse' not in self.filters
+                        block='mouse' in self.filters
                     )
             )
         )
@@ -57,7 +60,7 @@ class Debug(Module):
                 lambda:
                     self.__debug(
                         print_message=f'Entity id={self.owner.id} mouse button LEFT released',
-                        force='mouse' not in self.filters
+                        block='mouse' in self.filters
                     )
             )
         )
@@ -68,14 +71,14 @@ class Debug(Module):
                 lambda:
                     self.__debug(
                         print_message=f'Entity id={self.owner.id} key SPACE pressed',
-                        force='keys' not in self.filters
+                        block='keys' in self.filters
                     )
             )
         )
 
 
-    def __debug(self, print_message: str, force: bool = False):
-        if not self.print and not force:
+    def __debug(self, print_message: str, block: bool = False):
+        if block:
             return
         print(print_message)
         print('-----------------------------------')
@@ -87,7 +90,7 @@ class Debug(Module):
         super().on_owner_update(delta_time)
         if self.timeout < 0.0:
             self.timeout = self.update_delay
-            self.__debug(f'Updating entity id={self.owner.id}')
+            self.__debug(f'Updating entity id={self.owner.id}', block='events' in self.filters)
         else:
             self.timeout -= delta_time
             
@@ -96,7 +99,10 @@ class Debug(Module):
         ''' Called when the owner entity is drawn. '''
         super().on_owner_draw()
         if self.timeout == self.update_delay:
-            self.__debug(f'Drawing entity id={self.owner.id} rect: {self.owner.transform.get_rect()}')
+            self.__debug(
+                print_message=f'Drawing entity id={self.owner.id} rect: {self.owner.transform.get_rect()}',
+                block='events' in self.filters
+            )
 
         # Draw entity bounding box.
         pygame.draw.rect(
@@ -110,10 +116,16 @@ class Debug(Module):
     def on_owner_transform_changed(self, prev: Transform, new: Transform):
         ''' Called when the owner entity transform is changed. '''
         super().on_owner_transform_changed(prev, new)
-        self.__debug(f'Entity id={self.owner.id} transform changed from {prev} to {new}')
+        self.__debug(
+            print_message=f'Entity id={self.owner.id} transform changed from {prev} to {new}',
+            block='events' in self.filters
+        )
 
 
     def on_owner_event(self, event: pygame.event.Event):
         ''' Called when the owner entity receives an event. '''
         super().on_owner_event(event)
-        self.__debug(f'Entity id={self.owner.id} received event: {event}')
+        self.__debug(
+            print_message=f'Entity id={self.owner.id} received event: {event}',
+            block='events' in self.filters
+        )

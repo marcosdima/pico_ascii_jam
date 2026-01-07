@@ -32,7 +32,6 @@ class Game:
             size=(200, 200),
             z_index=1
         )
-        self.entity.modules.set_debug()
 
 
     def __set_display(self):
@@ -51,9 +50,6 @@ class Game:
             self.entity.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
-            # If it was a click...
-            #elif event.type == pygame.MOUSEBUTTONDOWN:
-                #self.entity.set_transform(scale=self.entity.transform.scale * 1.1)
 
 
     def draw(self):

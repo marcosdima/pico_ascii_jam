@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import pygame
 
 
 from ...entity import Entity
@@ -22,10 +23,26 @@ class Ascii(Entity):
         self.squares = []
 
         for (r, c), color in positions:
+            # Create square.
             square = Square(surface=self.surface)
+
+            # Configure square.
+            square.set_color(color=color)
+            square.modules.set_debug()
+            square.modules.input.add_mouse_callback(
+                to='on',
+                callback=lambda sq=square, col=color: sq.set_color(color=col.darker())
+            )
+            square.modules.input.add_mouse_callback(
+                to='exit',
+                callback=lambda sq=square, col=color: sq.set_color(color=col)
+            )
+
+            # Add to grid.
             self.grid.modules.family.add_child(square.modules.family)
             self.grid.set_position(entity_id=square.id, column=c, row=r)
-            square.set_color(color=color)
+            
+            # Store reference.
             self.squares.append(square)
 
 
