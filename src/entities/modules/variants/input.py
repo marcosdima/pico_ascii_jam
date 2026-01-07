@@ -28,7 +28,8 @@ class Input(Module):
             self.release_mouse_button(button)
         elif event.type == pygame.MOUSEMOTION:
             mouse_pos = pygame.mouse.get_pos()
-            if self.owner.transform.get_rect().contains(pygame.Rect(mouse_pos, (1, 1))):
+            owner_rect = pygame.Rect(self.owner.get_rect())
+            if owner_rect.contains(pygame.Rect(mouse_pos, (1, 1))):
                 self.mouse_on()
                 self.__mouse_on = True
             elif self.__mouse_on:
