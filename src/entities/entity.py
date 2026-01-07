@@ -68,9 +68,10 @@ class Entity(Anfitrion, Coloreable, Visible):
                 new_transform.set_scale(*scale)
             if z_index is not None:
                 new_transform.set_z_index(z_index)
-
-        self.on_transform_changed(prev=self.transform, new=new_transform)
-        self.transform = new_transform
+        
+        if new_transform != self.transform:
+            self.on_transform_changed(prev=self.transform, new=new_transform)
+            self.transform = new_transform
         
 
     ''' Lifecycle methods. '''
