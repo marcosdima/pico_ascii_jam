@@ -57,6 +57,10 @@ class Key(CustomEnum):
     CTRL = pygame.K_LCTRL
     ALT = pygame.K_LALT
 
+    # Space and Enter.
+    SPACE = pygame.K_SPACE
+    ENTER = pygame.K_RETURN
+
 
     @classmethod
     def from_pygame_key(cls, pygame_key: int) -> 'Key':
