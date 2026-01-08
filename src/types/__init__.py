@@ -18,6 +18,7 @@ from .vector2 import Vector2
 from .font import Font
 from .color import Color
 from .text import Text
+from .hook import Hook
 
 
 __all__ = [
@@ -39,4 +40,5 @@ __all__ = [
     "Font",
     "Text",
     "Vector2",
+    "Hook",
 ]

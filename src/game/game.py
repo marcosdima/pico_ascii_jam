@@ -11,6 +11,8 @@ from ..config import (
 )
 from .player import Player
 from .ui import Status, UI
+from ..types import Color, Transform
+from ..entities import Entity
 
 
 class Game:
@@ -26,6 +28,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
+        self.test = Entity()
+        self.test.set_color(Color.WHITE)
+        self.test.set_transform(size=(50, 50), position=(100, 100))
+        self.test.modules.set_background()
+        self.test.modules.set_wasd()
+        self.test.modules.set_debug()
+        return
         self.player = Player(surface=self.screen)
         
         # Initialize UI
@@ -48,27 +57,23 @@ class Game:
     def handle_events(self):
         '''Handle game events.'''
         for event in pygame.event.get():
-            self.player.entity.handle_event(event)
+            #self.player.entity.handle_event(event)
+            self.test.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 key = event.key
                 if key == pygame.K_ESCAPE:
                     self.running = False
-                elif key == pygame.K_SPACE:
-                    self.player.entity.set_transform(scale=self.player.entity.get_scale() * 1.1)
+                #elif key == pygame.K_SPACE:
+                   # self.player.entity.set_transform(scale=self.player.entity.get_scale() * 1.1)
 
 
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        
-        # Draw entities first
-        self.player.entity.draw()
-        
-        # Draw UI on top (always visible)
-        for ui_element in self.ui_elements:
-            ui_element.draw()
+        self.test.draw(self.screen)
+        #self.test.hide()
         
         pygame.display.flip()
 
@@ -81,12 +86,7 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.player.entity.update(dt)
-            
-            # Update UI elements
-            for ui_element in self.ui_elements:
-                ui_element.update(dt)
-            
+            self.test.update(dt)
             self.draw()
 
         pygame.quit()

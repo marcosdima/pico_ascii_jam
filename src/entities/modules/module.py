@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import pygame
 
 
-from ...types import Event, Transform
+from ...types import Transform
 
 
 if TYPE_CHECKING:
@@ -21,10 +21,10 @@ class Module(ABC):
     @abstractmethod
     def setup(self):
         ''' Setup the module. '''
-        self.owner.add_event_callback(Event.DRAW, self.on_owner_draw)
-        self.owner.add_event_callback(Event.UPDATE, self.on_owner_update)
-        self.owner.add_event_callback(Event.TRANSFORM_CHANGED, self.on_owner_transform_changed)
-        self.owner.add_event_callback(Event.PYGAME_EVENT, self.on_owner_event)
+        self.owner.draw.add_callback(self.on_owner_draw)
+        self.owner.update.add_callback(self.on_owner_update)
+        self.owner.transform_changed.add_callback(self.on_owner_transform_changed)
+        self.owner.handle_event.add_callback(self.on_owner_event)
 
 
     ''' Module lifecycle methods. '''
@@ -33,7 +33,7 @@ class Module(ABC):
         pass
 
 
-    def on_owner_draw(self):
+    def on_owner_draw(self, surface: pygame.Surface):
         ''' Called when the owner entity is drawn. '''
         pass
 

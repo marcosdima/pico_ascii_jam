@@ -38,25 +38,6 @@ class Transform:
     def set_z_index(self, z_index: int):
         '''Set the z-index.'''
         self.z_index = z_index
-
-
-    def get_scaled_size(self) -> Size:
-        '''Get the size after applying the scale.'''
-        return Size(
-            self.size.width * self.scale.x,
-            self.size.height * self.scale.y
-        )
-    
-
-    def get_rect(self) -> pygame.Rect:
-        '''Get the pygame.Rect representing the transform.'''
-        real_size = self.get_scaled_size()
-        return pygame.Rect(
-            int(self.position.x),
-            int(self.position.y),
-            int(real_size.width),
-            int(real_size.height)
-        )   
     
     
     def copy(self) -> 'Transform':

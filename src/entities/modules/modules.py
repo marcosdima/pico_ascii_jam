@@ -1,10 +1,8 @@
 from .module import Module
-from .variants.family import Family
 from .variants.debug import Debug
 from .variants.movement import Movement
 from .variants.wasd import WASD
 from .variants.background import Background
-from .variants.input import Input
 
 
 class Modules(Module):
@@ -29,6 +27,3 @@ class Modules(Module):
     def setup(self):
         # Set basic modules.
         self.movement = Movement(self.owner)
-        self.family = Family(self.owner)
-        self.input = Input(self.owner)
-        

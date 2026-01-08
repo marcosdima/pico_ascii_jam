@@ -7,6 +7,8 @@ from ....types import Vector2
 
 class WASD(Module):
     ''' A module that allows movement using WASD keys. '''
+    def set_speed(self, speed: float):
+        self.speed = speed
 
 
     ''' Module abstract methods. '''
@@ -16,7 +18,7 @@ class WASD(Module):
 
 
     ''' Override methods. '''
-    def on_owner_update(self, delta_time: float):
+    def on_owner_update(self, _):
         keys = pygame.key.get_pressed()
         target = self.owner
         speed = self.speed

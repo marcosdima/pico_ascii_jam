@@ -1,12 +1,17 @@
-from .__interface import Interface
-from .coloreable import Coloreable
-from .anfitrion import Anfitrion
-from .visible import Visible
+from .base import Base
+from .variants.coloreable import Coloreable
+from .variants.visible import Visible
+from .variants.familiar import Familiar
+from .variants.input import Input
+
+
+class JointInterface(Coloreable, Visible, Familiar, Input):
+    pass
 
 
 __all__ = [
-    "Interface",
+    "Base",
     "Coloreable",
-    "Anfitrion",
     "Visible",
+    "JointInterface",
 ]

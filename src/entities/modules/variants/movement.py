@@ -37,9 +37,7 @@ class Movement(Module):
 
 
     ''' Module lifecycle methods. '''
-    def on_owner_update(self, delta_time: float):
-        super().on_owner_update(delta_time)
-        
+    def on_owner_update(self, delta_time):
         if not self.moving or (not self.distance.is_positive() and not self.infinite):
             return
         
