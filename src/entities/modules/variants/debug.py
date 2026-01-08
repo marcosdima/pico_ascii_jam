@@ -34,17 +34,19 @@ class Debug(Module):
                 'mouse',
                 'bounding_box',
                 'color',
+                'collisions',
             ]
         ] = set(
             (
-                #'update',        # Periodic update logs
+                # 'update',        # Periodic update logs
                 # 'draw',          # Drawing logs
                 'transform',     # Transform change logs
-                # 'events',        # Pygame events logs
-                'keyboard',      # Keyboard input logs
+                #'events',        # Pygame events logs
+                #'keyboard',      # Keyboard input logs
                 'mouse',         # Mouse input logs
                 'bounding_box',  # Draw bounding box
                 'color',
+                'collisions',
             )
         )
 
@@ -68,9 +70,29 @@ class Debug(Module):
             lambda key: self.__debug(f'Key {key} released.', category='keyboard')
         )
 
-        # Set callbacs for color changes.
+        # Set callbacks for color changes.
         self.owner.on_set_color.add_callback(
             lambda color: self.__debug(f'Color changed to {color}.', category='color')
+        )
+
+        # Set callback for collisions.
+        self.owner.on_collision.add_callback(
+            lambda other: self.__debug(
+                f'Collided with entity id={other.id}.',
+                category='collisions'
+            )
+        )
+        self.owner.on_still_colliding.add_callback(
+            lambda other: self.__debug(
+                f'Colliding with id={other.id}.',
+                category='collisions'
+            )
+        )
+        self.owner.on_stop_colliding.add_callback(
+            lambda other: self.__debug(
+                f'Stopped colliding with id={other.id}.',
+                category='collisions'
+            )
         )
 
 

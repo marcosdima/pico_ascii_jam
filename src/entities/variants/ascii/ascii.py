@@ -29,6 +29,7 @@ class Ascii(Entity):
             follow=self,
             anchor=Anchor.TOP_CENTER,
         )
+        self.sign.set_color(color=Color.WHITE)
         self.add_child(self.sign)
         self.sign.hide()
         self.mouse_on.add_callback(lambda: self.sign.show())

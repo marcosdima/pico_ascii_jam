@@ -9,6 +9,7 @@ class Familiar(Base):
         super().__init__()
         self.update.add_callback(self.__update_children)
         self.draw.add_callback(self.__draw_children)
+        self.handle_event.add_callback(self.__handle_event)
 
     
     def __update_children(self, delta_time):
@@ -21,6 +22,12 @@ class Familiar(Base):
         ''' Draw all children. '''
         for child in self.__children:
             child.draw(surface)
+
+        
+    def __handle_event(self, event):
+        ''' Handle event for all children. '''
+        for child in self.__children:
+            child.handle_event(event)
 
 
     def add_child(self, child: 'Familiar'):

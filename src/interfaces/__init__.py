@@ -3,9 +3,10 @@ from .variants.coloreable import Coloreable
 from .variants.visible import Visible
 from .variants.familiar import Familiar
 from .variants.input import Input
+from .variants.collider import Collider
 
 
-class JointInterface(Coloreable, Visible, Familiar, Input):
+class JointInterface(Coloreable, Visible, Familiar, Input, Collider):
     pass
 
 
@@ -14,4 +15,7 @@ __all__ = [
     "Coloreable",
     "Visible",
     "JointInterface",
+    "Familiar",
+    "Input",
+    "Collider",
 ]

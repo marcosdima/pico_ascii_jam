@@ -84,5 +84,3 @@ class Input(Base):
     def __handle__event(self, event: pygame.event.Event):
         self.__handle_key_event(event)
         self.__handle_mouse_event(event)
-        
-        

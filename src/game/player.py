@@ -13,7 +13,7 @@ class Player(Entity):
         self.body.set_color(color=Color.YELLOW)
         self.body.set_transform(size=(200, 200), position=(100, 100))
         self.add_child(self.body)
-        self.body.modules.set_debug()
+        #self.body.modules.set_debug()
         #self.body.modules.set_background()
 
         # Set resources.
