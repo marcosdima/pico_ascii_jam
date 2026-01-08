@@ -11,7 +11,7 @@ class V(Ascii):
     
 
     def get_default_dimensions(self):
-        return (4, 3)
+        return (5, 3)
   
 
     ''' Lifecycle methods. '''
@@ -20,6 +20,7 @@ class V(Ascii):
         self.create_squares([
             self.get_coord(0, 0), self.get_coord(0, 2),
             self.get_coord(1, 0), self.get_coord(1, 2),
-            *self.from_row(2, 2),
-            self.get_coord(3, 1),
+            self.get_coord(2, 0), self.get_coord(2, 2),
+            *self.from_row(3, 2),
+            self.get_coord(4, 1),
         ])

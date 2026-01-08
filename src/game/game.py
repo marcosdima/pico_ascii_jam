@@ -51,6 +51,12 @@ class Game:
             self.player.entity.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                key = event.key
+                if key == pygame.K_ESCAPE:
+                    self.running = False
+                elif key == pygame.K_SPACE:
+                    self.player.entity.set_transform(scale=self.player.entity.get_scale() * 1.1)
 
 
     def draw(self):

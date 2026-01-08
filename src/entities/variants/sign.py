@@ -108,7 +108,6 @@ class Sign(Entity):
         # Calculate drawing position
         follow_rect = self.follow.get_rect()
         fx, fy, fwidth, fheight = follow_rect
-        print(f'Follow: {self.follow}, Rendered surface size: {self.rendered_surface.get_size()}')
 
         if self.anchor == Anchor.TOP_CENTER:
             draw_pos = (

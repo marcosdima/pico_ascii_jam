@@ -3,7 +3,7 @@ import pygame
 
 
 from .modules import Modules
-from ..types import Transform, Position, Color, Vector2
+from ..types import Transform, Position, Color, Vector2, Size
 from ..interfaces import Anfitrion, Coloreable, Visible
 
 
@@ -24,7 +24,7 @@ class Entity(Anfitrion, Coloreable, Visible):
         return (self.transform.position * self.get_scale()) + offset
     
 
-    def get_size(self) -> Position:
+    def get_size(self) -> Size:
         real_size = self.transform.size
         return real_size * self.get_scale()
     
