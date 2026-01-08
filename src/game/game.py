@@ -28,19 +28,11 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.test = Entity()
-        self.test.set_color(Color.WHITE)
-        self.test.set_transform(size=(50, 50), position=(100, 100))
-        self.test.modules.set_background()
-        self.test.modules.set_wasd()
-        self.test.modules.set_debug()
-        return
-        self.player = Player(surface=self.screen)
+        self.player = Player()
         
         # Initialize UI
         self.ui_elements: list[UI] = []
         self.status_ui = Status(surface=self.screen)
-        self.status_ui.set_resources(self.player.resources)
         self.ui_elements.append(self.status_ui)
 
 
@@ -57,24 +49,21 @@ class Game:
     def handle_events(self):
         '''Handle game events.'''
         for event in pygame.event.get():
-            #self.player.entity.handle_event(event)
-            self.test.handle_event(event)
+            self.player.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 key = event.key
                 if key == pygame.K_ESCAPE:
                     self.running = False
-                #elif key == pygame.K_SPACE:
-                   # self.player.entity.set_transform(scale=self.player.entity.get_scale() * 1.1)
+                elif key == pygame.K_SPACE:
+                   self.player.set_transform(scale=self.player.get_scale() * 1.1)
 
 
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.test.draw(self.screen)
-        #self.test.hide()
-        
+        self.player.draw(self.screen)
         pygame.display.flip()
 
 
@@ -86,7 +75,8 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.test.update(dt)
+            self.player.update(dt)
+            self.status_ui.set_resources(self.player.resources)
             self.draw()
 
         pygame.quit()

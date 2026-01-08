@@ -1,5 +1,5 @@
 from ..ascii import Ascii
-from .....types import Color, Transform
+from .....utils import create_coord, create_row
 
 
 class Parenthesis(Ascii):
@@ -8,31 +8,22 @@ class Parenthesis(Ascii):
 
     ''' Ascii overrides. '''
     def get_unicode(self) -> int:
-        ''' Get the Unicode code point for this parenthesis. '''
-        return 0x0028  # Unicode for '('
+        return 0x0028
     
 
     def get_default_dimensions(self):
         return (5, 2)
-    
-
-    ''' Coloreable interface methods. '''
-    def get_default_color(self):
-        return Color.GREEN
                 
 
     ''' Lifecycle methods. '''
-    def setup(self):
-        super().setup()
-
-        from_row = lambda r, f, t: (((r, c), self.color) for c in range(f, t + 1))
-
-        self.create_squares([
-            *from_row(0, 1, 3),
-            *from_row(1, 1, 3),
-            *from_row(2, 0, 4),
-            *from_row(3, 1, 3),
-            ((4, 1), self.color),
-            ((4, 3), self.color),
-        ])
+    def get_square_values(self):
+        color = { 'color': self.color }
+        return [
+            *create_row(0, 1, 3, content=color),
+            *create_row(1, 1, 3, content=color),
+            *create_row(2, 0, 4, content=color),
+            *create_row(3, 1, 3, content=color),
+            create_coord(4, 1, content=color),
+            create_coord(4, 3, content=color),
+        ]
 

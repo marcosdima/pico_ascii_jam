@@ -7,6 +7,20 @@ class Familiar(Base):
         self.__parent = None
         self.__children: list['Familiar'] = []
         super().__init__()
+        self.update.add_callback(self.__update_children)
+        self.draw.add_callback(self.__draw_children)
+
+    
+    def __update_children(self, delta_time):
+        ''' Update all children. '''
+        for child in self.__children:
+            child.update(delta_time)
+
+    
+    def __draw_children(self, surface):
+        ''' Draw all children. '''
+        for child in self.__children:
+            child.draw(surface)
 
 
     def add_child(self, child: 'Familiar'):
@@ -42,12 +56,10 @@ class Familiar(Base):
         return self.__parent is not None
     
 
-    ''' Overrides. '''
-    def set_properties(self):
-        self.__parent: 'Familiar' = None
-        self.__children: list['Familiar'] = []
-        super().set_properties()
-
+    def has_children(self) -> bool:
+        ''' Check if familiar has children. '''
+        return len(self.__children) > 0
+    
 
     ''' Transform overrides. '''
     def get_position(self):

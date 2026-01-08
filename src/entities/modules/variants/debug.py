@@ -32,17 +32,19 @@ class Debug(Module):
                 'events',
                 'keyboard',
                 'mouse',
-                'bounding_box'
+                'bounding_box',
+                'color',
             ]
         ] = set(
             (
-                # 'update',        # Periodic update logs
+                #'update',        # Periodic update logs
                 # 'draw',          # Drawing logs
                 'transform',     # Transform change logs
                 # 'events',        # Pygame events logs
                 'keyboard',      # Keyboard input logs
                 'mouse',         # Mouse input logs
                 'bounding_box',  # Draw bounding box
+                'color',
             )
         )
 
@@ -66,16 +68,53 @@ class Debug(Module):
             lambda key: self.__debug(f'Key {key} released.', category='keyboard')
         )
 
+        # Set callbacs for color changes.
+        self.owner.on_set_color.add_callback(
+            lambda color: self.__debug(f'Color changed to {color}.', category='color')
+        )
+
 
     ''' Module lifecycle methods. '''
     def on_owner_update(self, delta_time: float):
         ''' Called when the owner entity is updated. '''
         if self.timeout <= 0.0:
             self.timeout = self.update_delay
-            self.__debug(
-                f'delta_time={delta_time:.4f}s, pos={self.owner.get_position()}, size={self.owner.get_size()}',
-                category='update'
+
+            owner = self.owner
+            parent = owner.get_parent() if hasattr(owner, 'get_parent') else None
+            children = owner.get_children() if hasattr(owner, 'get_children') else []
+
+            parent_label = (
+                f'{type(parent).__name__}#{getattr(parent, "id", "?")}'
+                if parent else 'None'
             )
+            children_label = (
+                ', '.join(
+                    f'{type(child).__name__}#{getattr(child, "id", "?")}'
+                    for child in children
+                )
+                if children else 'None'
+            )
+
+            local = owner.transform
+            global_pos = owner.get_position()
+            rect = owner.get_rect()
+            color = getattr(owner, 'color', None)
+            color_label = repr(color) if color is not None else 'None'
+
+            snapshot_lines = [
+                f'  delta_time: {delta_time:.4f}s',
+                '  hierarchy:',
+                f'    parent: {parent_label}',
+                f'    children ({len(children)}): {children_label}',
+                '  transform:',
+                f'    local: pos={local.position}, size={local.size}, scale={local.scale}, z_index={local.z_index}',
+                f'    global: pos={global_pos}, rect={rect}',
+                '  color:',
+                f'    current: {color_label}',
+            ]
+
+            self.__debug('\n'.join(snapshot_lines), category='update')
         else:
             self.timeout -= delta_time
             

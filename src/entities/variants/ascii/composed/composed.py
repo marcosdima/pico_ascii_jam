@@ -3,36 +3,40 @@ from .....types import Color
 
 class Composed(Entity):
     ''' Composed entity class. '''
+    def __init__(self):
+        super().__init__()
+
+        # Initialize Ascii components.
+        self.__asciis: list[Ascii] = self.get_initial_asciis()
+        
+        # Add Ascii components as children.
+        for ascii in self.__asciis:
+            self.add_child(ascii)
 
 
-    def __set_asciis(self):
-        ''' Private method to set the Ascii components. '''
-        self.asciis = self.get_asciis()
+    def get_asciis(self) -> list[Ascii]:
+        ''' Access to Ascii components. '''
+        return self.__asciis
+    
+
+    ''' Entity overrides. '''
+    def get_size(self):
+        if not self.__asciis:
+            return super().get_size()
+        
+        aux = self.get_asciis()[0].get_size()
+        for ascii in self.get_asciis()[1:]:
+            aux += ascii.get_size()
+            
+        return aux
 
 
     ''' Abstract methods. '''
     @abstractmethod
-    def get_asciis(self) -> list[Ascii]:
+    def get_initial_asciis(self) -> list[Ascii]:
         ''' Get the Ascii components that make up this composed entity. '''
         return []
 
 
-    ''' Entity overrides. '''
-    def set_color(self, color: Color):
-        super().set_color(color)
-        for ascii_entity in self.asciis:
-            ascii_entity.set_color(color=self.color)
-
-
-    ''' Lifecycle methods. '''
-    def set_properties(self):
-        self.asciis: list[Ascii] = []
-        super().set_properties()
-
         
-    def setup(self):
-        super().setup()
-        self.__set_asciis()
-        # Setup each Ascii component.
-        for ascii_entity in self.asciis:
-            self.modules.family.add_child(ascii_entity.modules.family)
+    

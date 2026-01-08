@@ -10,12 +10,11 @@ class Slingshot(Composed):
 
 
     ''' Composed overrides. '''
-    def get_asciis(self) -> list[Ascii]:
-        if not hasattr(self, 'v') or not hasattr(self, 'ascii_circum'):
-            self.v = V(surface=self.surface,)
-            self.ascii_circum = AsciiCircum(surface=self.surface)
+    def get_initial_asciis(self) -> list[Ascii]:
+        self.v = V()
+        self.ascii_circum = AsciiCircum()
 
-        size = 150 # Harcided
+        size = 150 # Hardcoded
         part = size / 10
         height = part * 4
         width = part * 3
@@ -29,12 +28,3 @@ class Slingshot(Composed):
         self.ascii_circum.set_sign_anchor(anchor=Anchor.BOTTOM_CENTER)
 
         return [self.v, self.ascii_circum]
-    
-
-    ''' Entity overrides. '''
-    def get_size(self):
-        aux = Size()
-        for ascii in self.asciis:
-            if ascii is self.v:
-                aux += ascii.get_size()
-        return aux

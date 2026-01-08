@@ -1,11 +1,12 @@
 from ..base import Base
-from ...types import Color
+from ...types import Color, Hook
 
 class Coloreable(Base):
     ''' Coloreable interface class. '''
     def __init__(self):
         super().__init__()
         # Set default color at initialization.
+        self.on_set_color = Hook[Color]()
         self.set_color(self.get_default_color())
 
 
@@ -17,6 +18,7 @@ class Coloreable(Base):
             color (Color): The color to set.
         """
         self.color = color
+        self.on_set_color(color)
 
 
     def get_color(self) -> Color:

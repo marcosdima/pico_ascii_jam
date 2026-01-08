@@ -1,5 +1,5 @@
 from ..ascii import Ascii
-
+from .....utils import create_coord, create_row
 
 class V(Ascii):
     ''' V entity class. '''
@@ -14,13 +14,12 @@ class V(Ascii):
         return (5, 3)
   
 
-    ''' Lifecycle methods. '''
-    def setup(self):
-        super().setup()
-        self.create_squares([
-            self.get_coord(0, 0), self.get_coord(0, 2),
-            self.get_coord(1, 0), self.get_coord(1, 2),
-            self.get_coord(2, 0), self.get_coord(2, 2),
-            *self.from_row(3, 2),
-            self.get_coord(4, 1),
-        ])
+    def get_square_values(self):
+        color = { 'color': self.color }
+        return [
+            create_coord(0, 0, content=color), create_coord(0, 2, content=color),
+            create_coord(1, 0, content=color), create_coord(1, 2, content=color),
+            create_coord(2, 0, content=color), create_coord(2, 2, content=color),
+            *create_row(3, 2, content=color),
+            create_coord(4, 1, content=color),
+        ]

@@ -11,7 +11,6 @@ class Sign(Entity):
     
     def __init__(
             self,
-            surface: pygame.Surface,
             text: str,
             follow: 'Entity',
             anchor: Anchor = Anchor.CENTER,
@@ -30,7 +29,11 @@ class Sign(Entity):
         self.anchor = anchor
         self.offset = offset
 
-        super().__init__(surface)
+        super().__init__()
+
+        # Set as callback for drawing.
+        self.draw.add_callback(self.__on_draw)
+        self.transform_changed.add_callback(self.__update_rendered_surface)
     
 
     def set_text(self, text: str):
@@ -68,9 +71,9 @@ class Sign(Entity):
         return trimmed
 
 
-    def __update_rendered_surface(self, size: Size = Size(0, 0)):
+    def __update_rendered_surface(self, prev, new):
         '''Update the rendered text surface.'''
-        font_size = max(8, int(size.y / 2))
+        font_size = max(8, int(new.size.y / 2))
 
         # Create or update font with new size
         self.font = Font(font_path=FONT_PATH, font_size=font_size)
@@ -86,22 +89,7 @@ class Sign(Entity):
         self.rendered_surface = self.__trim_surface(rendered)
 
 
-    ''' Lifecycle methods. '''
-    def setup(self):
-        super().setup()
-        self.__update_rendered_surface(size=self.transform.size)
-
-
-    def on_transform_changed(self, prev, new):
-        '''Recalculate font size when transform changes.'''
-        super().on_transform_changed(prev, new)
-        self.__update_rendered_surface(size=new.size)
-
-
-    def on_draw(self):
-        '''Draw the text on screen.'''
-        super().on_draw()
-
+    def __on_draw(self, surface):
         if not self.rendered_surface:
             return
         
@@ -133,4 +121,9 @@ class Sign(Entity):
             draw_pos = (fx, fy)
         
         # Draw the text surface
-        self.surface.blit(self.rendered_surface, draw_pos)
+        surface.blit(self.rendered_surface, draw_pos)
+
+
+
+
+    

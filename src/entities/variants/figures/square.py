@@ -3,11 +3,8 @@ from ...entity import Entity
 
 class Square(Entity):
     ''' Square entity class. '''
-    
-
-    ''' Lifecycle methods. '''
-    def setup(self):
-        super().setup()
+    def __init__(self):
+        super().__init__()
         self.modules.set_background()
 
     

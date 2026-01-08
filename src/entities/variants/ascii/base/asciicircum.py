@@ -1,4 +1,5 @@
 from ..ascii import Ascii
+from .....utils import create_coord
 
 
 class AsciiCircum(Ascii):
@@ -14,11 +15,10 @@ class AsciiCircum(Ascii):
         return (2, 3)
   
 
-    ''' Lifecycle methods. '''
-    def setup(self):
-        super().setup()
-
-        self.create_squares([
-            self.get_coord(0, 1),
-            self.get_coord(1, 0), self.get_coord(1, 2),
-        ])
+    def get_square_values(self):
+        color = { 'color': self.color }
+        return [
+            create_coord(0, 1, content=color),
+            create_coord(1, 0, content=color),
+            create_coord(1, 2, content=color),
+        ]
