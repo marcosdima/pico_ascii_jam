@@ -1,5 +1,5 @@
-from ..entities import Avatar, Slingshot, Entity
-from ..types import Color, Size, Resource, ColliderGroup, Trajectory
+from ..entities import Avatar, Slingshot, Entity, Pickaxe
+from ..types import Color, Size, Resource, ColliderGroup
 from .logic import Resources
 
 
@@ -14,6 +14,7 @@ class Player(Entity):
         self.body.set_transform(size=(125, 125), position=(100, 100))
         self.body.set_group(ColliderGroup.PLAYER)
         self.body.on_collision.add_callback(self.__bounce_on_collision)
+        self.body.update.add_callback(self.__on_update)
         self.add_child(self.body)
 
         # Set resources.
@@ -22,8 +23,21 @@ class Player(Entity):
         
         # Set slingshot.
         self.slingshot = Slingshot()
-        self.body.add_child(self.slingshot)
+        #self.body.add_child(self.slingshot)
 
+        # Set pickaxe.
+        self.pickaxe = Pickaxe()
+        self.body.add_child(self.pickaxe)
+
+
+        self.main_tool = self.pickaxe
+
+
+        
+
+
+    def __on_update(self, delta_time: float):
+        '''Handle update event.'''
         slingshot_size = Size(50, 80)
         body_size = self.body.get_size()
         self.slingshot.set_transform(

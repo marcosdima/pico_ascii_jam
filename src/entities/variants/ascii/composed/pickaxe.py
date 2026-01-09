@@ -1,9 +1,25 @@
-from ..ascii import Ascii, Entity, abstractmethod
+from .composed import Composed
+from ..base.v import V
+from ..base.parenthesis import Parenthesis
+from ..ascii import Ascii
+from .....types import Color, Anchor
 
 
-class Pickaxe(Entity):
+class Pickaxe(Composed):
     ''' Pickaxe entity class. '''
 
 
-    ''' Entity overrides. '''
-    #def g
+    ''' Composed overrides. '''
+    def get_initial_asciis(self) -> list[Ascii]:
+        self.top = Parenthesis()
+
+        size = 150 # Hardcoded
+        part = size / 10
+        height = part * 5
+        width = part * 2
+
+        self.top.set_color(color=Color.BEIGE)
+        self.top.set_transform(size=(width, height))
+        self.top.set_sign_anchor(anchor=Anchor.TOP_CENTER)
+
+        return [self.top]

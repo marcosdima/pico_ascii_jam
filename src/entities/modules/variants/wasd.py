@@ -42,7 +42,7 @@ class WASD(Module):
             )
         
         if direction != Vector2():
-            movement.move(force=25)
+            movement.move(force=10)
     
     def on_draw(self):
         pass

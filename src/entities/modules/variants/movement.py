@@ -25,7 +25,7 @@ class Movement(Module):
         super().setup()
 
         self.acc_force = 0.0
-        self.speed = 500.0
+        self.speed = 250.0
         self.trajectory = Trajectory()
 
         # Flags.

@@ -33,8 +33,9 @@ class Sign(Entity):
 
         # Set as callback for drawing.
         self.draw.add_callback(self.__on_draw)
-        self.transform_changed.add_callback(self.__update_rendered_surface)
-    
+        self.transform_changed.add_callback(lambda _, __: self.__update_rendered_surface())
+        self.on_set_color.add_callback(lambda _: self.__update_front_surface())
+
 
     def set_text(self, text: str):
         '''Set the text to display.
@@ -71,9 +72,25 @@ class Sign(Entity):
         return trimmed
 
 
-    def __update_rendered_surface(self, prev, new):
+    def __update_front_surface(self):
+        '''Update the rendered text surface on color change.'''
+        if not self.rendered_surface:
+            return
+        
+        # Re-render text with new color
+        rendered = self.font.render(
+            str(self.text_content),
+            True,
+            self.color.to_pygame_color()
+        )
+        
+        # Trim whitespace
+        self.rendered_surface = self.__trim_surface(rendered)
+
+
+    def __update_rendered_surface(self):
         '''Update the rendered text surface.'''
-        font_size = max(8, int(new.size.y / 2))
+        font_size = max(8, int(self.get_size().y / 2))
 
         # Create or update font with new size
         self.font = Font(font_path=FONT_PATH, font_size=font_size)
@@ -88,40 +105,53 @@ class Sign(Entity):
         # Trim whitespace
         self.rendered_surface = self.__trim_surface(rendered)
 
-
-    def __on_draw(self, surface):
-        if not self.rendered_surface:
-            return
-        
         # Calculate drawing position
         follow_rect = self.follow.get_rect()
         fx, fy, fwidth, fheight = follow_rect
 
         if self.anchor == Anchor.TOP_CENTER:
-            draw_pos = (
+            self.draw_pos = (
                 fx + (fwidth - self.rendered_surface.get_width()) / 2,
                 fy - self.rendered_surface.get_height() - self.offset
             )
         elif self.anchor == Anchor.BOTTOM_CENTER:
-            draw_pos = (
+            self.draw_pos = (
                 fx + (fwidth - self.rendered_surface.get_width()) / 2,
                 fy + fheight + self.offset
             )
         elif self.anchor == Anchor.CENTER:
-            draw_pos = (
+            self.draw_pos = (
                 fx + (fwidth - self.rendered_surface.get_width()) / 2,
                 fy + (fheight - self.rendered_surface.get_height()) / 2
             )
         elif self.anchor == Anchor.CENTER_RIGHT:
-            draw_pos = (
+            self.draw_pos = (
                 fx + fwidth + self.offset,
                 fy + (fheight - self.rendered_surface.get_height()) / 2
             )
         else:
-            draw_pos = (fx, fy)
+            self.draw_pos = (fx, fy)
+        self.set_transform(
+            position=self.draw_pos,
+        )
+
+
+    def __on_draw(self, surface):
+        if not self.rendered_surface:
+            return
         
         # Draw the text surface
-        surface.blit(self.rendered_surface, draw_pos)
+        surface.blit(self.rendered_surface, self.draw_pos)
+
+
+    ''' Entity overrides. '''
+    def get_rect(self):
+        return pygame.Rect(
+            self.transform.position.x,
+            self.transform.position.y,
+            self.rendered_surface.get_width() if self.rendered_surface else 0,
+            self.rendered_surface.get_height() if self.rendered_surface else 0,
+        )
 
 
 

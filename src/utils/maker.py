@@ -24,6 +24,15 @@ def create_row(
     return [create_coord(row, c, content) for c in range(from_col, to_col + 1)]
 
 
+def create_column(
+        column: int,
+        to_row: int,
+        from_row: int = 0,
+        content: object = {},
+    ) -> list[Coordinate]:
+    return [create_coord(r, column, content) for r in range(from_row, to_row + 1)]
+
+
 def create_full_rows(
         rows: list[int],
         columns: int,

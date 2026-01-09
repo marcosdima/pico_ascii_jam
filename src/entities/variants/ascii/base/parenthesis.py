@@ -1,5 +1,6 @@
 from ..ascii import Ascii
-from .....utils import create_coord, create_row
+from .....utils import create_coord, create_column
+from .....types import Color
 
 
 class Parenthesis(Ascii):
@@ -17,13 +18,10 @@ class Parenthesis(Ascii):
 
     ''' Lifecycle methods. '''
     def get_square_values(self):
-        color = { 'color': self.color }
+        color = { 'color': Color.BROWN }
         return [
-            *create_row(0, 1, 3, content=color),
-            *create_row(1, 1, 3, content=color),
-            *create_row(2, 0, 4, content=color),
-            *create_row(3, 1, 3, content=color),
+            create_coord(0, 1, content=color),
+            *create_column(0, 3, 1, content=color),
             create_coord(4, 1, content=color),
-            create_coord(4, 3, content=color),
         ]
 
