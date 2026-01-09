@@ -2,7 +2,7 @@ from ..ascii import Ascii
 from .....utils import create_coord, create_row
 
 class H18533(Ascii):
-    ''' V entity class. '''
+    ''' H18533 entity class. '''
 
 
     ''' Ascii overrides. '''
