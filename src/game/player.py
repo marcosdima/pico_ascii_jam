@@ -1,5 +1,5 @@
 from ..entities import Avatar, Slingshot, Entity
-from ..types import Color, Size, Resource
+from ..types import Color, Size, Resource, ColliderGroup
 from .logic import Resources
 
 
@@ -13,8 +13,7 @@ class Player(Entity):
         self.body.set_color(color=Color.YELLOW)
         self.body.set_transform(size=(200, 200), position=(100, 100))
         self.add_child(self.body)
-        #self.body.modules.set_debug()
-        #self.body.modules.set_background()
+        self.body.set_group(ColliderGroup.PLAYER)
 
         # Set resources.
         self.resources = Resources()
