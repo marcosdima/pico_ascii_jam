@@ -54,6 +54,7 @@ class Ascii(Entity):
         '''Create square figures from a list of ((row, col), Color) items.'''
         if self.squares:
             # Clear previous squares.
+            self.remove_areas(self.squares)
             for square in self.squares:
                 self.grid.remove_child(square)
 
@@ -71,9 +72,11 @@ class Ascii(Entity):
             # Add to grid.
             self.grid.add_child(square)
             self.grid.set_grid_position(square, column=c, row=r)
-            
+
             # Store reference.
             self.squares.append(square)
+            square.disable_collide()
+        self.add_areas(self.squares)
 
 
     def set_sign_anchor(self, anchor: Anchor):

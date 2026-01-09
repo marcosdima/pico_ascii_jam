@@ -1,47 +1,55 @@
 from ..module import Module
 from ....types import Position
+from ....types.trajectory import Trajectory, TrajectoryType, Fields
+
 
 class Movement(Module):
     ''' Movement module. '''
-    def go_to(
-            self,
-            direction: tuple[float, float],
-            speed: float,
-            infinite: bool = False
-            ):
-        ''' Set movement direction and speed. '''
-        # Set movement parameters.
-        self.direction = Position(*direction)
-        self.speed = speed
-        self.distance = (self.owner.get_position() - self.direction).absolute()  
-        self.direction = self.direction.normalized()
+    def move(self, force: float):
+        '''Start moving in a given direction with a given speed.'''
+        self.__moving = True
+        self.acc_force += force
 
-        # Update flags.
-        self.infinite = infinite
-        self.moving = True
-    
+
+    def change_trajectory(self, kind: TrajectoryType, fields: Fields):
+        '''Change the current trajectory type and fields.'''
+        self.trajectory.set(
+            kind=kind,
+            start=self.owner.transform.position,
+            fields=fields
+        )
+
 
     ''' Module abstract methods. '''
     def setup(self):
         super().setup()
 
-        # Workflow variables.
-        self.speed = 1.0 # 1 unit per second.
-        self.direction = Position(0, 0)
-        self.distance = Position(0, 0)
-        self.target = None
+        self.acc_force = 0.0
+        self.speed = 500.0
+        self.trajectory = Trajectory()
 
         # Flags.
-        self.moving = False
-        self.infinite = False
+        self.__moving = False
 
 
     ''' Module lifecycle methods. '''
     def on_owner_update(self, delta_time):
-        if not self.moving or (not self.distance.is_positive() and not self.infinite):
+        if not self.__moving:
+            return
+        elif self.acc_force < 1:
+            self.__moving = False
+            self.acc_force = 0.0
             return
         
-        # Move owner towards target.
-        movement_vector = self.direction * self.speed * delta_time
-        self.distance -= movement_vector
-        self.owner.transform.position += movement_vector
+        speed = self.speed
+        force = self.acc_force
+
+        if force > speed:
+            movement = delta_time * speed
+            self.acc_force -= 10 * movement
+        else:
+            movement = delta_time * force
+            self.acc_force -= movement
+
+        next_position = self.trajectory(movement)
+        self.owner.transform.position = next_position

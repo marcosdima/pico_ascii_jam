@@ -1,8 +1,8 @@
 from .__scene import Scene
-from .menu import MenuScene
+from .menu import Menu
 
 
 __all__ = [
     "Scene",
-    "MenuScene",
+    "Menu",
 ]

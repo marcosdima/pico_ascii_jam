@@ -1,27 +1,26 @@
+import math
 import pygame
 
 
 from ..module import Module
-from ....types import Vector2
+from ....types import Vector2, Position
 
 
 class WASD(Module):
     ''' A module that allows movement using WASD keys. '''
-    def set_speed(self, speed: float):
-        self.speed = speed
 
 
     ''' Module abstract methods. '''
     def setup(self):
         super().setup()
-        self.speed: float = 200.0
+        self.curr_direction: Vector2 = Vector2()
 
 
     ''' Override methods. '''
     def on_owner_update(self, _):
         keys = pygame.key.get_pressed()
         target = self.owner
-        speed = self.speed
+        movement = target.modules.movement
 
         direction = Vector2(0, 0)
         if keys[pygame.K_w]: direction += Vector2.UP
@@ -29,11 +28,21 @@ class WASD(Module):
         if keys[pygame.K_a]: direction += Vector2.LEFT
         if keys[pygame.K_d]: direction += Vector2.RIGHT
 
-        target.modules.movement.go_to(
-            direction=direction.normalized().to_tuple(),
-            speed=speed,
-            infinite=True
-        )
+        # If there's no input, don't start movement.
+        normalized_direction = direction.normalized()
+        if self.curr_direction != normalized_direction:
+            self.curr_direction = normalized_direction
+            direction = Position.from_tuple(normalized_direction.to_tuple())
+            fields = {
+                'direction': direction
+            }
+            movement.change_trajectory(
+                kind='linear',
+                fields=fields
+            )
+        
+        if direction != Vector2():
+            movement.move(force=25)
     
     def on_draw(self):
         pass

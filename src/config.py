@@ -1,5 +1,5 @@
 # Window dimensions
-WINDOW_WIDTH = 600
+WINDOW_WIDTH = 1200
 WINDOW_HEIGHT = 600
 
 # Colors (RGB)

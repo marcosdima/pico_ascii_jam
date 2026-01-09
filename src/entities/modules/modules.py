@@ -7,10 +7,9 @@ from .variants.background import Background
 
 class Modules(Module):
     ''' Modules container class. '''
-    def set_wasd(self, speed: float = 200.0):
+    def set_wasd(self):
         ''' Set WASD module with given speed. '''
         self.wasd = WASD(self.owner)
-        self.wasd.speed = speed
 
 
     def set_debug(self):

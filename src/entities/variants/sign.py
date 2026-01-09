@@ -105,7 +105,7 @@ class Sign(Entity):
         elif self.anchor == Anchor.BOTTOM_CENTER:
             draw_pos = (
                 fx + (fwidth - self.rendered_surface.get_width()) / 2,
-                fy + fheight
+                fy + fheight + self.offset
             )
         elif self.anchor == Anchor.CENTER:
             draw_pos = (

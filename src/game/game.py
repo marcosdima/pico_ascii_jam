@@ -11,8 +11,7 @@ from ..config import (
 )
 from .player import Player
 from .ui import Status, UI
-from ..types import Color, Transform
-from ..entities import Entity, H18533
+from .scenes import Menu, Scene
 
 
 class Game:
@@ -28,26 +27,14 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.main_entity = Entity()
+        # Main scene.
+        self.menu: Menu = Menu()
+        self.scenes: list[Scene] = [self.menu]
+        self.main_scene: Scene = self.menu
 
         # Set player.
         self.player = Player()
-        self.player.modules.set_debug()
-        self.player.add_areas([self.player.body])
-        self.main_entity.add_child(self.player)
-        
-        # Collision test.
-        test = H18533()
-        test.set_transform(
-            position=(400, 300),
-            size=(100, 100)
-        )
-        print(test.get_rect())
-        test.add_areas([test])
-        self.main_entity.add_child(test)
 
-        
-        
         # Initialize UI
         self.ui_elements: list[UI] = []
         self.status_ui = Status(surface=self.screen)
@@ -67,7 +54,8 @@ class Game:
     def handle_events(self):
         '''Handle game events.'''
         for event in pygame.event.get():
-            self.main_entity.handle_event(event)
+            self.main_scene.main_entity.handle_event(event)
+            self.player.handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.KEYDOWN:
@@ -81,7 +69,10 @@ class Game:
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.main_entity.draw(self.screen)
+        self.main_scene.main_entity.draw(self.screen)
+        self.player.draw(self.screen)
+        for ui_element in self.ui_elements:
+            ui_element.draw()
         pygame.display.flip()
 
 
@@ -93,7 +84,8 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.main_entity.update(dt)
+            self.main_scene.main_entity.update(dt)
+            self.player.update(dt)
             self.status_ui.set_resources(self.player.resources)
             self.draw()
 
