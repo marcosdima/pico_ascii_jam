@@ -4,15 +4,25 @@ from abc import abstractmethod
 from ...entity import Entity
 from ..layouts.grid import Grid
 from ..figures.square import Square
-from ..sign import Sign, Anchor
-from ....types import Color
+from ..common.text import TextEntity
+from ....types import Color, Anchor, Position
 from ....utils import Coordinate
 
 
 class Ascii(Entity):
     '''Base class for ASCII-style figures that use a grid of squares.'''
-    def __init__(self):
+    def __init__(
+        self,
+        anchor: Anchor = Anchor.TOP_CENTER,
+        from_anchor: Anchor = Anchor.BOTTOM_CENTER,
+        sign_offset: float = 10.0,
+    ):
         super().__init__()
+
+        # Set sign anchor.
+        self.sign_anchor = anchor
+        self.from_anchor = from_anchor
+        self.sign_offset = sign_offset
 
         # Set squares.
         self.squares: list[Square] = []
@@ -24,16 +34,14 @@ class Ascii(Entity):
         self.add_child(self.grid)
 
         # Set ascii sign.
-        self.sign = Sign(
-            text=chr(self.get_unicode()),
-            follow=self,
-            anchor=Anchor.TOP_CENTER,
-        )
+        self.sign = TextEntity(text=chr(self.get_unicode()), font_size=32)
         self.sign.set_color(color=Color.WHITE)
-        self.add_child(self.sign)
-        self.sign.hide()
+        self.add_child(self.sign)        
+        
+        # Hidding and showing sign on mouse events.
         self.mouse_on.add_callback(lambda: self.sign.show())
         self.mouse_exit.add_callback(lambda: self.sign.hide())
+        self.sign.hide()
 
         # Callbacks.
         self.transform_changed.add_callback(self.__keep_grid_size)
@@ -46,10 +54,21 @@ class Ascii(Entity):
     def __keep_grid_size(self, prev, new):
         '''Keep the grid sized with this entity.'''
         self.grid.set_transform(size=new.size.to_tuple())
-        sign_height = 50
-        self.sign.set_transform(size=(new.size.x, sign_height), position=(0, -sign_height))
 
-
+        # Calculate sign position.
+        ascii_size = self.get_size()
+        sign_size = self.sign.get_size()
+        if self.sign_anchor == Anchor.TOP_CENTER:
+            sign_pos = Position(ascii_size.x / 2 - sign_size.x / 2, -sign_size.y - self.sign_offset)
+        elif self.sign_anchor == Anchor.BOTTOM_CENTER:
+            sign_pos = Position(ascii_size.x / 2 - sign_size.x / 2, sign_size.y / 2 + self.sign_offset)
+        elif self.sign_anchor == Anchor.CENTER_LEFT:
+            sign_pos = Position(0, sign_size.y / 2 + self.sign_offset)
+        elif self.sign_anchor == Anchor.CENTER_RIGHT:
+            sign_pos = Position(ascii_size.x - sign_size.x, sign_size.y / 2 + self.sign_offset)
+        self.sign.set_transform(position=sign_pos)
+        
+        
     def create_squares(self):
         '''Create square figures from a list of ((row, col), Color) items.'''
         if self.squares:
@@ -77,12 +96,6 @@ class Ascii(Entity):
             self.squares.append(square)
             square.disable_collide()
         self.add_areas(self.squares)
-
-
-    def set_sign_anchor(self, anchor: Anchor):
-        '''Set the anchor point for the sign entity.'''
-        if hasattr(self, 'sign'):
-            self.sign.anchor = anchor
 
 
     ''' Color overrides. '''

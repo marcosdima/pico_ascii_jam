@@ -1,4 +1,5 @@
 from ..base import Base
+from ...types import Position
 
 
 class Familiar(Base):
@@ -6,22 +7,34 @@ class Familiar(Base):
     def __init__(self):
         self.__parent = None
         self.__children: list['Familiar'] = []
+
         super().__init__()
+        
         self.update.add_callback(self.__update_children)
         self.draw.add_callback(self.__draw_children)
         self.handle_event.add_callback(self.__handle_event)
 
-    
+
+    ''' Transform overrides. '''
+    def get_global_position(self) -> Position:
+        ''' Get the start point of the familiar. '''
+        global_pos = super().get_global_position()
+        if self.has_parent():
+            return self.__parent.get_global_position() + global_pos
+        return global_pos
+        
+
+    ''' Children management. '''    
     def __update_children(self, delta_time):
         ''' Update all children. '''
         for child in self.__children:
-            child.update(delta_time)
+            child.call_update(delta_time)
 
     
-    def __draw_children(self, surface):
+    def __draw_children(self):
         ''' Draw all children. '''
         for child in self.__children:
-            child.draw(surface)
+            child.call_draw(self.surface)
 
         
     def __handle_event(self, event):
@@ -68,15 +81,4 @@ class Familiar(Base):
         return len(self.__children) > 0
     
 
-    ''' Transform overrides. '''
-    def get_position(self):
-        # Get transform position.
-        transform_position = super().get_position()
-
-        # If has parent, add parent's position.
-        if self.has_parent():
-            parent_size = self.__parent.get_position()
-            return parent_size + transform_position
-        
-        return transform_position
-        
+    

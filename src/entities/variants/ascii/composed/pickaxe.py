@@ -11,7 +11,7 @@ class Pickaxe(Composed):
 
     ''' Composed overrides. '''
     def get_initial_asciis(self) -> list[Ascii]:
-        self.top = Parenthesis()
+        self.top = Parenthesis(anchor=Anchor.TOP_CENTER)
 
         size = 150 # Hardcoded
         part = size / 10
@@ -20,6 +20,5 @@ class Pickaxe(Composed):
 
         self.top.set_color(color=Color.BEIGE)
         self.top.set_transform(size=(width, height))
-        self.top.set_sign_anchor(anchor=Anchor.TOP_CENTER)
 
         return [self.top]

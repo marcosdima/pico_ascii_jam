@@ -4,7 +4,6 @@ from .variants.movement import Movement
 from .variants.wasd import WASD
 from .variants.background import Background
 
-
 class Modules(Module):
     ''' Modules container class. '''
     def set_wasd(self):

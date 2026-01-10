@@ -18,7 +18,6 @@ class Module(ABC):
 
 
     ''' Abstract methods. '''
-    @abstractmethod
     def setup(self):
         ''' Setup the module. '''
         self.owner.draw.add_callback(self.on_owner_draw)
@@ -33,7 +32,7 @@ class Module(ABC):
         pass
 
 
-    def on_owner_draw(self, surface: pygame.Surface):
+    def on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
         pass
 

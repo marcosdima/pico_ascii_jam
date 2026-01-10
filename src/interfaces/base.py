@@ -18,9 +18,18 @@ class Base:
 
         # Set lyfe cycle callbacks.
         self.update = Hook[float]()
-        self.draw = Hook[pygame.Surface]()
+        self.draw = Hook[None]()
         self.handle_event = Hook[pygame.event.Event]()
         self.transform_changed = Hook[[Transform, Transform]]()
+
+
+    def call_draw(self, surface: pygame.Surface) -> pygame.Surface:
+        self.surface = surface
+        self.draw()
+
+
+    def call_update(self, delta_time: float):
+        self.update(delta_time)
 
 
     ''' Transform methods. '''
@@ -47,7 +56,12 @@ class Base:
         return self.transform.scale
     
 
+    def get_global_position(self) -> pygame.Rect:
+        ''' Get the start point of the entity. '''
+        return self.get_position()
+
+
     def get_rect(self) -> pygame.Rect:
-        position = self.get_position()
+        position = self.get_global_position()
         size = self.get_size()
         return pygame.Rect(position.x, position.y, size.x, size.y)

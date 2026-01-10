@@ -1,7 +1,7 @@
 import pygame
 
 
-from ..module import Module, Transform
+from ..module import Module
 
 
 class Background(Module):
@@ -17,14 +17,14 @@ class Background(Module):
 
 
     ''' Module lifecycle methods. '''
-    def on_owner_draw(self, surface):
+    def on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
         if self.timeout == self.update_delay:
             self.__debug(f'Drawing entity id={self.owner.id} rect: {self.owner.transform.get_rect()}')
 
         # Draw a rectangle.
         pygame.draw.rect(
-            surface,
+            self.owner.surface,
             self.owner.color.to_pygame_color(),
             self.owner.get_rect(),
         )

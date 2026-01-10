@@ -8,7 +8,6 @@ from .transform.size import Size
 from .enums.anchor import Anchor
 from .enums.resource import Resource
 from .enums.groups import ColliderGroup
-from .enums.event import Event
 from .enums.key import Key
 from .enums.mouse import MouseButton
 
@@ -32,7 +31,6 @@ __all__ = [
     "Anchor",
     "Resource",
     "ColliderGroup",
-    "Event",
     "Key",
     "MouseButton",
 

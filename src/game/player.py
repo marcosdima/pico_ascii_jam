@@ -16,6 +16,7 @@ class Player(Entity):
         self.body.on_collision.add_callback(self.__bounce_on_collision)
         self.body.update.add_callback(self.__on_update)
         self.add_child(self.body)
+        #self.body.modules.set_debug()
 
         # Set resources.
         self.resources = Resources()
@@ -31,9 +32,6 @@ class Player(Entity):
 
 
         self.main_tool = self.pickaxe
-
-
-        
 
 
     def __on_update(self, delta_time: float):

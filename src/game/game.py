@@ -69,8 +69,8 @@ class Game:
     def draw(self):
         '''Render game content.'''
         self.screen.fill(BG_COLOR)
-        self.main_scene.main_entity.draw(self.screen)
-        self.player.draw(self.screen)
+        self.main_scene.main_entity.call_draw(self.screen)
+        self.player.call_draw(self.screen)
         for ui_element in self.ui_elements:
             ui_element.draw()
         pygame.display.flip()
@@ -84,8 +84,8 @@ class Game:
 
             # Handle events, update and draw.
             self.handle_events()
-            self.main_scene.main_entity.update(dt)
-            self.player.update(dt)
+            self.main_scene.main_entity.call_update(dt)
+            self.player.call_update(dt)
             self.status_ui.set_resources(self.player.resources)
             self.draw()
 

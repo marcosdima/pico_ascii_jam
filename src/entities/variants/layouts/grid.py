@@ -11,33 +11,22 @@ class Grid(Entity):
         self.update.add_callback(self.__handle_update)
 
 
-    def __handle_update(self, delta_time):
+    def __handle_update(self, _):
         for child in self.get_children():
             current = self.positions.get(child.id, (0, 0))
             cell_width, cell_height = self.get_cell_size()
 
             # Desired position and size in world space (after parent's scale)
-            world_pos = (
+            pos = (
                 current[0] * cell_width,
                 current[1] * cell_height,
             )
-            world_size = (cell_width, cell_height)
+            size = (cell_width, cell_height)
 
-            # Compute owner's total scale (including parent's scale) and
-            # convert world-space values to local values so that after
-            # scaling the entity fills the cell exactly.
-            owner_scale = self.get_scale()
-
-            # Guard against zero scale to avoid division by zero.
-            sx = owner_scale.x if owner_scale.x != 0 else 1.0
-            sy = owner_scale.y if owner_scale.y != 0 else 1.0
-
-            local_pos = (world_pos[0] / sx, world_pos[1] / sy)
-            local_size = (world_size[0] / sx, world_size[1] / sy)
 
             child.set_transform(
-                position=local_pos,
-                size=local_size
+                position=pos,
+                size=size
             )
             self.positions[self.id] = current
 

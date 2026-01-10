@@ -85,7 +85,7 @@ class Collider(Base):
         return False
 
     
-    def __debug_draw_areas(self, surface: pygame.Surface):
+    def __debug_draw_areas(self):
         ''' Draw collider areas for debugging. '''
         areas = self.get_areas()
         if self.__debug_collisions:
@@ -96,7 +96,7 @@ class Collider(Base):
             
             for area in areas:
                 pygame.draw.rect(
-                    surface,
+                    self.surface,
                     self.__debug_color.to_pygame_color(),
                     area,
                     1,

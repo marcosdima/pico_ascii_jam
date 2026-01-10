@@ -119,7 +119,7 @@ class Debug(Module):
             )
 
             local = owner.transform
-            global_pos = owner.get_position()
+            global_pos = owner.get_global_position()
             rect = owner.get_rect()
             color = getattr(owner, 'color', None)
             color_label = repr(color) if color is not None else 'None'
@@ -141,7 +141,7 @@ class Debug(Module):
             self.timeout -= delta_time
             
 
-    def on_owner_draw(self, surface: pygame.Surface):
+    def on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
         self.__debug(
             f'rect={self.owner.get_rect()}, z_index={self.owner.transform.z_index}',
@@ -151,7 +151,7 @@ class Debug(Module):
         # Draw entity bounding box.
         if 'bounding_box' in self.enabled:
             pygame.draw.rect(
-                surface,
+                self.owner.surface,
                 (255, 0, 0),  # Red for bounding box
                 self.owner.get_rect(),
                 2,  # Line thickness

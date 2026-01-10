@@ -9,15 +9,16 @@ from .variants.ascii.base.asciicircum import AsciiCircum
 from .variants.ascii.composed.slingshot import Slingshot
 from .variants.ascii.composed.pickaxe import Pickaxe
 from .variants.ascii.composed.rock import Rock
-from .variants.sign import Sign
 from .variants.drops.drop import Drop
+
+# Common.
+from .variants.common.text import TextEntity
 
 __all__ = [
     "Entity",
     "Square",
     "Grid",
     "Avatar",
-    "Sign",
     "V",
     "H18533",
     "Uni30ED",
@@ -25,4 +26,8 @@ __all__ = [
     "Slingshot",
     "Rock",
     "Drop",
+    "Pickaxe",
+
+    # Common.
+    "TextEntity",
 ]
