@@ -4,9 +4,10 @@ from .variants.visible import Visible
 from .variants.familiar import Familiar
 from .variants.input import Input
 from .variants.collider import Collider
+from .variants.drawable import Drawable
 
 
-class JointInterface(Coloreable, Visible, Familiar, Input, Collider):
+class JointInterface(Coloreable, Visible, Familiar, Input, Collider, Drawable):
     pass
 
 

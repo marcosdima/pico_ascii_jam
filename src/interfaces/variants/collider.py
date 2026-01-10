@@ -27,7 +27,6 @@ class Collider(Base):
 
         # Add update callback to check for collisions.
         self.update.add_callback(self.__check_collision)
-        self.draw.add_callback(self.__debug_draw_areas)
 
         # Callbacks.
         self.on_collision = Hook[Collider]()
@@ -85,24 +84,6 @@ class Collider(Base):
         return False
 
     
-    def __debug_draw_areas(self):
-        ''' Draw collider areas for debugging. '''
-        areas = self.get_areas()
-        if self.__debug_collisions:
-            areas = self.get_areas()
-
-            if not areas:
-                return
-            
-            for area in areas:
-                pygame.draw.rect(
-                    self.surface,
-                    self.__debug_color.to_pygame_color(),
-                    area,
-                    1,
-                )
-
-
     def disable_collide(self) -> None:
         ''' Disable collision for this collider. '''
         self.__collide = False

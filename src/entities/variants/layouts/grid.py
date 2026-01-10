@@ -1,5 +1,5 @@
 from ...entity import Entity
-
+from ....types import Vector2
 
 class Grid(Entity):
     ''' Grid entity class. '''
@@ -14,15 +14,15 @@ class Grid(Entity):
     def __handle_update(self, _):
         for child in self.get_children():
             current = self.positions.get(child.id, (0, 0))
+            current_vec = Vector2(*current)
+
             cell_width, cell_height = self.get_cell_size()
 
-            # Desired position and size in world space (after parent's scale)
             pos = (
-                current[0] * cell_width,
-                current[1] * cell_height,
+                current_vec.x * cell_width,
+                current_vec.y * cell_height,
             )
             size = (cell_width, cell_height)
-
 
             child.set_transform(
                 position=pos,
@@ -35,7 +35,7 @@ class Grid(Entity):
         if self.columns == 0 or self.rows == 0:
             return (0.0, 0.0)
         
-        size = self.get_size()
+        size = self.transform.size
         return (size.x / self.columns, size.y / self.rows)
     
 

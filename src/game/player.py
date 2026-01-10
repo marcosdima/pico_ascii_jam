@@ -16,7 +16,7 @@ class Player(Entity):
         self.body.on_collision.add_callback(self.__bounce_on_collision)
         self.body.update.add_callback(self.__on_update)
         self.add_child(self.body)
-        #self.body.modules.set_debug()
+        self.body.modules.set_debug()
 
         # Set resources.
         self.resources = Resources()
@@ -29,6 +29,7 @@ class Player(Entity):
         # Set pickaxe.
         self.pickaxe = Pickaxe()
         self.body.add_child(self.pickaxe)
+        self.body.set_transform(scale=2)
 
 
         self.main_tool = self.pickaxe
@@ -37,7 +38,7 @@ class Player(Entity):
     def __on_update(self, delta_time: float):
         '''Handle update event.'''
         slingshot_size = Size(50, 80)
-        body_size = self.body.get_size()
+        body_size = self.body.transform.size
         self.slingshot.set_transform(
             size=(slingshot_size.x, slingshot_size.y),
             position=(body_size.x, body_size.y / 2 - slingshot_size.y),

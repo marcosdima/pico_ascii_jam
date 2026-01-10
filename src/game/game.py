@@ -63,7 +63,7 @@ class Game:
                 if key == pygame.K_ESCAPE:
                     self.running = False
                 elif key == pygame.K_SPACE:
-                   self.player.set_transform(scale=self.player.get_scale() * 1.1)
+                   self.player.set_transform(scale=self.player.transform.scale * 1.1)
 
 
     def draw(self):

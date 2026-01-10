@@ -61,11 +61,11 @@ class Status(UI):
             )
             
             # Draw icon
-            self.surface.blit(icon_surface, (self.padding, y_offset))
+            self.base_surface.blit(icon_surface, (self.padding, y_offset))
             
             # Draw text next to icon
             icon_width = icon_surface.get_width()
-            self.surface.blit(
+            self.base_surface.blit(
                 text_surface,
                 (self.padding + icon_width + self.icon_spacing, y_offset)
             )

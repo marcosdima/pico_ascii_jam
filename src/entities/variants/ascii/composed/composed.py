@@ -22,11 +22,11 @@ class Composed(Entity):
     ''' Entity overrides. '''
     def get_size(self):
         if not self.__asciis:
-            return super().get_size()
+            return super().transform.size
         
-        aux = self.get_asciis()[0].get_size()
+        aux = self.get_asciis()[0].transform.size
         for ascii in self.get_asciis()[1:]:
-            aux += ascii.get_size()
+            aux += ascii.transform.size
             
         return aux
 

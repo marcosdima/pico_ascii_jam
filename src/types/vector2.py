@@ -72,7 +72,7 @@ class Vector2:
     
 
     def __add__(self, other):
-        if not isinstance(other, Vector2):
+        if not hasattr(other, 'x') or not hasattr(other, 'y'):
             return NotImplemented
         return Vector2(self.x + other.x, self.y + other.y)
     

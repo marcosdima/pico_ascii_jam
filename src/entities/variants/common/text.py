@@ -19,8 +19,8 @@ class TextEntity(Entity):
     def __on_draw(self):
         if not self.rendered_surface:
             return
-        pos = self.get_global_position()
-        self.surface.blit(self.rendered_surface, (pos.x, pos.y))
+        pos = self.get_world_position()
+        self.base_surface.blit(self.rendered_surface, (pos.x, pos.y))
 
 
     def __set_font(self):

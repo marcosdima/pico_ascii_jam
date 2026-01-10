@@ -19,9 +19,7 @@ class Parenthesis(Ascii):
     ''' Lifecycle methods. '''
     def get_square_values(self):
         color = { 'color': Color.BROWN }
-        return [
-            create_coord(0, 1, content=color),
-            *create_column(0, 3, 1, content=color),
-            create_coord(4, 1, content=color),
-        ]
-
+        return (
+            [create_coord(0, 1, content=color), create_coord(4, 1, content=color)]
+            + create_column(0, 3, 1, content=color)
+        )

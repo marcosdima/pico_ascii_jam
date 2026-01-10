@@ -19,13 +19,4 @@ class Background(Module):
     ''' Module lifecycle methods. '''
     def on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
-        if self.timeout == self.update_delay:
-            self.__debug(f'Drawing entity id={self.owner.id} rect: {self.owner.transform.get_rect()}')
-
-        # Draw a rectangle.
-        pygame.draw.rect(
-            self.owner.surface,
-            self.owner.color.to_pygame_color(),
-            self.owner.get_rect(),
-        )
-
+        self.owner.draw_rect(self.owner.get_world_rect().scale_by(1.1), self.owner.color)

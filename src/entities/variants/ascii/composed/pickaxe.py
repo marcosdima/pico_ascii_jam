@@ -13,7 +13,7 @@ class Pickaxe(Composed):
     def get_initial_asciis(self) -> list[Ascii]:
         self.top = Parenthesis(anchor=Anchor.TOP_CENTER)
 
-        size = 150 # Hardcoded
+        size = 70 # Hardcoded
         part = size / 10
         height = part * 5
         width = part * 2

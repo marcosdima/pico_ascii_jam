@@ -29,8 +29,8 @@ class Menu(Scene):
         sign.set_color(BUTTON_COLOR)
         follow.add_child(sign)
 
-        follow_size = follow.get_size()
-        sign_size = sign.get_size()
+        follow_size = follow.transform.size
+        sign_size = sign.transform.size
         rest = follow_size.x - sign_size.x
 
         sign.set_transform(

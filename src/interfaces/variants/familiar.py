@@ -9,19 +9,25 @@ class Familiar(Base):
         self.__children: list['Familiar'] = []
 
         super().__init__()
-        
+
         self.update.add_callback(self.__update_children)
         self.draw.add_callback(self.__draw_children)
         self.handle_event.add_callback(self.__handle_event)
+        self.transform_changed.add_callback(self.__update_world_transform)
 
 
-    ''' Transform overrides. '''
-    def get_global_position(self) -> Position:
-        ''' Get the start point of the familiar. '''
-        global_pos = super().get_global_position()
+    def __update_world_transform(self, prev, new):
+        ''' Update the world transform based on parent transforms. '''
+        copy = self.transform.copy()
         if self.has_parent():
-            return self.__parent.get_global_position() + global_pos
-        return global_pos
+            parent_transform = self.__parent.get_world_transform()
+            copy.position = self.rotate_point(
+                copy.position,
+                parent_transform.rotation
+            )
+            self.world_transform = copy + parent_transform
+        else:
+            self.world_transform = copy
         
 
     ''' Children management. '''    
@@ -34,7 +40,8 @@ class Familiar(Base):
     def __draw_children(self):
         ''' Draw all children. '''
         for child in self.__children:
-            child.call_draw(self.surface)
+            child.__update_world_transform(None, None)
+            child.call_draw(self.base_surface)
 
         
     def __handle_event(self, event):

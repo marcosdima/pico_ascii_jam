@@ -50,14 +50,16 @@ class Ascii(Entity):
         # Create squares.
         self.create_squares()
 
+        self.transform.rotation = 70
+
 
     def __keep_grid_size(self, prev, new):
         '''Keep the grid sized with this entity.'''
         self.grid.set_transform(size=new.size.to_tuple())
 
         # Calculate sign position.
-        ascii_size = self.get_size()
-        sign_size = self.sign.get_size()
+        ascii_size = self.transform.size
+        sign_size = self.sign.transform.size
         if self.sign_anchor == Anchor.TOP_CENTER:
             sign_pos = Position(ascii_size.x / 2 - sign_size.x / 2, -sign_size.y - self.sign_offset)
         elif self.sign_anchor == Anchor.BOTTOM_CENTER:
@@ -66,6 +68,7 @@ class Ascii(Entity):
             sign_pos = Position(0, sign_size.y / 2 + self.sign_offset)
         elif self.sign_anchor == Anchor.CENTER_RIGHT:
             sign_pos = Position(ascii_size.x - sign_size.x, sign_size.y / 2 + self.sign_offset)
+
         self.sign.set_transform(position=sign_pos)
         
         

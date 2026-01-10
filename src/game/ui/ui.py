@@ -5,7 +5,7 @@ import pygame
 class UI(ABC):
     '''Base class for UI elements.'''
     def __init__(self, surface: pygame.Surface):
-        self.surface = surface
+        self.base_surface = surface
         self.setup()
 
 
