@@ -1,5 +1,5 @@
 from ..ascii import Ascii, Entity, abstractmethod
-from .....types import Color
+
 
 class Composed(Entity):
     ''' Composed entity class. '''

@@ -1,5 +1,5 @@
 from ..ascii import Ascii
-from .....utils import create_coord, create_row, create_full_rows
+from ......utils import Coordinate
 
 class Uni30ED(Ascii):
     ''' Unicode U+30ED entity class. '''
@@ -15,10 +15,10 @@ class Uni30ED(Ascii):
     def get_square_values(self):
         color = { 'color': self.color }
         return (
-            create_full_rows([0, 4], 5, content=color)
+            Coordinate.create_full_rows([0, 4], 5, content=color)
             + [
-                create_coord(1, 0, content=color), create_coord(1, 4, content=color),
-                create_coord(2, 0, content=color), create_coord(2, 4, content=color),
-                create_coord(3, 0, content=color), create_coord(3, 4, content=color),
+                Coordinate.create_coord(1, 0, content=color), Coordinate.create_coord(1, 4, content=color),
+                Coordinate.create_coord(2, 0, content=color), Coordinate.create_coord(2, 4, content=color),
+                Coordinate.create_coord(3, 0, content=color), Coordinate.create_coord(3, 4, content=color),
             ]
         )

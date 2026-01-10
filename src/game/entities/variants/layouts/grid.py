@@ -1,5 +1,5 @@
 from ...entity import Entity
-from ....types import Vector2
+from .....types import Vector2
 
 class Grid(Entity):
     ''' Grid entity class. '''

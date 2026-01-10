@@ -1,5 +1,5 @@
 from ..ascii import Ascii
-from .....utils import create_coord
+from ......utils import Coordinate
 
 
 class AsciiCircum(Ascii):
@@ -18,7 +18,7 @@ class AsciiCircum(Ascii):
     def get_square_values(self):
         color = { 'color': self.color }
         return [
-            create_coord(0, 1, content=color),
-            create_coord(1, 0, content=color),
-            create_coord(1, 2, content=color),
+            Coordinate.create_coord(0, 1, content=color),
+            Coordinate.create_coord(1, 0, content=color),
+            Coordinate.create_coord(1, 2, content=color),
         ]

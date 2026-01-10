@@ -2,7 +2,7 @@ from .composed import Composed
 from ..base.v import V
 from ..base.parenthesis import Parenthesis
 from ..ascii import Ascii
-from .....types import Color, Anchor
+from ......types import Color, Anchor
 
 
 class Pickaxe(Composed):

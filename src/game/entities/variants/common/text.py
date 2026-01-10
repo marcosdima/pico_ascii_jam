@@ -2,9 +2,10 @@ import pygame
 
 
 from ...entity import Entity
-from ....types import Text, Font, Size
-from ....config import FONT_PATH
+from .....types import Text, Font, Size
 
+
+FONT_PATH = 'src/assets/fonts/arial.ttf'
 
 class TextEntity(Entity):
     def __init__(self, text: str, font_size: int = 12):

@@ -1,5 +1,5 @@
 from ..ascii import Ascii
-from .....utils import create_coord, create_row
+from ......utils import Coordinate
 
 class H18533(Ascii):
     ''' H18533 entity class. '''
@@ -17,9 +17,9 @@ class H18533(Ascii):
     def get_square_values(self):
         color = { 'color': self.color }
         return [
-            *create_row(0, 3, 1, content=color),
-            *create_row(1, 2, content=color), create_coord(1, 4, content=color),
-            *create_row(2, 4, content=color),
-            *create_row(3, 4, content=color),
-            *create_row(4, 3, 1, content=color),
+            *Coordinate.create_row(0, 3, 1, content=color),
+            *Coordinate.create_row(1, 2, content=color), Coordinate.create_coord(1, 4, content=color),
+            *Coordinate.create_row(2, 4, content=color),
+            *Coordinate.create_row(3, 4, content=color),
+            *Coordinate.create_row(4, 3, 1, content=color),
         ]

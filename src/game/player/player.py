@@ -1,6 +1,6 @@
 from ..entities import Avatar, Slingshot, Entity, Pickaxe
-from ..types import Color, Size, Resource, ColliderGroup
-from .logic import Resources
+from ...types import Color, Size, Resource, ColliderGroup
+from .rosources import Resources
 
 
 class Player(Entity):

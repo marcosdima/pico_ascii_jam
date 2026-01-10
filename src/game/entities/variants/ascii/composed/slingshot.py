@@ -2,7 +2,7 @@ from .composed import Composed
 from ..base.v import V
 from ..base.asciicircum import AsciiCircum
 from ..ascii import Ascii
-from .....types import Color, Anchor, Size
+from ......types import Color, Anchor, Size
 
 
 class Slingshot(Composed):

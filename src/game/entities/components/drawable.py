@@ -1,17 +1,23 @@
+import math
+
+
 from .__base import Base, pygame
 from ....types import Color
 
 
 class Drawable(Base):
     ''' Drawable interface. '''
-    def draw_rect(self, rect: pygame.Rect, color: Color):
-        local = pygame.Surface(rect.size, pygame.SRCALPHA)
+    def draw_rect(self, color: Color):
+        local = pygame.Surface(self.size, pygame.SRCALPHA)
         pygame.draw.rect(local, color.to_pygame_color(), local.get_rect())
 
-        transformed = self.get_transformed_surface(local)
+        rotated = pygame.transform.rotate(
+            local,
+            -math.degrees(self.body.angle)
+        )
 
-        draw_rect = transformed.get_rect(center=rect.center)
-        self.base_surface.blit(transformed, draw_rect)
+        rect = rotated.get_rect(center=self.body.position)
+        self.base_surface.blit(rotated, rect)
 
 
         

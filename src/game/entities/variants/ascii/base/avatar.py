@@ -1,6 +1,5 @@
-from ..ascii import Ascii, Anchor
-from .....types import Color, Transform
-from .....utils import create_full_rows, create_row, create_coord
+from ..ascii import Ascii
+from ......utils import Coordinate
 
 
 class Avatar(Ascii):
@@ -19,10 +18,10 @@ class Avatar(Ascii):
     def get_square_values(self):
         color = { 'color': self.color }
         return [
-            *create_row(0, 3, 1, content=color),
-            *create_row(1, 3, 1, content=color),
-            *create_row(2, 4, 0, content=color),
-            *create_row(3, 3, 1, content=color),
-            create_coord(4, 1, content=color),
-            create_coord(4, 3, content=color),
+            *Coordinate.create_row(0, 3, 1, content=color),
+            *Coordinate.create_row(1, 3, 1, content=color),
+            *Coordinate.create_row(2, 4, 0, content=color),
+            *Coordinate.create_row(3, 3, 1, content=color),
+            Coordinate.create_coord(4, 1, content=color),
+            Coordinate.create_coord(4, 3, content=color),
         ]

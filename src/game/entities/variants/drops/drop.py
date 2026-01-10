@@ -1,7 +1,7 @@
 from ..ascii.ascii import Ascii
 from ...entity import Entity
 from ..ascii.base.H18533 import H18533
-from ....types import Resource, ColliderGroup
+from .....types import Resource
 
 class Drop(Entity):
     '''Base class for drop entities.'''

@@ -1,5 +1,6 @@
 from .event import Event
 from .trajectory import Trajectory, TrajectoryType, Fields
+from .coordinate import Coordinate
 
 
 __all__ = [
@@ -10,4 +11,7 @@ __all__ = [
     'Trajectory',
     'TrajectoryType',
     'Fields',
+
+    # Coordinate.
+    'Coordinate',
 ]

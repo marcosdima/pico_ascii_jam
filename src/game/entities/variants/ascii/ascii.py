@@ -3,10 +3,9 @@ from abc import abstractmethod
 
 from ...entity import Entity
 from ..layouts.grid import Grid
-from ..figures.square import Square
 from ..common.text import TextEntity
-from ....types import Color, Anchor, Position
-from ....utils import Coordinate
+from .....types import Color, Anchor, Position
+from .....utils import Coordinate
 
 
 class Ascii(Entity):
@@ -25,7 +24,7 @@ class Ascii(Entity):
         self.sign_offset = sign_offset
 
         # Set squares.
-        self.squares: list[Square] = []
+        self.squares: list[Entity] = []
 
         # Default layout: a 5x5 grid.
         self.grid = Grid()
@@ -49,8 +48,6 @@ class Ascii(Entity):
 
         # Create squares.
         self.create_squares()
-
-        self.transform.rotation = 70
 
 
     def __keep_grid_size(self, prev, new):
@@ -86,10 +83,11 @@ class Ascii(Entity):
             (r, c), content = coord.as_tuple()
 
             # Create square.
-            square = Square()
+            square = Entity()
 
             # Configure square.
             square.set_color(color=content.get('color', self.get_default_color()))
+            square.modules.set_background()
 
             # Add to grid.
             self.grid.add_child(square)

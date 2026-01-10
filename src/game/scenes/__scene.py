@@ -1,8 +1,7 @@
-from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 
-from ...entities import Entity
+from ..entities import Entity
 
 
 if TYPE_CHECKING:
@@ -12,24 +11,38 @@ if TYPE_CHECKING:
 by_z_index = lambda e: e.transform.z_index
 
 
-class Scene(ABC):
+class Scene:
     '''Base class for all game scenes.'''
-    def __init__(self):
+    def __init__(self, game: 'Game' = None):
         super().__init__()
-        self.main_entity: Entity = Entity()
+        self.game: 'Game' = game
+        self.__entities: list[Entity] = []
+        self.setup()
+
+    
+    def setup(self):
+        '''Setup the scene. Override in subclasses.'''
+        pass
 
 
     def add_entity(self, entity: Entity) -> None:
         '''Add an entity to the scene.'''
-        self.main_entity.add_child(entity)
+        self.__entities.append(entity)
+        self.__entities.sort(key=by_z_index)
 
     
     def remove_entity(self, entity: Entity) -> None:
         '''Remove an entity from the scene.'''
-        self.main_entity.remove_child(entity)
+        self.__entities.remove(entity)
 
-    
-    def set_game(self, game: 'Game') -> None:
-        '''Update the scene and its entities.'''
-        game.main_scene = self
-        self.game = game
+
+    def draw(self, surface) -> None:
+        '''Draw the scene.'''
+        for entity in self.__entities:
+            entity.call_draw(surface)
+
+
+    def update(self, delta_time: float) -> None:
+        '''Update the scene.'''
+        for entity in self.__entities:
+            entity.call_update(delta_time)

@@ -29,7 +29,7 @@ class Coloreable(Base):
         Returns:
             Color: The current color.
         """
-        raise NotImplementedError("Subclasses must implement this method.")
+        return self.color
     
 
     def get_default_color(self) -> Color:

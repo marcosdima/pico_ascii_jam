@@ -1,7 +1,7 @@
 from .composed import Composed
 from ..base.uni30ED import Uni30ED
 from ..ascii import Ascii
-from .....types import Resource
+from ......types import Resource
 
 class Rock(Composed):
     ''' Rock entity class. '''
