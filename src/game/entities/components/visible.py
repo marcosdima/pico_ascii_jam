@@ -1,4 +1,4 @@
-from ..base import Base
+from .__base import Base
 
 
 class Visible(Base):

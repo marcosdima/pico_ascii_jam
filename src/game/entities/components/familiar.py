@@ -1,5 +1,4 @@
-from ..base import Base
-from ...types import Position
+from .__base import Base
 
 
 class Familiar(Base):

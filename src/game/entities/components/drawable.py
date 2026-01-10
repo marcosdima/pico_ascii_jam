@@ -1,5 +1,5 @@
-from ..base import Base, pygame
-from ...types import Color
+from .__base import Base, pygame
+from ....types import Color
 
 
 class Drawable(Base):

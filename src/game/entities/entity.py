@@ -1,9 +1,10 @@
 from .modules import Modules
-from ..types import Transform, Position, Size, Hook
-from ..interfaces import JointInterface
+from ...types import Transform, Position, Size
+from ...utils import Event
+from .components import Components
 
 
-class Entity(JointInterface):
+class Entity(Components):
     ''' Entity base class. '''
     def __str__(self):
         return f'<Entity id={self.id}>'
@@ -47,8 +48,8 @@ class Entity(JointInterface):
         self.modules = Modules(self)
 
         # Own hooks.
-        self.on_position_change = Hook[Position, Position]()
-        self.on_size_change = Hook[Size, Size]()
+        self.on_position_change = Event[Position, Position]()
+        self.on_size_change = Event[Size, Size]()
 
 
     

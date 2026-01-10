@@ -1,4 +1,4 @@
-from .module import Module
+from .variants.module import Module
 from .variants.debug import Debug
 from .variants.movement import Movement
 from .variants.wasd import WASD

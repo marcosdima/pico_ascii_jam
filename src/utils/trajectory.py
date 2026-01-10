@@ -1,7 +1,7 @@
 from typing import Literal, TypeAlias, Callable
 
 
-from .transform.position import Position, Vector2
+from ..types.transform.position import Position, Vector2
 
 
 TrajectoryType: TypeAlias = Literal['linear', 'parabolic', 'circular']

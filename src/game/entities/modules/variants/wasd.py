@@ -1,9 +1,8 @@
-import math
 import pygame
 
 
-from ..module import Module
-from ....types import Vector2, Position
+from .__module import Module
+from .....types import Vector2, Position
 
 
 class WASD(Module):

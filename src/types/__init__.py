@@ -13,12 +13,11 @@ from .enums.mouse import MouseButton
 
 
 # Others.
-from .vector2 import Vector2
-from .font import Font
-from .color import Color
-from .text import Text
-from .hook import Hook
-from .trajectory import Trajectory
+from .transform.vector2 import Vector2
+from .common.font import Font
+from .common.color import Color
+from .common.text import Text
+from ..utils.trajectory import Trajectory
 
 
 __all__ = [
@@ -39,6 +38,5 @@ __all__ = [
     "Font",
     "Text",
     "Vector2",
-    "Hook",
     "Trajectory",
 ]

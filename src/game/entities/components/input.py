@@ -1,8 +1,9 @@
 import pygame
 
 
-from ..base import Base
-from ...types import Key, MouseButton, Hook
+from .__base import Base
+from ....types import Key, MouseButton
+from ....utils import Event
 
 
 ## TODO: Focus implementation.
@@ -21,12 +22,12 @@ class Input(Base):
         self.__mouse_on = False
 
         # Callbacks.
-        self.press_key = Hook[Key, None]()
-        self.mouse_exit = Hook[None]()
-        self.mouse_on = Hook[None]()
-        self.release_key = Hook[Key, None]()
-        self.press_mouse_button = Hook[MouseButton, None]()
-        self.release_mouse_button = Hook[MouseButton, None]()
+        self.press_key = Event[Key, None]()
+        self.mouse_exit = Event[None]()
+        self.mouse_on = Event[None]()
+        self.release_key = Event[Key, None]()
+        self.press_mouse_button = Event[MouseButton, None]()
+        self.release_mouse_button = Event[MouseButton, None]()
 
         # Set some default callbacks.
         self.press_key.add_callback(lambda key: self.pressed_keys.add(key))

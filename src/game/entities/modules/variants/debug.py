@@ -1,7 +1,8 @@
 import pygame
 from typing import Literal
 
-from ..module import Module, Transform
+from .__module import Module
+from .....types import Transform
 
 
 class Debug(Module):

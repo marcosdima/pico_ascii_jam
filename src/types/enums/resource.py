@@ -1,5 +1,5 @@
 from .__enum import CustomEnum
-from ..color import Color
+from ..common.color import Color
 
 class Resource(CustomEnum):
     ROCK = 0

@@ -1,7 +1,4 @@
-import pygame
-
-
-from ..module import Module
+from .__module import Module
 
 
 class Background(Module):

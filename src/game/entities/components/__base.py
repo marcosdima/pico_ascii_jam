@@ -1,8 +1,8 @@
 import pygame, math
 
 
-from ..types import Transform, Hook, Position
-
+from ....types import Transform, Position
+from ....utils import Event
 
 class Base:
     __count = 0
@@ -21,10 +21,10 @@ class Base:
         self.base_surface: pygame.Surface = None
 
         # Set lyfe cycle callbacks.
-        self.update = Hook[float]()
-        self.draw = Hook[None]()
-        self.handle_event = Hook[pygame.event.Event]()
-        self.transform_changed = Hook[[Transform, Transform]]()
+        self.update = Event[float]()
+        self.draw = Event[None]()
+        self.handle_event = Event[pygame.event.Event]()
+        self.transform_changed = Event[[Transform, Transform]]()
 
 
     def call_draw(self, surface: pygame.Surface) -> pygame.Surface:

@@ -1,6 +1,5 @@
-from ..module import Module
-from ....types import Position
-from ....types.trajectory import Trajectory, TrajectoryType, Fields
+from .__module import Module
+from .....utils.trajectory import Trajectory, TrajectoryType, Fields
 
 
 class Movement(Module):

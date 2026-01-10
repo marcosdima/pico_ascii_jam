@@ -1,5 +1,6 @@
-from ..base import Base, pygame
-from ...types import ColliderGroup, Hook, Color
+from .__base import Base, pygame
+from ....types import ColliderGroup, Color
+from ....utils import Event
 
 
 class Collider(Base):
@@ -29,9 +30,9 @@ class Collider(Base):
         self.update.add_callback(self.__check_collision)
 
         # Callbacks.
-        self.on_collision = Hook[Collider]()
-        self.on_still_colliding = Hook[Collider]()
-        self.on_stop_colliding = Hook[Collider]()
+        self.on_collision = Event[Collider]()
+        self.on_still_colliding = Event[Collider]()
+        self.on_stop_colliding = Event[Collider]()
 
         # Set defaults.
         self.on_collision.add_callback(lambda other: self.__colliding.add(other))

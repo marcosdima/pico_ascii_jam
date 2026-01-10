@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 import pygame
 
 
-from ...types import Transform
+from .....types import Transform
 
 
 if TYPE_CHECKING:
-    from ..entity import Entity
+    from ...entity import Entity
 
 
 class Module(ABC):
