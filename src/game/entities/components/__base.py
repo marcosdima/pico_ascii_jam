@@ -1,7 +1,7 @@
 import pygame, pymunk
 
 
-from ....types import Transform, Size
+from ....types import Position, Size
 from ....utils import Event
 
 
@@ -19,8 +19,10 @@ class Base:
 
         # Set body and space.
         self.size = Size()
-        self.body: pymunk.Body = pymunk.Body()
+        self.z_index = 0
         self.space: pymunk.Space = None
+        self.body_type: pymunk.Body = pymunk.Body.DYNAMIC
+        self.body: pymunk.Body = pymunk.Body(mass=1, moment=1, body_type=self.body_type)
 
         # Set lyfe cycle callbacks.
         self.update = Event[float]()
@@ -31,19 +33,23 @@ class Base:
 
     def set_space(self, space: pymunk.Space):
         self.space = space
+        self.space.add(self.body)
+
+
+    def set_body_type(self, body_type: pymunk.Body):
+        ''' Set body type. '''
+        if self.body_type != body_type:
+            self.body_type = body_type
+            self.body.body_type = body_type
+
+            if body_type is pymunk.Body.DYNAMIC:
+                self.body.mass = 1
+                self.body.moment = 1
     
 
-    def call_draw(self, surface: pygame.Surface) -> pygame.Surface:
-        self.base_surface = surface
-        self.draw()
-
-
-    def call_update(self, delta_time: float):
-        self.update(delta_time)
-
-
-    def set_size(self, size: Size):
+    def set_size(self, size: tuple[tuple] | Size):
         """Set the size of the entity."""
+        size = Size(*size) if isinstance(size, tuple) else size
         if self.size != size:
             prev = self.size
             self.size = size

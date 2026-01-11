@@ -16,4 +16,5 @@ class Background(Module):
     ''' Module lifecycle methods. '''
     def on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
-        self.owner.draw_rect(self.owner.get_world_rect().scale_by(1.1), self.owner.color)
+        for shape in self.owner.body.shapes:
+            self.owner.draw_rect(shape, self.owner.color)

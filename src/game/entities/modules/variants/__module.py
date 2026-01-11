@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 import pygame
 
 
-from .....types import Transform
+from .....types import Size
 
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ class Module(ABC):
         ''' Setup the module. '''
         self.owner.draw.add_callback(self.on_owner_draw)
         self.owner.update.add_callback(self.on_owner_update)
-        self.owner.transform_changed.add_callback(self.on_owner_transform_changed)
+        self.owner.size_change.add_callback(self.on_owner_size_changed)
         self.owner.handle_event.add_callback(self.on_owner_event)
 
 
@@ -37,8 +37,8 @@ class Module(ABC):
         pass
 
 
-    def on_owner_transform_changed(self, prev: Transform, new: Transform):
-        ''' Called when the owner entity transform is changed. '''
+    def on_owner_size_changed(self, prev: Size, new: Size):
+        ''' Called when the owner entity size is changed. '''
         pass
 
 

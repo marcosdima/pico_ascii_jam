@@ -31,7 +31,7 @@ class Game:
 
         # -------- pymunk --------
         self.space = pymunk.Space()
-        self.space.gravity = (0, 900)
+        #self.space.gravity = (0, 900)
 
         self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
 
@@ -56,7 +56,7 @@ class Game:
 
     def draw(self):
         self.screen.fill(BG_COLOR)
-        self.space.debug_draw(self.draw_options)
+        #self.space.debug_draw(self.draw_options)
         self.main_scene.draw(self.screen)
         pygame.display.flip()
 

@@ -8,15 +8,15 @@ class Player(Entity):
         super().__init__()
 
         # Set entity.
-        self.body = Avatar()
-        self.body.modules.set_wasd()
-        self.body.set_color(color=Color.YELLOW)
-        self.body.set_transform(size=(125, 125), position=(100, 100))
-        self.body.set_group(ColliderGroup.PLAYER)
-        self.body.on_collision.add_callback(self.__bounce_on_collision)
-        self.body.update.add_callback(self.__on_update)
-        self.add_child(self.body)
-        self.body.modules.set_debug()
+        self.avatar = Avatar()
+        self.avatar.size = Size(125, 125)
+        self.avatar.modules.set_wasd()
+        self.avatar.set_color(color=Color.YELLOW)
+        #self.avatar.set_transform(size=(125, 125), position=(100, 100))
+        #self.avatar.set_group(ColliderGroup.PLAYER)
+        self.avatar.update.add_callback(self.__on_update)
+        self.add_child(self.avatar)
+        self.avatar.modules.set_debug()
 
         # Set resources.
         self.resources = Resources()
@@ -28,10 +28,7 @@ class Player(Entity):
 
         # Set pickaxe.
         self.pickaxe = Pickaxe()
-        self.body.add_child(self.pickaxe)
-        self.body.set_transform(scale=2)
-
-
+        self.avatar.add_child(self.pickaxe)
         self.main_tool = self.pickaxe
 
 
@@ -43,11 +40,3 @@ class Player(Entity):
             size=(slingshot_size.x, slingshot_size.y),
             position=(body_size.x, body_size.y / 2 - slingshot_size.y),
         )
-
-
-    def __bounce_on_collision(self, other: Entity):
-        '''Handle collision with another entity.'''
-        if other.group == ColliderGroup.DEFAULT:
-            #self.body.modules.movement.bounce()
-            pass
-

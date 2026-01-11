@@ -1,5 +1,6 @@
+import pymunk
 from .__scene import Scene
-from ..entities import Rock, Entity, TextEntity
+from ..entities import Entity
 from ...types import Resource, Color
 
 BUTTON_COLOR = Color.WHEAT.darker(0.5)
@@ -9,13 +10,41 @@ class Menu(Scene):
     '''Menu scene class.'''
     def setup(self):
         super().setup()
-        print("created menu")
+
+        # Base.
+        base = Entity()
+        #base.body.position = (200, 150)
+        base.modules.set_background()
+
+        base.set_size((100, 100))
+        base.set_color(Color.GRAY)
+        base.set_body_type(pymunk.Body.DYNAMIC)
+
+        self.add_entity(base)
+        base.add_shape_owner(base)
+
 
         # Set a rock.
         rock = Entity()
-        rock.modules.set_debug()
-        self.add_entity(rock)
-        rock.set_transform(size=(200, 200), position=(200, 150))
+        rock.set_body_type(pymunk.Body.KINEMATIC)
+        rock.body.position = (250, 150)
+        rock.set_size((100, 100))
+        rock.set_color(Color.BROWN)
+        
+        base.add_child(rock)
+        rock.add_shape_owner(rock)
+
+        rock.modules.set_background()
+        rock.update.add_callback(lambda _: print(rock.body.position))
+        
+        base.body.velocity = (50, 50)
+        base.body.angle = 90
+              
+        #base.add_child(rock)
+        #print(rock)
+
+        #rock.draw.add_callback(lambda: (rock.body.shapes))
+        #rock.set_transform(size=(200, 200), position=(200, 150))
 
 
     '''def __create_sign(

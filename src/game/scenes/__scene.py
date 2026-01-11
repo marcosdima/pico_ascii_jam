@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from game import Game
     
 
-by_z_index = lambda e: e.transform.z_index
+by_z_index = lambda e: e.z_index
 
 
 class Scene:
@@ -27,6 +27,7 @@ class Scene:
 
     def add_entity(self, entity: Entity) -> None:
         '''Add an entity to the scene.'''
+        entity.set_space(self.game.space)
         self.__entities.append(entity)
         self.__entities.sort(key=by_z_index)
 
@@ -34,6 +35,7 @@ class Scene:
     def remove_entity(self, entity: Entity) -> None:
         '''Remove an entity from the scene.'''
         self.__entities.remove(entity)
+        entity.space = None
 
 
     def draw(self, surface) -> None:

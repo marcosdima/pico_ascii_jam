@@ -1,3 +1,5 @@
+import pygame
+
 from .modules import Modules
 from .components import Components
 
@@ -16,4 +18,10 @@ class Entity(Components):
         self.modules = Modules(self)
 
 
-    
+    def call_draw(self, surface: pygame.Surface) -> pygame.Surface:
+        self.base_surface = surface
+        self.draw()
+
+
+    def call_update(self, delta_time: float):
+        self.update(delta_time)
