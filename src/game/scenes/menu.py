@@ -1,12 +1,26 @@
 import pymunk
+
+
 from .__scene import Scene
-from ..entities import Entity
-from ..entities.variants.ascii.base.parentheses import Parentheses
 from ...types import ColliderGroup, Color
 from ...utils import CollisionHandler
+from ..entities import (
+    Entity,
+    Parentheses,
+    Pipe,
+    V,
+    Avatar,
+    Frame,
+)
+
 
 BUTTON_COLOR = Color.WHEAT.darker(0.5)
 BUTTON_ON_HOVER_COLOR = Color.WHEAT
+
+
+# ASCII scale factor
+ASCII_SCALE = 0.5
+
 
 class Menu(Scene):
     '''Menu scene class.'''
@@ -16,10 +30,8 @@ class Menu(Scene):
         # Base.
         base = Entity()
         base.body.position = (200, 150)
-        base.modules.set_background()
         base.set_size((100, 100))
         base.set_color(Color.GRAY)
-        base.modules.set_background()
         base.modules.set_wasd()
         self.add_entity(base)
         
@@ -55,11 +67,40 @@ class Menu(Scene):
 
         # Fourth entity (ASCII target - Parentheses).
         target = Parentheses()
-        target.body.position = (650, 150)
-        target.set_size((200, 500))
+        target.body.position = (10, 150)
+        target.set_size((100 * ASCII_SCALE, 250 * ASCII_SCALE))
         target.rotate(-90)
         target.set_color(Color.CYAN)
         self.add_entity(target)
+        
+        # ASCII tests - Pipe
+        pipe = Pipe()
+        pipe.body.position = (160, 150)
+        pipe.set_size((50 * ASCII_SCALE, 250 * ASCII_SCALE))
+        pipe.set_color(Color.YELLOW)
+        self.add_entity(pipe)
+
+        
+        # ASCII tests - V
+        v_char = V()
+        v_char.body.position = (460, 150)
+        v_char.set_size((20 * ASCII_SCALE * 10, 40 * ASCII_SCALE * 10))
+        v_char.set_color(Color.PURPLE)
+        self.add_entity(v_char)
+        
+        # ASCII tests - Avatar
+        avatar = Avatar()
+        avatar.body.position = (610, 150)
+        avatar.set_size((100 * ASCII_SCALE * 2, 100 * ASCII_SCALE * 2))
+        avatar.set_color(Color.ORANGE)
+        self.add_entity(avatar)
+        
+        # ASCII tests - Frame
+        frame = Frame()
+        frame.body.position = (760, 150)
+        frame.set_size((100 * ASCII_SCALE, 100 * ASCII_SCALE))
+        frame.set_color(Color.CYAN)
+        self.add_entity(frame)
         
 
     '''def __create_sign(

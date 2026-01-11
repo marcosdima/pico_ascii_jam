@@ -27,7 +27,18 @@ class Ascii(Entity, ABC):
             pixel_pos, _ = pixel.to_tuple()
             layout.add_component(tile_entity, {'coords': pixel_pos})
             self._tile_entities[pixel_pos] = tile_entity
+
+        self.on_set_color.add_callback(self._on_color_changed)
         
+
+    def _on_color_changed(self, new_color: Color):
+        """Update tile colors when the ASCII entity color changes."""
+        tiles = self.get_tiles()
+        for pixel in tiles:
+            pixel_pos, pixel_color = pixel.to_tuple()
+            if pixel_pos in self._tile_entities:
+                self._tile_entities[pixel_pos].set_color(pixel_color or new_color)
+            
 
     def _set_pixel(self, column: int, row: int, color: Color = None) -> Pixel:
         """Get pixel instace."""

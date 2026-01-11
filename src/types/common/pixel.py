@@ -8,7 +8,7 @@ class Pixel:
     def __init__(self, x: int = 0, y: int = 0, color: Color = None):
         self.x = x
         self.y = y
-        self.color = color or Color.WHITE
+        self.color = color
     
     
     def __str__(self) -> str:
@@ -56,6 +56,6 @@ class Pixel:
         self.color = color
     
     
-    def to_tuple(self) -> tuple[tuple[int, int], tuple[int, int, int, int]]:
+    def to_tuple(self) -> tuple[tuple[int, int], Color]:
         """Return pixel as tuple of position and color."""
-        return ((self.x, self.y), self.color.to_tuple())
+        return ((self.x, self.y), self.color)
