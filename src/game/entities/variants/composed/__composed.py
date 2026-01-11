@@ -9,15 +9,20 @@ class Composed(Entity):
     def __init__(self):
         super().__init__()
         self.__parts: dict[Entity, Vector2] = {}
-        self.space_change.add_callback(self.__on_space_change)
+        self.space_change.add_callback(self.on_space_change)
 
 
-    def __on_space_change(self, space: pymunk.Space | None):
+    def on_space_change(self, space: pymunk.Space | None):
         ''' Handle parent changed event. '''
         for part, offset in self.__parts.items():
-
+            
             part.set_space(space)
-            part.modules.follower.set_target(self.body, offset, angle_offset=part.body.angle, follow_angle=True)
+            part.modules.follower.set_target(
+                self.body,
+                offset,
+                angle_offset=part.body.angle,
+                follow_angle=True
+            )
 
     
     def add_part(self, part: Entity, offset: tuple[float, float]):
@@ -37,5 +42,4 @@ class Composed(Entity):
     def remove_part(self, part: Entity):
         ''' Remove a part from the composed entity. '''
         self.__parts.pop(part, None)
-
-
+        

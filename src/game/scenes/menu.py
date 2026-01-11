@@ -1,11 +1,17 @@
 from .__scene import Scene
+from ..entities import Rock
+from config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 class Menu(Scene):
     '''Menu scene class.'''
     def setup(self):
         super().setup()
-        # Empty menu scene
+        
+        # Rock in the exact center
+        rock = Rock()
+        rock.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+        self.add_entity(rock)
 
     '''def __create_sign(
         self,

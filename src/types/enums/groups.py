@@ -8,3 +8,4 @@ class ColliderGroup(CustomEnum):
     ENEMY = 2
     ITEM = 3
     ENVIRONMENT = 4
+    TOOL = 5
