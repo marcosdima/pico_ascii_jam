@@ -28,7 +28,7 @@ class Menu(Scene):
         super().setup()
 
         # Base.
-        base = Entity()
+        base = Avatar()
         base.body.position = (200, 150)
         base.set_size((100, 100))
         base.set_color(Color.GRAY)
@@ -101,6 +101,9 @@ class Menu(Scene):
         frame.set_size((100 * ASCII_SCALE, 100 * ASCII_SCALE))
         frame.set_color(Color.CYAN)
         self.add_entity(frame)
+
+
+        base.rotate(45)
         
 
     '''def __create_sign(

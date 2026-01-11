@@ -19,6 +19,10 @@ class Grid(Layout):
         cell_width = owner.size.x / columns
         cell_height = owner.size.y / rows
         
+        # Small overlap to prevent gaps when rotating (1.01 = 1% larger)
+        # This compensates for floating point precision and rotation artifacts
+        overlap_factor = 1.1
+        
         # Calculate offset to center the grid (pymunk uses center as origin)
         grid_offset_x = -owner.size.x / 2
         grid_offset_y = -owner.size.y / 2
@@ -31,7 +35,7 @@ class Grid(Layout):
                 grid_offset_x + col * cell_width + cell_width / 2,
                 grid_offset_y + row * cell_height + cell_height / 2,
             )
-            size = (cell_width, cell_height)
+            size = (cell_width * overlap_factor, cell_height * overlap_factor)
             
             self._set_as_follower(component, pos)
             component.set_size(size)
