@@ -1,5 +1,5 @@
-from ..entities import Avatar, Slingshot, Entity, Pickaxe
-from ...types import Color, Size, Resource, ColliderGroup
+from ..entities import Avatar, Entity
+from ...types import Color, Size, Resource
 from .rosources import Resources
 
 

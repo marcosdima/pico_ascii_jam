@@ -21,6 +21,7 @@ class Drawable(Base):
         world_pos = pymunk.Vec2d(*self.body.position) + rotated_offset
 
         rect = rotated.get_rect(center=world_pos)
+        print(f"[Drawable] draw_rect id={self.id} size={size} color={color} body_pos={self.body.position} angle={math.degrees(self.body.angle):.1f} world_pos={world_pos}")
         self.base_surface.blit(rotated, rect)
 
 

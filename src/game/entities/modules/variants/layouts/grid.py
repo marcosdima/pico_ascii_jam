@@ -39,6 +39,7 @@ class Grid(Layout):
             
             self._set_as_follower(component, pos)
             component.set_size(size)
+            print(f"[Grid] owner_id={owner.id} component_id={component.id} cell=({col},{row}) pos={pos} size={size}")
 
 
     def get_coords(self, id: int) -> tuple[int, int]:

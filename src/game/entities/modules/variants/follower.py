@@ -9,6 +9,8 @@ class Follower(Module):
     def setup(self):
         self.target: pymunk.Body = None  # Body to follow.
         self.offset = pymunk.Vec2d(0, 0)
+        self.follow_angle: bool = True
+        self.angle_offset: float = 0.0  # Radians
         self.owner.set_body_type(pymunk.Body.KINEMATIC)
 
 
@@ -28,9 +30,13 @@ class Follower(Module):
             
             new_pos = self.target.position + rotated_offset
             self.owner.body.position = new_pos
-            self.owner.body.angle = self.target.angle
+            if self.follow_angle:
+                self.owner.body.angle = self.target.angle + self.angle_offset
     
-    def set_target(self, body=pymunk.Body, offset=(0, 0)):
+    
+    def set_target(self, body=pymunk.Body, offset=(0, 0), angle_offset: float = 0.0, follow_angle: bool = True):
         ''' Set Follower module. '''
         self.target = body
         self.offset = pymunk.Vec2d(*offset)
+        self.angle_offset = float(angle_offset)
+        self.follow_angle = bool(follow_angle)

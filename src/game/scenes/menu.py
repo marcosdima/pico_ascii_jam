@@ -6,11 +6,9 @@ from ...types import ColliderGroup, Color
 from ...utils import CollisionHandler
 from ..entities import (
     Entity,
-    Parentheses,
-    Pipe,
-    V,
     Avatar,
-    Frame,
+    Pickaxe,
+    Slingshot,
 )
 
 
@@ -65,45 +63,19 @@ class Menu(Scene):
         )
         third.modules.collision.set_new_handler(collision_handler)
 
-        # Fourth entity (ASCII target - Parentheses).
-        target = Parentheses()
-        target.body.position = (10, 150)
-        target.set_size((100 * ASCII_SCALE, 250 * ASCII_SCALE))
-        target.rotate(-90)
-        target.set_color(Color.CYAN)
-        self.add_entity(target)
-        
-        # ASCII tests - Pipe
-        pipe = Pipe()
-        pipe.body.position = (160, 150)
-        pipe.set_size((50 * ASCII_SCALE, 250 * ASCII_SCALE))
-        pipe.set_color(Color.YELLOW)
-        self.add_entity(pipe)
+        # Show only the pickaxe composed entity
+        pickaxe = Pickaxe()
+        pickaxe.body.position = (300, 150)
+        pickaxe.set_color(Color.CYAN)
+        self.add_entity(pickaxe)
+        pickaxe.modules.follower.set_target(body=base.body, offset=(-100, 0))
 
-        
-        # ASCII tests - V
-        v_char = V()
-        v_char.body.position = (460, 150)
-        v_char.set_size((20 * ASCII_SCALE * 10, 40 * ASCII_SCALE * 10))
-        v_char.set_color(Color.PURPLE)
-        self.add_entity(v_char)
-        
-        # ASCII tests - Avatar
-        avatar = Avatar()
-        avatar.body.position = (610, 150)
-        avatar.set_size((100 * ASCII_SCALE * 2, 100 * ASCII_SCALE * 2))
-        avatar.set_color(Color.ORANGE)
-        self.add_entity(avatar)
-        
-        # ASCII tests - Frame
-        frame = Frame()
-        frame.body.position = (760, 150)
-        frame.set_size((100 * ASCII_SCALE, 100 * ASCII_SCALE))
-        frame.set_color(Color.CYAN)
-        self.add_entity(frame)
-
-
-        base.rotate(45)
+        # Add slingshot composed entity and attach to avatar
+        slingshot = Slingshot()
+        slingshot.body.position = (340, 150)
+        slingshot.set_color(Color.CYAN)
+        self.add_entity(slingshot)
+        slingshot.modules.follower.set_target(body=base.body, offset=(100, 0))
         
 
     '''def __create_sign(

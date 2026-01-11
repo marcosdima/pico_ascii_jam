@@ -30,11 +30,13 @@ class Base:
         self.draw = Event[None]()
         self.handle_event = Event[pygame.event.Event]()
         self.size_change = Event[[Size, Size]]()
+        self.space_change = Event[[pymunk.Space | None]]()
 
 
     def set_space(self, space: pymunk.Space):
         self.space = space
         self.space.add(self.body)
+        self.space_change(space)
 
 
     def set_body_type(self, body_type: pymunk.Body | Literal['dynamic', 'static', 'kinematic']):
