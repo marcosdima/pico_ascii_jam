@@ -1,4 +1,4 @@
-from ...types import Resource
+from ..types import Resource
 
 class Resources:
     ''' Class to manage game resources. '''

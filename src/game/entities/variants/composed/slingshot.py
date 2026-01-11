@@ -12,7 +12,6 @@ class Slingshot(Composed):
 
 	def __init__(self):
 		super().__init__()
-		print("[Slingshot] Creating slingshot composed entity")
 
 		fork = V()      # upper fork
 		handle = X()    # handle/cross

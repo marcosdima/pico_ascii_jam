@@ -10,9 +10,16 @@ from .variants.ascii.base.v_char import V
 from .variants.ascii.base.x_char import X
 from .variants.composed.pickaxe import Pickaxe
 from .variants.composed.slingshot import Slingshot
+from .variants.composed.__composed import Composed
+from .variants.special.player import Player
+
 
 __all__ = [
     "Entity",
+
+    # Specialized entities.
+    "Composed",
+    "Player",
 
     # Ascii-based entities.
     "Ascii",

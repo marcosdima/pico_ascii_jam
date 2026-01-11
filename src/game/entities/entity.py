@@ -25,3 +25,7 @@ class Entity(Components):
 
     def call_update(self, delta_time: float):
         self.update(delta_time)
+
+
+    def call_handle_event(self, event: pygame.event.Event):
+        self.handle_event(event)

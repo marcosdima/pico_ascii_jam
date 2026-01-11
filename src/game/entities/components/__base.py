@@ -71,3 +71,33 @@ class Base:
     def rotate(self, degrees: float):
         """Rotate the entity by the given angle in degrees."""
         self.body.angle = math.radians(degrees)
+
+
+    def get_rect(self) -> pygame.Rect:
+        """Get an axis-aligned bounding rect of the entity in world space.
+
+        The rect accounts for current rotation by computing the rotated
+        bounding box size analytically, centered at the body's position.
+        """
+        w = float(self.size.x)
+        h = float(self.size.y)
+
+        # Handle empty sizes gracefully
+        if w <= 0 or h <= 0:
+            return pygame.Rect(int(self.body.position.x), int(self.body.position.y), 0, 0)
+
+        angle = float(self.body.angle)
+        cos_a = abs(math.cos(angle))
+        sin_a = abs(math.sin(angle))
+
+        bw = w * cos_a + h * sin_a
+        bh = w * sin_a + h * cos_a
+
+        cx = float(self.body.position.x)
+        cy = float(self.body.position.y)
+
+        x = int(round(cx - bw / 2))
+        y = int(round(cy - bh / 2))
+        rw = int(round(bw))
+        rh = int(round(bh))
+        return pygame.Rect(x, y, rw, rh)

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+import pygame
 
 from ..entities import Entity
 
@@ -48,3 +48,9 @@ class Scene:
         '''Update the scene.'''
         for entity in self.__entities:
             entity.call_update(delta_time)
+
+
+    def handle_event(self, event: pygame.event.Event) -> None:
+        '''Handle an event for the scene.'''
+        for entity in self.__entities:
+            entity.call_handle_event(event)

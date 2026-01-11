@@ -36,8 +36,6 @@ class Input(Base):
         # Set mouse check callbacks.
         self.mouse_on.set_check(lambda: not self.__mouse_on)
         self.mouse_exit.set_check(lambda: self.__mouse_on)
-        self.press_mouse_button.set_check(lambda: self.__mouse_on)
-        self.release_mouse_button.set_check(lambda: self.__mouse_on)
 
         # Set event handler.
         self.handle_event.add_callback(self.__handle__event)

@@ -27,6 +27,5 @@ class Pickaxe(Composed):
 
 		self.add_part(handle, offset=(0, handle.size.y / 4))
 		self.add_part(head, offset=(0, -head.size.y / 4))
-		print("[Pickaxe] Parts added: handle and head")
         
 

@@ -11,6 +11,7 @@ from config import (
     MAIN_SCREEN,
 )
 from src.game.scenes.menu import Menu
+from src.game.entities import Player
 
 
 class Game:
@@ -37,10 +38,17 @@ class Game:
 
         #------- game state --------
         self.main_scene = Menu(self)
+        
+        # Player instance
+        self.player = Player()
+        self.player.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+        self.player.set_space(self.space)
 
 
     def handle_events(self):
         for event in pygame.event.get():
+            self.main_scene.handle_event(event)
+            self.player.call_handle_event(event)
             if event.type == pygame.QUIT:
                 self.running = False
 
@@ -52,12 +60,14 @@ class Game:
     def update(self, dt: float):
         self.space.step(dt)
         self.main_scene.update(dt)
+        self.player.call_update(dt)
 
 
     def draw(self):
         self.screen.fill(BG_COLOR)
         #self.space.debug_draw(self.draw_options)
         self.main_scene.draw(self.screen)
+        self.player.call_draw(self.screen)
         pygame.display.flip()
 
 
