@@ -51,15 +51,15 @@ class Rock(Composed):
         super().on_space_change(space)
         # Set collider group
         self.size = self.frame.size
-        self.modules.collision.create_own_shape()
-        self.modules.collision.set_collision_type(ColliderGroup.ENVIRONMENT)
+        self.create_own_shape()
+        self.set_collision_type(ColliderGroup.ENVIRONMENT)
 
         # Set collision handler
         collision_handler = (
             CollisionHandler(ColliderGroup.ENVIRONMENT, ColliderGroup.TOOL)
             .set_begin(self.__on_begin_collision_with_tool)
         )
-        self.modules.collision.set_new_handler(collision_handler)
+        self.set_new_handler(collision_handler)
 
 
 

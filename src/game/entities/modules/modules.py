@@ -9,7 +9,6 @@ from .variants.background import Background
 from .variants.layouts.__layout import Layout
 from .variants.layouts.grid import Grid
 from .variants.follower import Follower
-from .variants.collision import Collision
 
 
 class Modules(Module):
@@ -42,8 +41,7 @@ class Modules(Module):
 
 
     def setup(self):
-        ''' Set Follower module. '''
+        '''Set Follower module.'''
         self.follower = Follower(self.owner)
-        self.collision = Collision(self.owner)
 
 

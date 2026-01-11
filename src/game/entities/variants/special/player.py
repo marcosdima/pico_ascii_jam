@@ -41,8 +41,8 @@ class Player(Composed):
         super().on_space_change(space)
         
         # Set collider group of pickaxe.
-        self.pickaxe.modules.collision.create_own_shape()
-        self.pickaxe.modules.collision.set_collision_type(ColliderGroup.TOOL)
+        self.pickaxe.create_own_shape()
+        self.pickaxe.set_collision_type(ColliderGroup.TOOL)
 
 
     def __on_mouse_button_press(self, mouse_button: MouseButton):
