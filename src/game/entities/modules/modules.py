@@ -1,16 +1,15 @@
+import pymunk
 from typing import Literal, TypeAlias
 
 
 from .variants.__module import Module
 from .variants.debug import Debug
-from .variants.movement import Movement
 from .variants.wasd import WASD
 from .variants.background import Background
 from .variants.layouts.__layout import Layout
 from .variants.layouts.grid import Grid
-
-
-LayoutType: TypeAlias = Literal['grid']
+from .variants.follower import Follower
+from .variants.collision import Collision
 
 
 class Modules(Module):
@@ -30,7 +29,7 @@ class Modules(Module):
         self.background = Background(self.owner)
 
     
-    def set_layout(self, layout_type: LayoutType, config: dict = {}):
+    def set_layout(self, layout_type: Literal['grid'], config: dict = {}):
         ''' Set layout module of given type. '''
         layout: Layout = None
         if layout_type == 'grid':
@@ -42,7 +41,9 @@ class Modules(Module):
         self.layout = layout
 
 
-    ''' Module abstract methods. '''
     def setup(self):
-        # Set basic modules.
-        self.movement = Movement(self.owner)
+        ''' Set Follower module. '''
+        self.follower = Follower(self.owner)
+        self.collision = Collision(self.owner)
+
+

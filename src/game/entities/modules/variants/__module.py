@@ -14,34 +14,37 @@ class Module(ABC):
     ''' Module base class. '''
     def __init__(self, owner: 'Entity'):
         self.owner: 'Entity' = owner
+
+        self.owner.draw.add_callback(self._on_owner_draw)
+        self.owner.update.add_callback(self._on_owner_update)
+        self.owner.size_change.add_callback(self._on_owner_size_changed)
+        self.owner.handle_event.add_callback(self._on_owner_event)
+
         self.setup()
 
 
     ''' Abstract methods. '''
     def setup(self):
         ''' Setup the module. '''
-        self.owner.draw.add_callback(self.on_owner_draw)
-        self.owner.update.add_callback(self.on_owner_update)
-        self.owner.size_change.add_callback(self.on_owner_size_changed)
-        self.owner.handle_event.add_callback(self.on_owner_event)
+        pass
 
 
     ''' Module lifecycle methods. '''
-    def on_owner_update(self, delta_time: float):
+    def _on_owner_update(self, delta_time: float):
         ''' Called when the owner entity is updated. '''
         pass
 
 
-    def on_owner_draw(self):
+    def _on_owner_draw(self):
         ''' Called when the owner entity is drawn. '''
         pass
 
 
-    def on_owner_size_changed(self, prev: Size, new: Size):
+    def _on_owner_size_changed(self, prev: Size, new: Size):
         ''' Called when the owner entity size is changed. '''
         pass
 
 
-    def on_owner_event(self, event: pygame.event.Event):
+    def _on_owner_event(self, event: pygame.event.Event):
         ''' Called when the owner entity receives an event. '''
         pass

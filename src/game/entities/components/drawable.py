@@ -7,16 +7,20 @@ from ....types import Color
 
 class Drawable(Base):
     ''' Drawable interface. '''
-    def draw_rect(self, shape: pymunk.Shape, color: Color):
-        local = pygame.Surface((shape.bb.right - shape.bb.left, shape.bb.top - shape.bb.bottom), pygame.SRCALPHA)
+    def draw_rect(self, size: tuple[float, float], color: Color, offset: pymunk.Vec2d = pymunk.Vec2d(0, 0)):
+        ''' Draw a rectangle shape. '''
+        local = pygame.Surface(size, pygame.SRCALPHA)
         pygame.draw.rect(local, color.to_pygame_color(), local.get_rect())
-        
+
         rotated = pygame.transform.rotate(
             local,
             -math.degrees(self.body.angle)
         )
 
-        rect = rotated.get_rect(center=self.body.position)
+        rotated_offset = offset.rotated(-self.body.angle)
+        world_pos = pymunk.Vec2d(*self.body.position) + rotated_offset
+
+        rect = rotated.get_rect(center=world_pos)
         self.base_surface.blit(rotated, rect)
 
 

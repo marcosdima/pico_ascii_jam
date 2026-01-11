@@ -15,11 +15,7 @@ class Debug(Module):
         print(f'[{category.upper()}] Entity id={self.owner.id}: {message}')
 
 
-    ''' Abstract methods. '''
     def setup(self):
-        ''' Setup the module. '''
-        super().setup()
-
         # Debug configuration.
         self.update_delay = 5.0  # Seconds between update logs.
         self.timeout = 0.0

@@ -1,7 +1,8 @@
-import pygame, pymunk
+import pygame, pymunk, math
+from typing import Literal
 
 
-from ....types import Position, Size
+from ....types import Size
 from ....utils import Event
 
 
@@ -36,15 +37,24 @@ class Base:
         self.space.add(self.body)
 
 
-    def set_body_type(self, body_type: pymunk.Body):
+    def set_body_type(self, body_type: pymunk.Body | Literal['dynamic', 'static', 'kinematic']):
         ''' Set body type. '''
+        # Convert string to pymunk.Body type.
+        if isinstance(body_type, str):
+            body_type = {
+                'dynamic': pymunk.Body.DYNAMIC,
+                'static': pymunk.Body.STATIC,
+                'kinematic': pymunk.Body.KINEMATIC,
+            }[body_type.lower()]
+        
+        # Set body type, if different.
         if self.body_type != body_type:
             self.body_type = body_type
             self.body.body_type = body_type
 
             if body_type is pymunk.Body.DYNAMIC:
-                self.body.mass = 1
-                self.body.moment = 1
+                self.body.mass = min(1, self.body.mass)
+                self.body.moment = min(1, self.body.mass)
     
 
     def set_size(self, size: tuple[tuple] | Size):
@@ -54,3 +64,8 @@ class Base:
             prev = self.size
             self.size = size
             self.size_change(prev, size)
+
+
+    def rotate(self, degrees: float):
+        """Rotate the entity by the given angle in degrees."""
+        self.body.angle = math.radians(degrees)

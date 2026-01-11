@@ -70,8 +70,27 @@ class Color:
 
 
     '''  Python special methods. '''
+    def __str__(self) -> str:
+        return f'({self.r}, {self.g}, {self.b}, {self.a})'
+    
+    
     def __repr__(self) -> str:
         return f'Color(r={self.r}, g={self.g}, b={self.b}, a={self.a})'
+    
+    
+    def __eq__(self, other) -> bool:
+        '''Check if two colors are equal.'''
+        if not isinstance(other, Color):
+            return False
+        return (self.r == other.r and 
+                self.g == other.g and 
+                self.b == other.b and 
+                self.a == other.a)
+    
+    
+    def __hash__(self) -> int:
+        '''Return hash of the color.'''
+        return hash((self.r, self.g, self.b, self.a))
     
 
     @classmethod

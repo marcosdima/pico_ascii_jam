@@ -3,11 +3,12 @@ from .__layout import Layout
 
 ROWS = 'rows'
 COLUMNS = 'columns'
+COORDS = 'coords'
 
 
 class Grid(Layout):
     ''' Grid layout module class. '''
-    def arrange_children(self):
+    def _arrange_components(self):
         rows = self.settings[ROWS]
         columns = self.settings[COLUMNS]
         owner = self.owner
@@ -17,30 +18,45 @@ class Grid(Layout):
 
         cell_width = owner.size.x / columns
         cell_height = owner.size.y / rows
+        
+        # Calculate offset to center the grid (pymunk uses center as origin)
+        grid_offset_x = -owner.size.x / 2
+        grid_offset_y = -owner.size.y / 2
 
-        for index, child in enumerate(owner.get_children()):
-            col = index % columns
-            row = index // columns
+        for component in self.components:
+            col, row = self.get_coords(component.id)
 
+            # Position relative to grid origin (top-left), then center the cell, then offset to center grid
             pos = (
-                col * cell_width,
-                row * cell_height,
+                grid_offset_x + col * cell_width + cell_width / 2,
+                grid_offset_y + row * cell_height + cell_height / 2,
             )
             size = (cell_width, cell_height)
-
-            if not owner.space:
-                return
             
-            owner.move_child(
-                child,
-                position=pos,
-            )
-
-            child.set_size(size)
+            self._set_as_follower(component, pos)
+            component.set_size(size)
 
 
-    def validate_settings(self, settings) -> bool:
+    def get_coords(self, id: int) -> tuple[int, int]:
+        ''' Get number of rows. '''
+        return self._get_component_setting_field(id, COORDS, (0, 0))
+
+
+    def _validate_settings(self, settings) -> bool:
         rows = settings.get(ROWS, None)
         columns = settings.get(COLUMNS, None)
 
         return isinstance(rows, int) and rows >= 0 and isinstance(columns, int) and columns >= 0
+    
+
+    def _validate_component_setting(self, component_setting: dict) -> bool:
+        if COORDS in component_setting:
+            coords = component_setting[COORDS]
+            if (
+                not isinstance(coords, tuple)
+                or len(coords) != 2
+                or not all(isinstance(c, int) for c in coords)
+            ):
+                raise ValueError("Coords must be a pair of integers.")
+            return True
+        return False

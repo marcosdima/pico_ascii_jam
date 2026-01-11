@@ -1,7 +1,9 @@
 import pymunk
 from .__scene import Scene
 from ..entities import Entity
-from ...types import Resource, Color
+from ..entities.variants.ascii.base.parentheses import Parentheses
+from ...types import ColliderGroup, Color
+from ...utils import CollisionHandler
 
 BUTTON_COLOR = Color.WHEAT.darker(0.5)
 BUTTON_ON_HOVER_COLOR = Color.WHEAT
@@ -13,39 +15,52 @@ class Menu(Scene):
 
         # Base.
         base = Entity()
-        #base.body.position = (200, 150)
+        base.body.position = (200, 150)
         base.modules.set_background()
-
         base.set_size((100, 100))
         base.set_color(Color.GRAY)
-        base.set_body_type(pymunk.Body.DYNAMIC)
-
+        base.modules.set_background()
+        base.modules.set_wasd()
         self.add_entity(base)
-        base.add_shape_owner(base)
-
-
-        # Set a rock.
-        rock = Entity()
-        rock.set_body_type(pymunk.Body.KINEMATIC)
-        rock.body.position = (250, 150)
-        rock.set_size((100, 100))
-        rock.set_color(Color.BROWN)
         
-        base.add_child(rock)
-        rock.add_shape_owner(rock)
+        # Second entity.
+        second = Entity()
+        second.set_size((50, 50))
+        second.set_color(Color.BLUE)
+        second.body.position = (400, 150)
+        second.modules.set_background()
+        self.add_entity(second)
+        second.modules.follower.set_target(body=base.body, offset=(110, 110))
 
-        rock.modules.set_background()
-        rock.update.add_callback(lambda _: print(rock.body.position))
+        # Third entity.
+        third = Entity()
+        third.set_body_type('static')
+        third.set_size((30, 30))
+        third.set_color(Color.RED)
+        third.body.position = (100, 150)
+        third.modules.set_background()
+        self.add_entity(third)
+
+        # Collision logic.
+        base.modules.collision.set_collision_type(ColliderGroup.PLAYER)
+        base.modules.collision.create_own_shape()   
+        third.modules.collision.set_collision_type(ColliderGroup.ENEMY)
+        third.modules.collision.create_own_shape()
+        collision_handler = (
+            CollisionHandler(ColliderGroup.PLAYER, ColliderGroup.ENEMY)
+            .set_begin(lambda arbiter, space, data: print("Collision began!") or True)
+            .set_separate(lambda arbiter, space, data: print("Collision ended!") or None)
+        )
+        third.modules.collision.set_new_handler(collision_handler)
+
+        # Fourth entity (ASCII target - Parentheses).
+        target = Parentheses()
+        target.body.position = (650, 150)
+        target.set_size((200, 500))
+        target.rotate(-90)
+        target.set_color(Color.CYAN)
+        self.add_entity(target)
         
-        base.body.velocity = (50, 50)
-        base.body.angle = 90
-              
-        #base.add_child(rock)
-        #print(rock)
-
-        #rock.draw.add_callback(lambda: (rock.body.shapes))
-        #rock.set_transform(size=(200, 200), position=(200, 150))
-
 
     '''def __create_sign(
         self,

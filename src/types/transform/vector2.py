@@ -44,6 +44,11 @@ class Vector2:
     def is_positive(self) -> bool:
         '''Check if both components are positive.'''
         return self.x >= 0.0 and self.y >= 0.0
+    
+
+    def magnitude(self) -> float:
+        '''Return the magnitude of the vector.'''
+        return (self.x ** 2 + self.y ** 2) ** 0.5
 
 
     @classmethod
