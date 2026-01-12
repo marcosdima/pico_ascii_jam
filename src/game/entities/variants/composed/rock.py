@@ -28,15 +28,11 @@ class Rock(Life, Composed):
         self.collision_type = ColliderGroup.RESOURCE.value
 
         # Create ASCII parts.
-        self.frame = Frame()
-        self.phase_1 = Ke()
-        self.phase_2 = Me()
-        self.phase_3 = V()
-        s = 5
-        self.frame.set_size((50 * s, 50 * s))
-        self.phase_1.set_size((15 * s, 15 * s))  # 3 columns x 3 rows
-        self.phase_2.set_size((35 * s, 25 * s))  # 7 columns x 5 rows
-        self.phase_3.set_size((15 * s, 25 * s))
+        self.frame = Frame(ascii_size=35)
+        self.phase_1 = Ke(ascii_size=15)
+        self.phase_2 = Me(ascii_size=15)
+        self.phase_2.rotate(180)
+        self.phase_3 = V(ascii_size=20)
 
         self.frame.set_color(resource.get_color())
         self.phase_1.set_color(resource.get_color())
@@ -47,14 +43,14 @@ class Rock(Life, Composed):
         self.add_part(self.frame, offset=(0, 0))
 
         # Add secondary ASCII characters inside the frame
-        self.add_part(self.phase_1, offset=(-10, -5))
-        self.add_part(self.phase_2, offset=(8, -2))
-        self.add_part(self.phase_3, offset=(0, 10))
+        self.add_part(self.phase_1, offset=(0.33, -0.33))
+        self.add_part(self.phase_2, offset=(0.55, -0.55))
+        self.add_part(self.phase_3, offset=(0, 0.4))
 
         # Hide parts initially
         self.__show_part: Ke | Me | V | None = None
         self.phase_1.hide()
-        self.phase_2.hide()
+        #self.phase_2.hide()
         self.phase_3.hide()
 
         # Health state

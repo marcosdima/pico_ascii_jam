@@ -13,7 +13,7 @@ class Player(Life, Composed):
 
         # Avatar setup.
         self.avatar = Avatar()
-        self.avatar.set_size((125, 125))
+        self.avatar.set_ascii_size(20)
         self.avatar.set_color(Color.YELLOW)
 
         # Resources state.

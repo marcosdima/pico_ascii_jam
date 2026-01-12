@@ -16,13 +16,9 @@ class Slingshot(Composed):
 		fork = V()      # upper fork
 		handle = X()    # handle/cross
 
-		s = 1
-		fork.set_size((30 * s, 40 * s))
-		handle.set_size((30 * s, 40 * s))
-
 		fork.set_color(Color.GRAY)
 		handle.set_color(Color.BROWN)
 
-		self.add_part(handle, offset=(0, handle.size.y / 2))
-		self.add_part(fork, offset=(0, -fork.size.y / 4))
+		self.add_part(handle, offset=(0, 0.5))
+		self.add_part(fork, offset=(0, -0.25))
 

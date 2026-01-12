@@ -16,20 +16,16 @@ class Pickaxe(Composed):
 		self.damage = self.made_of.value / 10
 
 		# Parts.
-		head = Parentheses()
-		handle = Pipe()
-
-		s = 1
-		head.set_size((20 * s, 50 * s))
-		handle.set_size((10 * s, 50 * s))
+		head = Parentheses(20)
+		handle = Pipe(10)
 
 		head.rotate(-90)
 
 		handle.set_color(Color.BROWN)
 		head.set_color(Color.GRAY)
 
-		self.add_part(handle, offset=(0, handle.size.y / 4))
-		self.add_part(head, offset=(0, -head.size.y / 4))
+		self.add_part(handle, offset=(0, 0.25))
+		self.add_part(head, offset=(0, -0.25))
 
 		# Recharge timer.
 		self.recharge_time = 0.2  # seconds between uses

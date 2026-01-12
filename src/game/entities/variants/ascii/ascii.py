@@ -7,13 +7,13 @@ from .....types import Pixel, Color
 
 class Ascii(Entity, ABC):
     """Base class for ASCII-based entities."""
-    def __init__(self):
+    def __init__(self, ascii_size: int = 1):
         super().__init__()
 
         # Set grid layout based on ASCII tiles.
         tiles = self.get_tiles()
-        grid_dims = self._compute_grid_dimensions(tiles)
-        self.modules.set_layout('grid', grid_dims)
+        rows, columns = self.grid_dimensions()
+        self.modules.set_layout('grid', {'rows': rows, 'columns': columns})
         
         # Set grid layout based on ASCII tiles and populate tile entities.
         self._tile_entities: dict[tuple[int, int], Entity] = {}
@@ -29,6 +29,9 @@ class Ascii(Entity, ABC):
             self._tile_entities[pixel_pos] = tile_entity
 
         self.on_set_color.add_callback(self._on_color_changed)
+
+        self.ascii_size = ascii_size
+        self.set_ascii_size(ascii_size)
         
 
     def _on_color_changed(self, new_color: Color):
@@ -45,25 +48,34 @@ class Ascii(Entity, ABC):
         return Pixel(column, row, color or self.color)
 
 
-    def _compute_grid_dimensions(self, tiles: list[Pixel]) -> dict:
+    def grid_dimensions(self) -> dict:
         """Calculate grid dimensions from a list of tiles."""
+        tiles = self.get_tiles()
         if not tiles:
-            return {'rows': 0, 'columns': 0}
+            return (0, 0)
         
         max_x = max(pixel.x for pixel in tiles)
         max_y = max(pixel.y for pixel in tiles)
         
-        return {
-            'rows': max_y + 1,
-            'columns': max_x + 1,
-        }
-        
-    
+        return (
+            max_x + 1,
+            max_y + 1,
+        )
+
+
     def set_space(self, space):
         """Propagate space assignment to tile entities."""
         super().set_space(space)
         for tile in self._tile_entities.values():
             tile.set_space(space)
+
+    
+    def set_ascii_size(self, s: int = 1):
+        """Set the size of each ASCII tile."""
+        self.ascii_size = s
+        rows, columns = self.grid_dimensions()
+        self.set_size((columns * s, rows * s))
+        
 
         
     @abstractmethod
