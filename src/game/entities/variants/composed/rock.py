@@ -24,7 +24,7 @@ class Rock(Life, Composed):
         super().__init__()
 
         self.resource = resource
-        self.set_collision_type(ColliderGroup.RESOURCE)
+        self.collision_type = ColliderGroup.RESOURCE.value
 
         # Create ASCII parts.
         self.frame = Frame()
@@ -41,7 +41,7 @@ class Rock(Life, Composed):
         self.parentheses.set_color(resource.get_color())
         self.x_char.set_color(resource.get_color())
         self.v_char.set_color(resource.get_color())
-
+        
         # Add frame as base
         self.add_part(self.frame, offset=(0, 0))
 
@@ -57,23 +57,22 @@ class Rock(Life, Composed):
 
         # Health state
         self.set_max_health(resource.value)
+        self.on_death.add_callback(self.free)
 
 
-    def on_space_change(self, space):
+    def _on_space_change(self, space):
         super()._on_space_change(space)
-
-        self.__hitted = False
-        self.__tool_count = 0   
 
         # Set collider group
         self.size = self.frame.size
-        self.create_collision_shapes_from_parts()
+        self.create_own_shape()
+        self.modules.set_debug()
+
 
         # Set collision handler
         collision_handler = (
             CollisionHandler(ColliderGroup.RESOURCE, ColliderGroup.AREA)
                 .set_begin(self.__on_begin_collision_with_tool)
-                .set_separate(self.__on_separate_collision_with_tool)
         )
         self.set_new_handler(collision_handler)
 
@@ -82,14 +81,12 @@ class Rock(Life, Composed):
         # Identify the other shape/entity (the tool) in this collision
         shape_a, shape_b = arbiter.shapes
         other_shape = shape_b if shape_a.body is self.body else shape_a
-        self.last_tool = getattr(other_shape, 'entity', None)
+        tool = getattr(other_shape, 'entity', None)
+        
+        if tool and hasattr(tool, 'damage'):
+            damage = tool.damage
+            self.damage(damage)
+            print('Life remaining:', self.current_health)
 
-        print(f'Rock hit by tool: {other_shape}')
         return True
     
-
-    def __on_separate_collision_with_tool(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
-        if self.__tool_count > 0:
-            self.__tool_count -= 1
-        if self.__tool_count == 0:
-            self.__hitted = False

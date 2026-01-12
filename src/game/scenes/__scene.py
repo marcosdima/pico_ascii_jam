@@ -46,8 +46,16 @@ class Scene:
 
     def update(self, delta_time: float) -> None:
         '''Update the scene.'''
+        remove = []
+
         for entity in self.__entities:
-            entity.call_update(delta_time)
+            if entity.was_freed():
+                remove.append(entity)
+            else:
+                entity.call_update(delta_time)
+
+        for entity in remove:
+            self.remove_entity(entity)
 
 
     def handle_event(self, event: pygame.event.Event) -> None:

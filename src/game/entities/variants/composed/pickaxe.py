@@ -32,7 +32,7 @@ class Pickaxe(Composed):
 		self.add_part(head, offset=(0, -head.size.y / 4))
 
 		# Recharge timer.
-		self.recharge_time = 2  # seconds between uses
+		self.recharge_time = 0.2  # seconds between uses
 		self._recharge_timer = 0.0
 		self.update.add_callback(self._update_recharge)
 
@@ -54,19 +54,16 @@ class Pickaxe(Composed):
 		'''Simulate using the pickaxe.'''
 		if self._recharge_timer == 0:
 			self._recharge_timer = self.recharge_time
-			trigger = self.modules.instantiator.create_trigger(
+			self.trigger = self.modules.instantiator.create_trigger(
 				size=(100, 100),
 				offset=self.body.position + (50, 0),
 			)
-			trigger.on_resource_enter = self.__on_hit_resource
+			self.trigger.set_entity_shape(self)
+			self.trigger.on_resource_enter = self.__on_hit_resource
 
 
 	def __on_hit_resource(self, arbiter, space, data):
 		'''Callback when pickaxe hits a resource.'''
-		shape_a, shape_b = arbiter.shapes
-		other = shape_a if shape_b.entity == self else shape_b
-		print(other.entity.__class__)
-		return True
-			
+		print('Pickaxe hit resource!')
 
 		

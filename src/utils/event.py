@@ -13,6 +13,11 @@ class Event(Generic[P]):
         self.__callback: CallbackMap[P] = {}
         self.__check = check
 
+    
+    def clear_callbacks(self):
+        ''' Clear all callbacks. '''
+        self.__callback.clear()
+
 
     def add_callback(
         self,

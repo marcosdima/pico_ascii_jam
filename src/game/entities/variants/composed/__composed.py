@@ -22,7 +22,6 @@ class Composed(Entity):
                 angle_offset=part.body.angle,
                 follow_angle=True
             )
-        self.create_collision_shapes_from_parts()
         
 
     def add_part(self, part: Entity, offset: tuple[float, float] = (0, 0)):

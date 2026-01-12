@@ -7,13 +7,38 @@ class Events(Module):
     '''Events module for entities.'''
     def setup(self):
         self.__set_key_events()
+        self.__time_events = {}
         self.owner.press_key.add_callback(self.__on_key_press)
+
+
+    def assign_time_event(self, name: str, event: callable, interval: float):
+        '''Assign a time-based event.'''
+        self.__time_events[name] = {
+            'event': event,
+            'interval': interval,
+            'elapsed': 0.0,
+        }
+        self.owner.update.add_callback(self.__update_time_events)
 
 
     def __on_key_press(self, key: Key):
         event = getattr(self, f'on_key_{key.name}_pressed', None)
         if event:
             event()
+
+    
+    def __update_time_events(self, delta_time: float):
+        remove = []
+        
+        for event_name in self.__time_events.keys():
+            event_data = self.__time_events[event_name]
+            event_data['elapsed'] += delta_time
+            if event_data['elapsed'] >= event_data['interval']:
+                event_data['event']()
+                remove.append(event_name)
+
+        for event_name in remove:
+            del self.__time_events[event_name]
 
 
     def __set_key_events(self):

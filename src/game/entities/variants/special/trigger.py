@@ -16,12 +16,12 @@ class Trigger(Entity):
     def __init__(
         self,
         size: Size,
+        lifetime: int = 2 # Seconds.
     ):
         super().__init__()
 
         # Initialize trigger.
         self.set_size(size)
-        self.modules.set_debug()
         self.space_change.add_callback(self.__on_space_set)
         self.__collider_type = ColliderGroup.AREA
         self.set_collision_type(self.__collider_type)
@@ -33,11 +33,15 @@ class Trigger(Entity):
         self.on_resource_enter: callable = lambda arbiter, space, data: True
         self.on_resource_exit: callable = lambda arbiter, space, data: None
 
+        self.modules.events.assign_time_event(
+            name='lifetime',
+            event=lambda: self.free(),
+            interval=lifetime,
+        )
+
     
     def __on_space_set(self, _):
         '''' Called when the space is set. '''
-        self.create_own_shape()
-
         # Handle player collisions.
         handler = (
             CollisionHandler(self.__collider_type, ColliderGroup.PLAYER)
@@ -75,3 +79,9 @@ class Trigger(Entity):
     def __on_player_exit(self, arbiter, space, data):
         """Called when a player exits the trigger."""
         self.on_player_exit(arbiter, space, data)
+
+
+    def set_entity_shape(self, entity: Entity) -> None:
+        '''Set the trigger's shape to match the entity's shape.'''
+        for shape in self.body.shapes:
+            shape.entity = entity
