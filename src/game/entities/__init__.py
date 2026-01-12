@@ -13,6 +13,7 @@ from .variants.composed.slingshot import Slingshot
 from .variants.composed.rock import Rock
 from .variants.composed.__composed import Composed
 from .variants.special.player import Player
+from .variants.special.trigger import Trigger
 
 
 __all__ = [
@@ -21,6 +22,7 @@ __all__ = [
     # Specialized entities.
     "Composed",
     "Player",
+    "Trigger",
 
     # Ascii-based entities.
     "Ascii",

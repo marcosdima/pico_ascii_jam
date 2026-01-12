@@ -28,7 +28,7 @@ class Base:
         # Set lyfe cycle callbacks.
         self.update = Event[float]()
         self.draw = Event[None]()
-        self.handle_event = Event[pygame.event.Event]()
+        self.handle_event = Event[[pygame.event.Event]]()
         self.size_change = Event[[Size, Size]]()
         self.space_change = Event[[pymunk.Space | None]]()
 

@@ -2,9 +2,9 @@ from .__enum import CustomEnum
 from ..common.color import Color
 
 class Resource(CustomEnum):
-    ROCK = 0
-    IRON = 1
-    GOLD = 2
+    ROCK = 10
+    IRON = 120
+    GOLD = 430
 
 
     def get_color(self) -> Color:

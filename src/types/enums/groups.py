@@ -9,3 +9,4 @@ class ColliderGroup(CustomEnum):
     ITEM = 3
     ENVIRONMENT = 4
     TOOL = 5
+    AREA = 6

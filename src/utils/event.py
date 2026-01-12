@@ -1,3 +1,4 @@
+import inspect
 from typing import ParamSpec, Generic, Callable, TypeAlias
 
 
@@ -44,9 +45,22 @@ class Event(Generic[P]):
         return self.__check()
 
 
+    def debug(self):
+        self.add_callback(lambda *args, **kwargs: print("Event triggered with args:", args, "and kwargs:", kwargs))
+
+
     def __call__(self, *args: P.args, **kwargs: P.kwargs):
-        ''' Call the event, executing all callbacks if working. '''
+        '''Call the event, executing all callbacks if working.
+
+        If a callback expects no parameters, it is invoked without args to avoid
+        signature mismatches when events supply collision data.
+        '''
         if not self.working():
             return
+
         for cb in self.__callback:
-            cb(*args, **kwargs)
+            sig = inspect.signature(cb)
+            if len(sig.parameters) == 0:
+                cb()
+            else:
+                cb(*args, **kwargs)

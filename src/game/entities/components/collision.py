@@ -1,4 +1,5 @@
 import pymunk
+import math
 
 from .__base import Base
 from ....utils import CollisionHandler, Event
@@ -50,5 +51,55 @@ class Collision(Base):
     def create_own_shape(self):
         '''Create a box shape for this entity.'''
         shape = pymunk.Poly.create_box(self.body, self.size.to_tuple())
-        self.space.add(shape)
         shape.collision_type = self.collision_type
+        shape.entity = self  # attach owner for collision context
+        self.space.add(shape)
+
+
+    def add_shape(self, shape: pymunk.Shape):
+        '''Add an existing shape to this entity's collision.
+        
+        Args:
+            shape: Pymunk shape to add (will be attached to this body)
+        '''
+        shape.collision_type = self.collision_type
+        shape.entity = self  # attach owner for collision context
+        self.space.add(shape)
+
+
+    def create_box_shape(self, size: tuple[float, float], offset: tuple[float, float] = (0, 0), angle: float = 0):
+        '''Create and add a box shape at a specific offset with rotation.
+        
+        Args:
+            size: (width, height) of the box
+            offset: (x, y) offset from body center
+            angle: rotation angle in radians
+        '''
+        # Create base vertices for unrotated box
+        half_w = size[0] / 2
+        half_h = size[1] / 2
+        base_vertices = [
+            (-half_w, -half_h),
+            (half_w, -half_h),
+            (half_w, half_h),
+            (-half_w, half_h),
+        ]
+        
+        # Rotate vertices if angle is provided
+        if angle != 0:
+            cos_a = math.cos(angle)
+            sin_a = math.sin(angle)
+            rotated_vertices = []
+            for x, y in base_vertices:
+                rotated_x = x * cos_a - y * sin_a
+                rotated_y = x * sin_a + y * cos_a
+                rotated_vertices.append((rotated_x, rotated_y))
+            base_vertices = rotated_vertices
+        
+        # Apply offset to all vertices
+        vertices = [(x + offset[0], y + offset[1]) for x, y in base_vertices]
+        
+        shape = pymunk.Poly(self.body, vertices)
+        shape.collision_type = self.collision_type
+        shape.entity = self  # attach owner for collision context
+        self.space.add(shape)

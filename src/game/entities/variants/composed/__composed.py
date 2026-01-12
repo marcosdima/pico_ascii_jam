@@ -42,4 +42,18 @@ class Composed(Entity):
     def remove_part(self, part: Entity):
         ''' Remove a part from the composed entity. '''
         self.__parts.pop(part, None)
+
+
+    def create_collision_shapes_from_parts(self):
+        '''Create collision shapes for all parts using the collision component.
         
+        Iterates through all parts and creates box shapes at their respective offsets,
+        all attached to this composed entity's body. Each shape is rotated according
+        to the part's angle.
+        '''
+        for part, offset in self.__parts.items():
+            self.create_box_shape(
+                size=part.size.to_tuple(),
+                offset=offset.to_tuple(),
+                angle=part.body.angle
+            )

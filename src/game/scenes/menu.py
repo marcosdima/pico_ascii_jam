@@ -1,5 +1,6 @@
 from .__scene import Scene
 from ..entities import Rock
+from ..entities.variants.special.trigger import Trigger
 from config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
@@ -12,6 +13,11 @@ class Menu(Scene):
         rock = Rock()
         rock.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
         self.add_entity(rock)
+        
+        # Test instantiator - create some triggers
+        trigger1 = rock.modules.instantiator.create_trigger((WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4))
+        trigger1.on_player_enter.add_callback(lambda: print("Player entered trigger 1"))
+        self.add_entity(trigger1)
 
     '''def __create_sign(
         self,

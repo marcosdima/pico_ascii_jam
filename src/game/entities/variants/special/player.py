@@ -2,11 +2,12 @@ from ..composed.__composed import Composed
 from ..composed.pickaxe import Pickaxe
 from ..composed.slingshot import Slingshot
 from ..ascii.base.avatar import Avatar
+from ...interfaces import Life
 from .....types import Color, Resource, MouseButton, ColliderGroup
 from .....utils import Resources
 
 
-class Player(Composed):
+class Player(Life, Composed):
     def __init__(self):
         super().__init__()
 
@@ -41,7 +42,7 @@ class Player(Composed):
         super().on_space_change(space)
         
         # Set collider group of pickaxe.
-        self.pickaxe.create_own_shape()
+        self.pickaxe.create_collision_shapes_from_parts()
         self.pickaxe.set_collision_type(ColliderGroup.TOOL)
 
 
