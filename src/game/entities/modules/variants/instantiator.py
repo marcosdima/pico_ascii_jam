@@ -1,6 +1,10 @@
 from .__module import Module
 from typing import TYPE_CHECKING
 
+
+from .....types import ColliderGroup
+
+
 if TYPE_CHECKING:
     from ...entity import Entity
     from ...variants.special.trigger import Trigger
@@ -19,16 +23,23 @@ class Instantiator(Module):
         
         # Parasite owner.
         owner = self.owner
+        entity.set_space(owner.space)
         owner.space_change.add_callback(lambda s: entity.set_space(s))
         owner.update.add_callback(entity.update)
-        #owner.draw.add_callback(entity.draw)
-        owner.handle_event.add_callback(entity.handle_event) 
+        owner.handle_event.add_callback(entity.handle_event)
+        owner.draw.add_callback(lambda: entity.call_draw(owner.base_surface))
 
         return entity
 
-        
-    def create_trigger(self, size: tuple, offset: tuple = (0, 0)) -> 'Trigger':
+
+    def create_trigger(
+        self,
+        size: tuple,
+        offset: tuple = (0, 0),
+    ) -> 'Trigger':
         '''Create a Trigger entity.'''
         from ...variants.special.trigger import Trigger
         trigger = Trigger(size)
-        return self.__instantiate(trigger, offset)
+        self.__instantiate(trigger, offset)
+        trigger.create_own_shape()
+        return trigger

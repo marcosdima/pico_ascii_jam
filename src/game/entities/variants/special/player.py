@@ -38,12 +38,22 @@ class Player(Life, Composed):
         self.press_mouse_button.add_callback(self.__on_mouse_button_press)
 
 
-    def on_space_change(self, space):
-        super().on_space_change(space)
+    def _on_space_change(self, space):
+        super()._on_space_change(space)
         
         # Set collider group of pickaxe.
         self.pickaxe.create_collision_shapes_from_parts()
         self.pickaxe.set_collision_type(ColliderGroup.TOOL)
+
+        # Set avatar.
+        self.avatar.set_collision_type(ColliderGroup.PLAYER)
+        self.avatar.create_own_shape()
+        self.avatar.modules.set_debug()
+
+        # Set actions.
+        self.modules.events.on_key_E_pressed.add_callback(
+            lambda: self.pickaxe.use() if self.pickaxe == self.main_tool else None
+        )
 
 
     def __on_mouse_button_press(self, mouse_button: MouseButton):

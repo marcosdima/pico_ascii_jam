@@ -51,9 +51,7 @@ class Collision(Base):
     def create_own_shape(self):
         '''Create a box shape for this entity.'''
         shape = pymunk.Poly.create_box(self.body, self.size.to_tuple())
-        shape.collision_type = self.collision_type
-        shape.entity = self  # attach owner for collision context
-        self.space.add(shape)
+        self.add_shape(shape)
 
 
     def add_shape(self, shape: pymunk.Shape):

@@ -24,6 +24,7 @@ class Rock(Life, Composed):
         super().__init__()
 
         self.resource = resource
+        self.set_collision_type(ColliderGroup.RESOURCE)
 
         # Create ASCII parts.
         self.frame = Frame()
@@ -59,7 +60,7 @@ class Rock(Life, Composed):
 
 
     def on_space_change(self, space):
-        super().on_space_change(space)
+        super()._on_space_change(space)
 
         self.__hitted = False
         self.__tool_count = 0   
@@ -67,13 +68,12 @@ class Rock(Life, Composed):
         # Set collider group
         self.size = self.frame.size
         self.create_collision_shapes_from_parts()
-        self.set_collision_type(ColliderGroup.ENVIRONMENT)
 
         # Set collision handler
         collision_handler = (
-            CollisionHandler(ColliderGroup.ENVIRONMENT, ColliderGroup.TOOL)
+            CollisionHandler(ColliderGroup.RESOURCE, ColliderGroup.AREA)
                 .set_begin(self.__on_begin_collision_with_tool)
-                .set_separate(self._on_separate_collision_with_tool)
+                .set_separate(self.__on_separate_collision_with_tool)
         )
         self.set_new_handler(collision_handler)
 
@@ -84,14 +84,11 @@ class Rock(Life, Composed):
         other_shape = shape_b if shape_a.body is self.body else shape_a
         self.last_tool = getattr(other_shape, 'entity', None)
 
-        self.__tool_count += 1
-        if self.__hitted:
-            return False
-        self.__hitted = True
+        print(f'Rock hit by tool: {other_shape}')
         return True
     
 
-    def _on_separate_collision_with_tool(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
+    def __on_separate_collision_with_tool(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict):
         if self.__tool_count > 0:
             self.__tool_count -= 1
         if self.__tool_count == 0:

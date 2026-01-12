@@ -43,6 +43,7 @@ class Game:
         self.player = Player()
         self.player.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
         self.player.set_space(self.space)
+        self.player.main_tool.modules.set_background()
 
 
     def handle_events(self):

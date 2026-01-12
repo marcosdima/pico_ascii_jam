@@ -10,12 +10,14 @@ class Menu(Scene):
         super().setup()
         
         # Rock in the exact center
-        rock = Rock()
-        rock.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
-        self.add_entity(rock)
-        
+        self.rock = Rock()
+        self.rock.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+        self.add_entity(self.rock)
+
+
+    def test_trigger(self):
         # Test instantiator - create some triggers
-        trigger1 = rock.modules.instantiator.create_trigger((WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4))
+        trigger1 = self.rock.modules.instantiator.create_trigger((WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4), (100, 100))
         trigger1.on_player_enter.add_callback(lambda: print("Player entered trigger 1"))
         self.add_entity(trigger1)
 

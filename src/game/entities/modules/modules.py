@@ -10,6 +10,7 @@ from .variants.layouts.__layout import Layout
 from .variants.layouts.grid import Grid
 from .variants.follower import Follower
 from .variants.instantiator import Instantiator
+from .variants.events import Events
 
 
 class Modules(Module):
@@ -45,3 +46,4 @@ class Modules(Module):
         '''Set Follower module.'''
         self.follower = Follower(self.owner)
         self.instantiator = Instantiator(self.owner)
+        self.events = Events(self.owner)

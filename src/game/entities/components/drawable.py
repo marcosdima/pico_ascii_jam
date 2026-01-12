@@ -24,4 +24,16 @@ class Drawable(Base):
         self.base_surface.blit(rotated, rect)
 
 
+    def draw_shape(self, shape: pymunk.Shape, color: Color):
+        ''' Draw shape using physics vertices (follows movement accurately). '''
+        if isinstance(shape, pymunk.Poly):
+            # Get vertices in world space
+            vertices = [self.body.local_to_world(v) for v in shape.get_vertices()]
+            # Convert to tuples for pygame
+            vertices_tuple = [(v.x, v.y) for v in vertices]
+            
+            if len(vertices_tuple) > 2:
+                pygame.draw.polygon(self.base_surface, color.to_pygame_color(), vertices_tuple)
+
+
         
