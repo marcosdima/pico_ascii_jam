@@ -15,9 +15,9 @@ class Me(Ascii):
 		p = self._set_pixel
 		# Me (メ) shape - katakana character based on SVG path
 		return [
-					p(1, 0), p(2, 0),
-								 p(3, 1),					 p(5, 1), p(6, 1),
-											 p(4, 2),
-								 p(3, 3),					 p(5, 3),
-															  p(6, 4),
+            p(5, 0),
+			p(4, 1), p(2, 1),
+			p(3, 2),
+			p(2, 3), p(4, 3), p(5, 3),
+			p(0, 4), p(1, 4),
 		]
