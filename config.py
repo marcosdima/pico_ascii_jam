@@ -8,7 +8,7 @@ TEXT_COLOR = (255, 255, 255)  # White
 
 # Resource paths
 ASSETS_PATH = 'assets'
-FONT_PATH = f'{ASSETS_PATH}/pico-8.otf'
+FONT_PATH = f'{ASSETS_PATH}/fonts/pico-8.otf'
 
 # FPS (Frames Per Second)
 FPS = 60

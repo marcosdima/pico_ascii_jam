@@ -1,6 +1,5 @@
 from .__scene import Scene
 from ..entities import Rock
-from ..entities.variants.special.trigger import Trigger
 from config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
