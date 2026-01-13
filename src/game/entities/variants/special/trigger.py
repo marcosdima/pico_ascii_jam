@@ -28,11 +28,11 @@ class Trigger(Entity):
 
         # Callbacks. These receive (arbiter, space, data).
         self.on_player_enter: callable = lambda arbiter, space, data: True
-        self.on_player_exirt: callable = lambda arbiter, space, data: None
+        self.on_player_exit: callable = lambda arbiter, space, data: None
 
         self.on_resource_enter: callable = lambda arbiter, space, data: True
         self.on_resource_exit: callable = lambda arbiter, space, data: None
-
+        self.modules.set_debug()
         self.modules.events.assign_time_event(
             name='lifetime',
             event=lambda: self.free(),

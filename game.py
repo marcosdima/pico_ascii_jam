@@ -41,7 +41,7 @@ class Game:
         
         # Player instance
         self.player = Player()
-        self.player.body.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+        self.player.body.position = (WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4)
         self.player.set_space(self.space)
         self.player.main_tool.modules.set_background()
 

@@ -16,16 +16,17 @@ class Pickaxe(Composed):
 		self.damage = self.made_of.value / 10
 
 		# Parts.
-		head = Parentheses(20)
-		handle = Pipe(10)
+		head = Parentheses(13)
+		handle = Pipe(13)
 
 		head.rotate(-90)
 
 		handle.set_color(Color.BROWN)
 		head.set_color(Color.GRAY)
 
-		self.add_part(handle, offset=(0, 0.25))
-		self.add_part(head, offset=(0, -0.25))
+		self.add_part(head, offset=(-head.size.x / 8, -head.size.y))
+		self.add_part(handle, offset=(handle.size.y * 2.8, (head.size.x / 32) - 1))
+		
 
 		# Recharge timer.
 		self.recharge_time = 0.2  # seconds between uses
@@ -51,8 +52,8 @@ class Pickaxe(Composed):
 		if self._recharge_timer == 0:
 			self._recharge_timer = self.recharge_time
 			self.trigger = self.modules.instantiator.create_trigger(
-				size=(100, 100),
-				offset=self.body.position + (50, 0),
+				size=(40, 50),
+				offset=self.body.position + (70, 0),
 			)
 			self.trigger.set_entity_shape(self)
 			self.trigger.on_resource_enter = self.__on_hit_resource

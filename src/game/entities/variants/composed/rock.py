@@ -28,30 +28,27 @@ class Rock(Life, Composed):
         self.collision_type = ColliderGroup.RESOURCE.value
 
         # Create ASCII parts.
+        unit = 15
         self.frame = Frame(ascii_size=35)
-        self.phase_1 = Ke(ascii_size=15)
-        self.phase_2 = Me(ascii_size=15)
+        self.phase_1 = Ke(ascii_size=unit)
+        self.phase_2 = Me(ascii_size=unit)
         self.phase_2.rotate(180)
-        self.phase_3 = V(ascii_size=20)
 
         self.frame.set_color(resource.get_color())
         self.phase_1.set_color(resource.get_color())
         self.phase_2.set_color(resource.get_color())
-        self.phase_3.set_color(resource.get_color())
         
         # Add frame as base
         self.add_part(self.frame, offset=(0, 0))
 
         # Add secondary ASCII characters inside the frame
-        self.add_part(self.phase_1, offset=(0.33, -0.33))
-        self.add_part(self.phase_2, offset=(0.55, -0.55))
-        self.add_part(self.phase_3, offset=(0, 0.4))
+        self.add_part(self.phase_1, offset=(-unit, unit / 2))
+        self.add_part(self.phase_2, offset=(0, 0))
 
         # Hide parts initially
         self.__show_part: Ke | Me | V | None = None
         self.phase_1.hide()
-        #self.phase_2.hide()
-        self.phase_3.hide()
+        self.phase_2.hide()
 
         # Health state
         self.set_max_health(resource.value)
@@ -79,9 +76,7 @@ class Rock(Life, Composed):
     def __on_damage_received(self, _: float):
         # Change visible part based on current health
         health_ratio = self.current_health / self.max_health
-        if health_ratio < 0.3:
-            self._turn_part_visible(self.phase_3)
-        elif health_ratio < 0.6:
+        if health_ratio < 0.6:
             self._turn_part_visible(self.phase_2)
         elif health_ratio < 0.9:
             self._turn_part_visible(self.phase_1)
