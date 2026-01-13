@@ -22,7 +22,7 @@ class Zombie(Life, Composed):
         # Chase behavior state
         self.__chase_target: pymunk.Vec2d | None = None
         self.__chase_speed: float = 260.0
-        self.__pulse_interval: float = 0.5
+        self.__pulse_interval: float = 1.5
         self.__pulse_timer: float = 0.0
         self.__player_contact = None  # Track player currently colliding
 

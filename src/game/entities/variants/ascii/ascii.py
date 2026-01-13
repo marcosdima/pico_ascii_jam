@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from ...entity import Entity
 from .....types import Pixel, Color
+from .....utils import Text
 
 
 class Ascii(Entity, ABC):
@@ -32,6 +33,23 @@ class Ascii(Entity, ABC):
 
         self.ascii_size = ascii_size
         self.set_ascii_size(ascii_size)
+
+        self.__display_sign: bool = False
+        self.text = Text(chr(self.get_ascii_unicode()), 32, Color.WHITE)
+        self.mouse_on.add_callback(self.display_sign)
+        self.mouse_exit.add_callback(lambda: self.display_sign(reverse=True))
+        text_size = self.text.get_size()
+        self.draw.add_callback(
+            lambda:
+                self.text.draw(
+                    surface=self.base_surface,
+                    position=(
+                        self.body.position.x - self.size.x / 2 + (self.size.x - text_size[0]) / 2,
+                        self.body.position.y - self.size.y / 2 - (text_size[1] * 1.5),
+                    )
+                )
+                if self.__display_sign else None
+        )
         
 
     def _on_color_changed(self, new_color: Color):
@@ -77,7 +95,11 @@ class Ascii(Entity, ABC):
         self.set_size((columns * s, rows * s))
         
 
-        
+    def display_sign(self, reverse: bool = False):
+        """Show ASCII sign on mouse over."""
+        self.__display_sign = not reverse
+
+
     @abstractmethod
     def get_ascii_unicode(self) -> int:
         """Return the Unicode character representing the ASCII entity."""

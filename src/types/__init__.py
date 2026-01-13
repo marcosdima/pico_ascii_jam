@@ -12,7 +12,6 @@ from .enums.mouse import MouseButton
 # Common.
 from .common.font import Font
 from .common.color import Color
-from .common.text import Text
 from .common.pixel import Pixel
 
 
@@ -31,6 +30,5 @@ __all__ = [
     # Others.
     "Color",
     "Font",
-    "Text",
     "Pixel",
 ]

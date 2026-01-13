@@ -58,3 +58,8 @@ class Composed(Entity):
                 offset=offset.to_tuple(),
                 angle=part.body.angle
             )
+
+
+    def get_parts(self) -> dict[Entity, Vector2]:
+        ''' Get all parts of the composed entity.'''
+        return self.__parts
