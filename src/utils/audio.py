@@ -21,6 +21,7 @@ class AudioManager:
             
             # Load default sounds
             self.load_sound('hit_rock', 'assets/sounds/hit_rock.wav')
+            self.load_sound('pickup', 'assets/sounds/Picked Coin Echo.wav')
             
             AudioManager._initialized = True
 
@@ -96,3 +97,8 @@ class AudioManager:
     def play_hit_rock(self, loops: int = 0, fade_ms: int = 0):
         """Play the rock hit sound."""
         return self.play('hit_rock', loops=loops, fade_ms=fade_ms)
+
+
+    def play_pickup(self, loops: int = 0, fade_ms: int = 0):
+        """Play the pickup sound."""
+        return self.play('pickup', loops=loops, fade_ms=fade_ms)

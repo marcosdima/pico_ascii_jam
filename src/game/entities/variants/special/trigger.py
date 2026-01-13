@@ -1,14 +1,15 @@
 import pymunk
-from typing import TypeAlias
+from typing import TypeAlias, Callable
 
 
+from .player import Player
 from ...entity import Entity
 from .....types import Size, ColliderGroup
 from .....utils import CollisionHandler, Event
 
 
-
 TriggerCallback: TypeAlias = Event[pymunk.Arbiter, pymunk.Space, object]
+PlayerCallback: TypeAlias = Callable[[Player], bool | None]
 
 
 class Trigger(Entity):
@@ -26,9 +27,9 @@ class Trigger(Entity):
         self.__collider_type = ColliderGroup.AREA
         self.set_collision_type(self.__collider_type)
 
-        # Callbacks. These receive (arbiter, space, data).
-        self.on_player_enter: callable = lambda arbiter, space, data: True
-        self.on_player_exit: callable = lambda arbiter, space, data: None
+        # Callbacks. Player callbacks receive the player entity.
+        self.on_player_enter: PlayerCallback = lambda player: True
+        self.on_player_exit: PlayerCallback = lambda player: None
 
         self.on_resource_enter: callable = lambda arbiter, space, data: True
         self.on_resource_exit: callable = lambda arbiter, space, data: None
@@ -70,15 +71,26 @@ class Trigger(Entity):
         self.on_resource_exit(arbiter, space, data)
 
     
+    def __get_player_from_arbiter(self, arbiter: pymunk.Arbiter) -> Entity:
+        """Extract the player entity from the arbiter."""
+        shape_a, shape_b = arbiter.shapes
+        other_shape = shape_b if shape_a.body is self.body else shape_a
+        return getattr(other_shape, 'entity', None)
+
+    
     def __on_player_enter(self, arbiter, space, data):
         """Called when a player enters the trigger."""
-        self.on_player_enter(arbiter, space, data)
+        player = self.__get_player_from_arbiter(arbiter)
+        if player:
+            self.on_player_enter(player)
         return True
 
     
     def __on_player_exit(self, arbiter, space, data):
         """Called when a player exits the trigger."""
-        self.on_player_exit(arbiter, space, data)
+        player = self.__get_player_from_arbiter(arbiter)
+        if player:
+            self.on_player_exit(player)
 
 
     def set_entity_shape(self, entity: Entity) -> None:

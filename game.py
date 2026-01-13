@@ -12,6 +12,7 @@ from config import (
 )
 from src.game.scenes.menu import Menu
 from src.game.entities import Player, GLOBAL
+from src.game.ui.status import Status
 
 
 class Game:
@@ -46,6 +47,10 @@ class Game:
         self.player.set_space(self.space)
         self.player.main_tool.modules.set_background()
 
+        # UI elements
+        self.status_ui = Status(self.screen)
+        self.status_ui.set_resources(self.player.resources)
+
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -64,6 +69,7 @@ class Game:
         GLOBAL.call_update(dt)
         self.main_scene.update(dt)
         self.player.call_update(dt)
+        self.status_ui.update(dt)
 
 
     def draw(self):
@@ -71,6 +77,7 @@ class Game:
         GLOBAL.call_draw(self.screen)
         self.main_scene.draw(self.screen)
         self.player.call_draw(self.screen)
+        self.status_ui.draw()
         pygame.display.flip()
 
 

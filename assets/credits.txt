@@ -1,1 +1,2 @@
-Sound: https://opengameart.org/content/mining-pick
+Sound 'hit_rock': https://opengameart.org/content/mining-pick
+Sound 'Picked Coin Echo': https://opengameart.org/content/picked-coin-echo

@@ -1,6 +1,6 @@
 from .ui import UI
 from ...types import Font, Color, Resource, Text
-from ....config import FONT_PATH
+from config import FONT_PATH
 
 
 class Status(UI):

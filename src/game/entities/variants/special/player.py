@@ -45,10 +45,9 @@ class Player(Life, Composed):
         self.pickaxe.create_collision_shapes_from_parts()
         self.pickaxe.set_collision_type(ColliderGroup.TOOL)
 
-        # Set avatar.
-        self.avatar.set_collision_type(ColliderGroup.PLAYER)
-        self.avatar.create_own_shape()
-        self.avatar.modules.set_debug()
+        
+        self.set_collision_type(ColliderGroup.PLAYER)
+        self.create_own_shape()
 
         # Set actions.
         self.modules.events.on_key_E_pressed.add_callback(

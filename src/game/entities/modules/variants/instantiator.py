@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 
 from .....types import Resource, Size
+from .....utils import AudioManager
 
 
 if TYPE_CHECKING:
@@ -48,6 +49,7 @@ class Instantiator(Module):
         drop = Trigger(size=Size(50, 50), lifetime=timeout)
         self.__instantiate(drop, offset)
         drop.create_own_shape()
+        
 
         # Set ASCII representation based on resource.
         ascii_entity = CF(5)
@@ -55,6 +57,7 @@ class Instantiator(Module):
         self.__instantiate(ascii_entity, offset)
 
         # Set drop with global reference.
+        drop.on_player_enter = lambda p, d=drop, o=of: self.__recolect_drop(p, d, o)
         self.__parasite( entity=drop)
 
         return drop
@@ -69,3 +72,13 @@ class Instantiator(Module):
         owner.update.add_callback(entity.update)
         owner.handle_event.add_callback(entity.handle_event)
         owner.draw.add_callback(lambda: entity.call_draw(owner.base_surface))
+
+
+    def __recolect_drop(self, player, drop: 'Trigger', of: Resource):
+        # Play hit sound
+        audio = AudioManager.get_instance()
+        audio.play_pickup()
+        player.resources.recolect(of, 1)
+        
+
+    
