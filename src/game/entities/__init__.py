@@ -11,6 +11,7 @@ from .variants.ascii.base.v_char import V
 from .variants.ascii.base.x_char import X
 from .variants.ascii.base.ke_char import Ke
 from .variants.ascii.base.me_char import Me
+from .variants.ascii.base.cf import CF
 
 
 # Composed Entities
@@ -25,8 +26,11 @@ from .variants.special.player import Player
 from .variants.special.trigger import Trigger
 
 
+GLOBAL = Entity()
+
 __all__ = [
     "Entity",
+    "GLOBAL",
 
     # Base ASCII Characters
     "Ascii",
@@ -38,6 +42,7 @@ __all__ = [
     "X",
     "Ke",
     "Me",
+    "CF",
 
     # Composed Entities
     "Composed",

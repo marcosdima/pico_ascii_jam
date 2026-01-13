@@ -15,7 +15,7 @@ class Pickaxe(Composed):
 		super().__init__()
 
 		self.made_of = Resource.ROCK
-		self.damage = self.made_of.value / 10
+		self.damage = self.made_of.value / 2 # Two strikes to break its resource.
 
 		# Build parts
 		head = Parentheses(13)
@@ -29,9 +29,8 @@ class Pickaxe(Composed):
 		self.add_part(head, offset=(-head.size.x / 8, -head.size.y))
 		self.add_part(handle, offset=(handle.size.y * 2.8, (head.size.x / 32) - 1))
 		
-
 		# Recharge timer
-		self.recharge_time = 0.2
+		self.recharge_time = 1
 		self._recharge_timer = 0.0
 		self.update.add_callback(self._update_recharge)
 

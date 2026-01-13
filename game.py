@@ -11,7 +11,7 @@ from config import (
     MAIN_SCREEN,
 )
 from src.game.scenes.menu import Menu
-from src.game.entities import Player
+from src.game.entities import Player, GLOBAL
 
 
 class Game:
@@ -37,6 +37,7 @@ class Game:
         self.draw_options = pymunk.pygame_util.DrawOptions(self.screen)
 
         #------- game state --------
+        GLOBAL.set_space(self.space)
         self.main_scene = Menu(self)
         
         # Player instance
@@ -60,13 +61,14 @@ class Game:
 
     def update(self, dt: float):
         self.space.step(dt)
+        GLOBAL.call_update(dt)
         self.main_scene.update(dt)
         self.player.call_update(dt)
 
 
     def draw(self):
         self.screen.fill(BG_COLOR)
-        #self.space.debug_draw(self.draw_options)
+        GLOBAL.call_draw(self.screen)
         self.main_scene.draw(self.screen)
         self.player.call_draw(self.screen)
         pygame.display.flip()
@@ -76,6 +78,7 @@ class Game:
         while self.running:
             dt = self.clock.tick(FPS) / 1000.0
             self.handle_events()
+            GLOBAL.call_update(dt)
             self.update(dt)
             self.draw()
 

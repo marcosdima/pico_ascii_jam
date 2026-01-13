@@ -1,4 +1,5 @@
 import pymunk
+from typing import TYPE_CHECKING
 
 
 from .__composed import Composed
@@ -54,6 +55,17 @@ class Rock(Life, Composed):
         self.set_max_health(resource.value)
         self.on_death.add_callback(self.free)
         self.on_damage_received.add_callback(self.__on_damage_received)
+
+
+    ''' Override. '''
+    def free(self):
+        # Drop resource item.
+        self.modules.instantiator.create_drop(
+            of=self.resource,
+            offset=self.body.position,
+            timeout=10,
+        )
+        super().free()
 
 
     def _on_space_change(self, space):
