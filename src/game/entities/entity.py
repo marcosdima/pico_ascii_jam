@@ -20,6 +20,9 @@ class Entity(Components):
 
     def free(self):
         """Remove body and all its shapes from the physics space."""
+        self.update.clear_callbacks()
+        self.draw.clear_callbacks()
+        self.handle_event.clear_callbacks()
         if self.space is not None:
             # Remove all shapes attached to the body
             for shape in list(self.body.shapes):
@@ -28,6 +31,8 @@ class Entity(Components):
             # Remove the body itself
             self.space.remove(self.body)
         self.__freed = True
+
+        
 
 
     def was_freed(self) -> bool:

@@ -17,16 +17,16 @@ class Trigger(Entity):
     def __init__(
         self,
         size: Size,
-        lifetime: int = 2 # Seconds.
+        lifetime: int = 2, # Seconds.
+        collider_type: ColliderGroup = ColliderGroup.AREA,
     ):
         super().__init__()
 
         # Initialize trigger.
         self.set_size(size)
         self.space_change.add_callback(self.__on_space_set)
-        self.__collider_type = ColliderGroup.AREA
+        self.__collider_type = collider_type
         self.set_collision_type(self.__collider_type)
-
         # Callbacks. Player callbacks receive the player entity.
         self.on_player_enter: PlayerCallback = lambda player: True
         self.on_player_exit: PlayerCallback = lambda player: None

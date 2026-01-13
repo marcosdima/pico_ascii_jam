@@ -15,7 +15,6 @@ class Input(Base):
         super().__init__()
 
         # State.
-        self.modifications: dict[Key, Key] = {}
         self.pressed_keys: set[Key] = set()
         
         # Flags.

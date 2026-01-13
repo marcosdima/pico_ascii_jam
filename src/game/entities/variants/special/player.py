@@ -47,7 +47,9 @@ class Player(Life, Composed):
 
         
         self.set_collision_type(ColliderGroup.PLAYER)
+        self.size = self.avatar.size
         self.create_own_shape()
+        self.modules.set_debug()
 
         # Set actions.
         self.modules.events.on_key_E_pressed.add_callback(

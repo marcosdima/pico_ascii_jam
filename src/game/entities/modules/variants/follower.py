@@ -4,15 +4,19 @@ import pymunk, math
 from .__module import Module
 
 
+APPEAR_OFFSET = -20
+
+
 class Follower(Module):
     ''' Follower module. '''
     def setup(self):
         self.__following = True
+        self.__first_follow = True  # Flag for first time following
         self.target: pymunk.Body = None  # Body to follow.
         self.offset = pymunk.Vec2d(0, 0)
         self.follow_angle: bool = True
         self.angle_offset: float = 0.0  # Radians
-        self.direct_follow: bool = False  # Flag para modo directo
+        self.direct_follow: bool = False  # Flag for direct follow mode
         self.owner.set_body_type(pymunk.Body.KINEMATIC)
 
 
@@ -30,10 +34,18 @@ class Follower(Module):
             
             target_pos = self.target.position + rotated_offset
             
-            if self.direct_follow:
+            # First time following: position directly with y offset
+            if self.__first_follow:
+                initial_pos = target_pos + pymunk.Vec2d(0, APPEAR_OFFSET)
+                self.owner.body.position = initial_pos
+                self.owner.body.velocity = pymunk.Vec2d(0, 0)
+                self.__first_follow = False
+            elif self.direct_follow:
+                # Direct mode: set position directly
                 self.owner.body.position = target_pos
                 self.owner.body.velocity = pymunk.Vec2d(0, 0)
             else:
+                # Smooth mode: move towards position using velocity
                 current_pos = self.owner.body.position
                 direction = target_pos - current_pos
                 distance = direction.length
@@ -63,6 +75,7 @@ class Follower(Module):
         self.angle_offset = float(angle_offset)
         self.follow_angle = bool(follow_angle)
         self.direct_follow = bool(direct_follow)
+        self.__first_follow = True  # Reset first follow flag
 
 
     def has_target(self) -> bool:

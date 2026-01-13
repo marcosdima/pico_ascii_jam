@@ -16,7 +16,7 @@ class Event(Generic[P]):
     
     def clear_callbacks(self):
         ''' Clear all callbacks. '''
-        self.__callback.clear()
+        self.__check = lambda: False
 
 
     def add_callback(

@@ -1,8 +1,8 @@
-from .__module import Module
 from typing import TYPE_CHECKING
 
 
-from .....types import Resource, Size
+from .__module import Module
+from .....types import Resource, Size, ColliderGroup
 from .....utils import AudioManager
 
 
@@ -46,11 +46,10 @@ class Instantiator(Module):
     ) -> 'Trigger':
         '''Create a Drop entity.'''
         from ....entities import CF, Trigger
-        drop = Trigger(size=Size(50, 50), lifetime=timeout)
+        drop = Trigger(size=Size(50, 50), lifetime=timeout, collider_type=ColliderGroup.ITEM)
         self.__instantiate(drop, offset)
         drop.create_own_shape()
         
-
         # Set ASCII representation based on resource.
         ascii_entity = CF(5)
         ascii_entity.set_color(of.get_color()) 
@@ -58,6 +57,7 @@ class Instantiator(Module):
 
         # Set drop with global reference.
         drop.on_player_enter = lambda p, d=drop, o=of: self.__recolect_drop(p, d, o)
+        drop.ascii = ascii_entity
         self.__parasite( entity=drop)
 
         return drop
@@ -79,6 +79,8 @@ class Instantiator(Module):
         audio = AudioManager.get_instance()
         audio.play_pickup()
         player.resources.recolect(of, 1)
+        drop.free()
+        drop.ascii.free()
         
 
     
