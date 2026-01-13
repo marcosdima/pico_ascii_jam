@@ -46,6 +46,7 @@ class Game:
         self.player.body.position = (WINDOW_WIDTH / 4, WINDOW_HEIGHT / 4)
         self.player.set_space(self.space)
         self.player.main_tool.modules.set_background()
+        self.player.on_death.add_callback(lambda: setattr(self, 'running', False))
 
         # UI elements
         self.status_ui = Status(self.screen)

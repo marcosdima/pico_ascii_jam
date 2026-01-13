@@ -24,6 +24,7 @@ from .variants.composed.slingshot import Slingshot
 # Special Entities
 from .variants.special.player import Player
 from .variants.special.trigger import Trigger
+from .variants.special.zombie import Zombie
 
 
 GLOBAL = Entity()
@@ -53,4 +54,5 @@ __all__ = [
     # Special Entities
     "Player",
     "Trigger",
+    "Zombie",
 ]

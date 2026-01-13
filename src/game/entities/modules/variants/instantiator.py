@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+import pymunk
 
 from .__module import Module
 from .....types import Resource, Size, ColliderGroup
@@ -61,6 +61,40 @@ class Instantiator(Module):
         self.__parasite( entity=drop)
 
         return drop
+
+    def create_damage_trigger(
+        self,
+        size: tuple,
+        offset: tuple = (0, 0),
+        damage: float = 10.0,
+        lifetime: float = 0.2,
+        knockback: float = 350.0,
+    ) -> 'Trigger':
+        '''Create a damage trigger centered at offset.'''
+        from ....entities import Trigger
+        trigger = Trigger(size=Size(*size), lifetime=lifetime)
+        self.__instantiate(trigger, offset)
+        trigger.create_own_shape()
+
+        audio = AudioManager.get_instance()
+
+        def on_player(player):
+            # Compute knockback away from owner (source of damage)
+            src = pymunk.Vec2d(self.owner.body.position.x, self.owner.body.position.y)
+            dst = pymunk.Vec2d(player.body.position.x, player.body.position.y)
+            dir_vec = dst - src
+            if dir_vec.length > 0:
+                kb = dir_vec.normalized() * knockback
+                player.body.velocity = kb
+            # Apply damage
+            if hasattr(player, 'damage'):
+                player.damage(damage)
+            # Sound
+            audio.play_hit_rock()
+            return True
+
+        trigger.on_player_enter = on_player
+        return trigger
     
 
     def __parasite(self, entity: 'Entity', host: 'Entity' = None):
