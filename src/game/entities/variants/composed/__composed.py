@@ -20,7 +20,8 @@ class Composed(Entity):
                 body=self.body,
                 offset=offset,
                 angle_offset=part.body.angle,
-                follow_angle=True
+                follow_angle=True,
+                direct_follow=True
             )
         
 

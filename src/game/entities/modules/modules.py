@@ -11,6 +11,7 @@ from .variants.layouts.grid import Grid
 from .variants.follower import Follower
 from .variants.instantiator import Instantiator
 from .variants.events import Events
+from .variants.animation import Animation
 
 
 class Modules(Module):
@@ -47,3 +48,5 @@ class Modules(Module):
         self.follower = Follower(self.owner)
         self.instantiator = Instantiator(self.owner)
         self.events = Events(self.owner)
+        self.animation = Animation(self.owner)
+
