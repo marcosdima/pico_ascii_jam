@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-import pymunk
+import pymunk, random
 
 from .__module import Module
 from .....types import Resource, Size, ColliderGroup
@@ -112,7 +112,7 @@ class Instantiator(Module):
         # Play hit sound
         audio = AudioManager.get_instance()
         audio.play_pickup()
-        player.resources.recolect(of, 1)
+        player.resources.recolect(of, random.randint(1, 3))
         drop.free()
         drop.ascii.free()
         
