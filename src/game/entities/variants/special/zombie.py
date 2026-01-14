@@ -1,8 +1,11 @@
+import pymunk
+import math
+
 from ..composed.__composed import Composed
 from ..ascii.base.avatar import Avatar
+from ..special.player import Player
 from ...interfaces import Life
 from .....types import Color, ColliderGroup
-import pymunk
 
 DAMAGE = 25.0
 
@@ -20,12 +23,12 @@ class Zombie(Life, Composed):
         self.add_part(self.avatar, offset=(0, 0))
 
         # Chase behavior state
-        self.__chase_target: pymunk.Vec2d | None = None
-        self.__target_player = None  # Reference to player entity
-        self.__max_speed: float = 260.0
-        self.__current_speed: float = 0.0  # Current movement speed
-        self.__acceleration: float = 200.0  # Speed gain per second
+        self.__max_speed: float = 400.0
+        self.__acceleration: float = 600.0
+        self.__drag: float = 0.9
         self.__player_contact = None  # Track player currently colliding
+        self.__avoid_timer: float = 0.0
+        self.__avoid_dir: pymunk.Vec2d | None = None
 
         # Movement update
         self.update.add_callback(self.__on_update)
@@ -44,9 +47,18 @@ class Zombie(Life, Composed):
         super()._on_space_change(space)
         
         self.set_collision_type(ColliderGroup.ENEMY)
+        self.set_body_type('dynamic')
         self.size = self.avatar.size
         self.size.x += 0.8
+        self.body.mass = 6.0
+        self.body.moment = pymunk.moment_for_box(self.body.mass, (self.size.x, self.size.y))
         self.create_own_shape()
+        for shape in self.body.shapes:
+            shape.friction = 1.0
+            shape.elasticity = 0.05
+        self.body.angular_velocity = 0
+        self.body.angular_velocity_limit = 0
+        self.body.velocity_func = lambda body, gravity, damping, dt: pymunk.Body.update_velocity(body, gravity, 0.98, dt)
         self.modules.set_debug()
 
         # Damage player on physical collision
@@ -58,46 +70,74 @@ class Zombie(Life, Composed):
         )
         self.set_new_handler(handler)
 
+        # Bounce off rocks and keep chasing
+        handler_rock = (
+            CollisionHandler(ColliderGroup.ENEMY, ColliderGroup.RESOURCE)
+                .set_begin(self.__on_collision_with_rock)
+        )
+        self.set_new_handler(handler_rock)
+
+        # Ignore collision with tools
+        handler_tool = (
+            CollisionHandler(ColliderGroup.ENEMY, ColliderGroup.TOOL)
+                .set_begin(lambda *args: False)  # Return False to prevent collision
+        )
+        self.set_new_handler(handler_tool)
+
 
     def __on_update(self, dt: float):
         # Update attack stun timer
         if self.__attack_stun_timer > 0:
             self.__attack_stun_timer -= dt
-            # During stun after attack, don't pursue
-            self.body.velocity = pymunk.Vec2d(0, 0)
+            self.body.velocity *= 0.6
+            self.body.angular_velocity = 0
             return
         
         # If still in contact and cooldown is over, keep attacking periodically
         if self.__player_contact is not None and self.charged():
             self.__attack_player(self.__player_contact)
 
-        # Only scan for player when no target
-        if self.__target_player is None:
-            self.__pulse_scan()
-            # Decelerate when idle
-            self.__current_speed = max(0, self.__current_speed - self.__acceleration * dt * 2)
-            self.body.velocity = pymunk.Vec2d(0, 0)
+        player = Player.get_instance()
+        if player is None:
+            self.body.velocity *= self.__drag
+            self.body.angular_velocity = 0
             return
 
-        # Update chase target to current player position (follow continuously)
-        self.__chase_target = pymunk.Vec2d(
-            self.__target_player.body.position.x,
-            self.__target_player.body.position.y
-        )
+        # Rotate to face player
+        player_dir = player.body.position - self.body.position
+        if player_dir.length > 0:
+            angle = math.atan2(player_dir.y, player_dir.x)
+            # Prevent upside down: if angle points downward, flip 180 degrees
+            if angle > math.pi / 2 or angle < -math.pi / 2:
+                angle += math.pi if angle > 0 else -math.pi
+            self.body.angle = angle
 
-        current = self.body.position
-        direction = self.__chase_target - current
-        dist = direction.length
-        
-        # Gradually increase speed up to max
-        self.__current_speed = min(self.__max_speed, self.__current_speed + self.__acceleration * dt)
-        
-        if dist < 5:
-            # Small deadzone: move slowly to avoid jitter
-            self.body.velocity = direction.normalized() * (self.__current_speed * 0.35)
-            return
+        # Choose direction: avoid rock briefly, else chase player
+        if self.__avoid_timer > 0 and self.__avoid_dir is not None:
+            self.__avoid_timer -= dt
+            direction = self.__avoid_dir
+        else:
+            direction = player.body.position - self.body.position
+            if direction.length > 0:
+                direction = direction.normalized()
+            else:
+                direction = pymunk.Vec2d(0, 0)
+            self.__avoid_dir = None
+            self.__avoid_timer = 0
 
-        self.body.velocity = direction.normalized() * self.__current_speed
+        desired = direction * self.__max_speed
+        vel = self.body.velocity
+        steering = desired - vel
+        max_steer = self.__acceleration * dt
+        if steering.length > max_steer:
+            steering = steering.normalized() * max_steer
+
+        new_vel = vel + steering
+        if new_vel.length > self.__max_speed:
+            new_vel = new_vel.normalized() * self.__max_speed
+
+        self.body.velocity = new_vel
+        self.body.angular_velocity = 0
 
 
     def _update_recharge(self, dt: float):
@@ -111,20 +151,6 @@ class Zombie(Life, Composed):
     def charged(self) -> bool:
         """Check if zombie can attack."""
         return self._recharge_timer == 0
-
-
-    def __pulse_scan(self):
-        # Create a large trigger centered at zombie to detect player
-        size = (1000, 1000)
-        center = (self.body.position.x, self.body.position.y)
-        trigger = self.modules.instantiator.create_trigger(size=size, offset=center)
-
-        # When player enters, store reference to player entity
-        def on_player(player):
-            self.__target_player = player
-            self.__chase_target = pymunk.Vec2d(player.body.position.x, player.body.position.y)
-            return True
-        trigger.on_player_enter = on_player
 
 
     def __on_begin_collision_with_player(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict) -> bool:
@@ -144,6 +170,19 @@ class Zombie(Life, Composed):
         self.__player_contact = None
 
 
+    def __on_collision_with_rock(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict) -> bool:
+        shape_a, shape_b = arbiter.shapes
+        other = shape_b if shape_a.body is self.body else shape_a
+        away = self.body.position - other.body.position if hasattr(other, 'body') else pymunk.Vec2d(0, 0)
+        if away.length > 0:
+            away = away.normalized()
+            self.__avoid_dir = away
+            self.__avoid_timer = 0.35
+            self.body.velocity = away * (self.__max_speed * 0.6)
+        self.body.angular_velocity = 0
+        return True
+
+
     def __attack_player(self, player):
         # Create a short-lived damage trigger centered on zombie
         center = (self.body.position.x, self.body.position.y)
@@ -159,4 +198,5 @@ class Zombie(Life, Composed):
         
         # Stun after attack: don't pursue for a moment
         self.__attack_stun_timer = self.__attack_stun_duration
-        self.__target_player = None  # Drop pursuit during stun
+        self.__avoid_timer = 0
+        self.__avoid_dir = None

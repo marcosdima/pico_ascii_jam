@@ -1,9 +1,10 @@
 import math
-import pymunk
+
+
 from .__composed import Composed
 from ..ascii.base.parentheses import Parentheses
 from ..ascii.base.pipe import Pipe
-from .....types import Color, Resource, Vector2
+from .....types import Color, Resource, Vector2, ColliderGroup
 
 
 class Pickaxe(Composed):
@@ -28,6 +29,8 @@ class Pickaxe(Composed):
 
 		self.add_part(head, offset=(-head.size.x / 8, -head.size.y))
 		self.add_part(handle, offset=(handle.size.y * 2.8, (head.size.x / 32) - 1))
+
+		self.set_collision_type(ColliderGroup.TOOL)
 		
 		# Recharge timer
 		self.recharge_time = 1
@@ -74,10 +77,15 @@ class Pickaxe(Composed):
 				lambda: self._return_to_following()
 			)
 			
+			# Create trigger in direction of pickaxe rotation
+			distance = 70
+			offset_x = math.cos(self.body.angle) * distance
+			offset_y = math.sin(self.body.angle) * distance
 			self.trigger = self.modules.instantiator.create_trigger(
 				size=(40, 50),
-				offset=self.body.position + (70, 0),
+				offset=self.body.position + (offset_x, offset_y),
 			)
+			
 			self.trigger.set_entity_shape(self)
 			self.trigger.on_resource_enter = self.__on_hit_resource
 	

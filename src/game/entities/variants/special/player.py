@@ -1,3 +1,7 @@
+import pygame
+import pymunk
+from typing import Optional
+
 from ..composed.__composed import Composed
 from ..composed.pickaxe import Pickaxe
 from ..composed.slingshot import Slingshot
@@ -8,8 +12,19 @@ from .....utils import Resources
 
 
 class Player(Life, Composed):
+    _instance: Optional['Player'] = None
+
+    @classmethod
+    def get_instance(cls) -> Optional['Player']:
+        return cls._instance
+
+
     def __init__(self):
         super().__init__()
+
+        # Register singleton instance
+        if Player._instance is None:
+            Player._instance = self
 
         # Avatar setup.
         self.avatar = Avatar()
@@ -36,18 +51,25 @@ class Player(Life, Composed):
         # Set wasd.
         self.modules.set_wasd()
         self.press_mouse_button.add_callback(self.__on_mouse_button_press)
+        self.update.add_callback(self.__on_update)
 
 
     def _on_space_change(self, space):
         super()._on_space_change(space)
         
-        # Set collider group of pickaxe.
-        self.pickaxe.create_collision_shapes_from_parts()
-        self.pickaxe.set_collision_type(ColliderGroup.TOOL)
-
+        # Set tools to kinematic so they don't interfere with physics
+        self.pickaxe.set_body_type('kinematic')
+        self.slingshot.set_body_type('kinematic')
         
+        # Set collider group of pickaxe.
+        self.pickaxe.create_own_shape()
+
+        # Player is a dynamic rigid body
         self.set_collision_type(ColliderGroup.PLAYER)
+        self.set_body_type('dynamic')
         self.size = self.avatar.size
+        self.body.mass = 15.0
+        self.body.moment = pymunk.moment_for_box(self.body.mass, (self.size.x, self.size.y))
         self.create_own_shape()
         self.modules.set_debug()
 
@@ -55,6 +77,21 @@ class Player(Life, Composed):
         self.modules.events.on_key_E_pressed.add_callback(
             lambda: self.pickaxe.use() if self.pickaxe == self.main_tool else None
         )
+
+
+    def __on_update(self, dt: float):
+        """Rotate player to face mouse cursor."""
+        import math
+        mouse_pos = pygame.mouse.get_pos()
+        player_pos = self.body.position
+        
+        # Vector from player to mouse
+        dx = mouse_pos[0] - player_pos.x
+        dy = mouse_pos[1] - player_pos.y
+        
+        # Calculate angle in radians
+        angle = math.atan2(dy, dx)
+        self.body.angle = angle
 
 
     def __on_mouse_button_press(self, mouse_button: MouseButton):

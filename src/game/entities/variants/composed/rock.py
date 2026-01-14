@@ -26,6 +26,9 @@ class Rock(Life, Composed):
         super().__init__()
 
         self.resource = resource
+        # Heavy static body so it reacts to physics but hardly moves
+        self.set_body_type('static')
+        #self.body.mass = 25
         self.collision_type = ColliderGroup.RESOURCE.value
 
         # Create ASCII parts.
@@ -76,13 +79,25 @@ class Rock(Life, Composed):
         self.create_own_shape()
         self.modules.set_debug()
 
+        # Make the rock a bit bouncy when something hits it
+        for shape in self.body.shapes:
+            shape.elasticity = 0.9
+            shape.friction = 0.8
 
-        # Set collision handler
+
+        # Set collision handler with tools
         collision_handler = (
             CollisionHandler(ColliderGroup.RESOURCE, ColliderGroup.AREA)
                 .set_begin(self.__on_begin_collision_with_tool)
         )
         self.set_new_handler(collision_handler)
+
+        # Set collision handler with player
+        collision_handler_player = (
+            CollisionHandler(ColliderGroup.RESOURCE, ColliderGroup.PLAYER)
+                .set_begin(self.__on_begin_collision_with_player)
+        )
+        self.set_new_handler(collision_handler_player)
 
 
     def __on_damage_received(self, _: float):
@@ -112,6 +127,27 @@ class Rock(Life, Composed):
 
         return True
     
+
+    def __on_begin_collision_with_player(self, arbiter: pymunk.Arbiter, space: pymunk.Space, data: dict) -> bool:
+        # Identify the player in this collision
+        shape_a, shape_b = arbiter.shapes
+        other_shape = shape_b if shape_a.body is self.body else shape_a
+        player = getattr(other_shape, 'entity', None)
+        print(player)
+        if player:
+            # Apply physical bounce to the player away from the rock
+            direction = player.body.position - self.body.position
+            if direction.length > 0:
+                impulse = direction.normalized() * 420
+                player.body.apply_impulse_at_world_point(impulse, player.body.position)
+
+            # Ensure the contact stays bouncy for this interaction
+            arbiter.elasticity = 0.8
+            for shape in arbiter.shapes:
+                shape.elasticity = 0.8
+        
+        return True
+
 
     def _turn_part_visible(self, part):
         if self.__show_part is not None:

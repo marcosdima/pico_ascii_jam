@@ -1,6 +1,8 @@
 from .__scene import Scene
 from ..entities import Rock, Zombie
 from config import WINDOW_WIDTH, WINDOW_HEIGHT
+from ...utils import AudioManager, Text
+from ...types import Color
 
 
 class Menu(Scene):
@@ -14,9 +16,19 @@ class Menu(Scene):
         self.add_entity(self.rock)
 
         # Spawn a zombie near the center
-        self.zombie = Zombie()
-        self.zombie.body.position = (WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 2)
-        self.add_entity(self.zombie)
+        #self.zombie = Zombie()
+        #self.zombie.body.position = (WINDOW_WIDTH / 2 + 200, WINDOW_HEIGHT / 2)
+        #self.add_entity(self.zombie)
+
+        # Start Text.
+        self.start_text = Text("Start", font_size=24, color=Color.WHITE)
+        x, y = self.start_text.get_size()
+        self.start_text_position = (WINDOW_WIDTH / 2 - x / 2, WINDOW_HEIGHT - 200)
+
+
+    def draw(self, surface):
+        super().draw(surface)
+        self.start_text.draw(surface, self.start_text_position)
 
 
     def test_trigger(self):

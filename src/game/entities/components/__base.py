@@ -55,8 +55,8 @@ class Base:
             self.body.body_type = body_type
 
             if body_type is pymunk.Body.DYNAMIC:
-                self.body.mass = min(1, self.body.mass)
-                self.body.moment = min(1, self.body.mass)
+                self.body.mass = max(1, self.body.mass)
+                self.body.moment = max(1, self.body.mass)
     
 
     def set_size(self, size: tuple[tuple] | Size):
