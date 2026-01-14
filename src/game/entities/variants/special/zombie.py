@@ -21,9 +21,10 @@ class Zombie(Life, Composed):
 
         # Chase behavior state
         self.__chase_target: pymunk.Vec2d | None = None
-        self.__chase_speed: float = 260.0
-        self.__pulse_interval: float = 1.5
-        self.__pulse_timer: float = 0.0
+        self.__target_player = None  # Reference to player entity
+        self.__max_speed: float = 260.0
+        self.__current_speed: float = 0.0  # Current movement speed
+        self.__acceleration: float = 200.0  # Speed gain per second
         self.__player_contact = None  # Track player currently colliding
 
         # Movement update
@@ -33,7 +34,11 @@ class Zombie(Life, Composed):
         self.recharge_time = 1.0
         self._recharge_timer = 0.0
         self.update.add_callback(self._update_recharge)
-
+        
+        # Stun after attack
+        self.__attack_stun_timer = 0.0
+        self.__attack_stun_duration = 0.8  # Duration after attacking before pursuing again
+        
 
     def _on_space_change(self, space):
         super()._on_space_change(space)
@@ -55,30 +60,44 @@ class Zombie(Life, Composed):
 
 
     def __on_update(self, dt: float):
-        # Simple chase movement towards last detected player position
-        # Pulse timer for periodic scans
-        self.__pulse_timer += dt
-        if self.__pulse_timer >= self.__pulse_interval:
-            self.__pulse_timer = 0.0
-            self.__pulse_scan()
-
+        # Update attack stun timer
+        if self.__attack_stun_timer > 0:
+            self.__attack_stun_timer -= dt
+            # During stun after attack, don't pursue
+            self.body.velocity = pymunk.Vec2d(0, 0)
+            return
+        
         # If still in contact and cooldown is over, keep attacking periodically
         if self.__player_contact is not None and self.charged():
             self.__attack_player(self.__player_contact)
 
-        if self.__chase_target is None:
+        # Only scan for player when no target
+        if self.__target_player is None:
+            self.__pulse_scan()
+            # Decelerate when idle
+            self.__current_speed = max(0, self.__current_speed - self.__acceleration * dt * 2)
             self.body.velocity = pymunk.Vec2d(0, 0)
             return
+
+        # Update chase target to current player position (follow continuously)
+        self.__chase_target = pymunk.Vec2d(
+            self.__target_player.body.position.x,
+            self.__target_player.body.position.y
+        )
 
         current = self.body.position
         direction = self.__chase_target - current
         dist = direction.length
+        
+        # Gradually increase speed up to max
+        self.__current_speed = min(self.__max_speed, self.__current_speed + self.__acceleration * dt)
+        
         if dist < 5:
             # Small deadzone: move slowly to avoid jitter
-            self.body.velocity = direction.normalized() * (self.__chase_speed * 0.35)
+            self.body.velocity = direction.normalized() * (self.__current_speed * 0.35)
             return
 
-        self.body.velocity = direction.normalized() * self.__chase_speed
+        self.body.velocity = direction.normalized() * self.__current_speed
 
 
     def _update_recharge(self, dt: float):
@@ -100,10 +119,10 @@ class Zombie(Life, Composed):
         center = (self.body.position.x, self.body.position.y)
         trigger = self.modules.instantiator.create_trigger(size=size, offset=center)
 
-        # When player enters, update chase target to current player position
+        # When player enters, store reference to player entity
         def on_player(player):
-            pos = pymunk.Vec2d(player.body.position.x, player.body.position.y)
-            self.__chase_target = pos
+            self.__target_player = player
+            self.__chase_target = pymunk.Vec2d(player.body.position.x, player.body.position.y)
             return True
         trigger.on_player_enter = on_player
 
@@ -137,3 +156,7 @@ class Zombie(Life, Composed):
         )
         # Start cooldown
         self._recharge_timer = self.recharge_time
+        
+        # Stun after attack: don't pursue for a moment
+        self.__attack_stun_timer = self.__attack_stun_duration
+        self.__target_player = None  # Drop pursuit during stun
